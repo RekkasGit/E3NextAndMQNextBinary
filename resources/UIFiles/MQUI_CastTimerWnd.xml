@@ -1,0 +1,885 @@
+<?xml version = "1.0"?>
+<XML ID = "EQInterfaceDefinitionLanguage">
+        <Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+
+        <!-- Tabbed subwindows for different search screens -->
+        <TabBox item = "CTW_Pages">
+                <ScreenID>CTW_Pages</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>0</TopAnchorOffset>
+                <BottomAnchorOffset>20</BottomAnchorOffset>
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+
+                <TabBorderTemplate>FT_DefTabBorder</TabBorderTemplate>
+                <PageBorderTemplate>FT_DefPageBorder</PageBorderTemplate>
+                        <Pages>CTW_TimerListPage</Pages>
+                        <Pages>CTW_SettingsPage</Pages>
+        </TabBox>
+
+        <!-- Page for getting LFP players -->
+        <Page item = "CTW_TimerListPage">
+                <ScreenID>CTW_TimerListPage</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <!-- Pages are sized and positioned by their parent tab box -->
+
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <DrawTemplate>WDT_Def</DrawTemplate>
+                <TabText>Timers</TabText>
+                <TabTextColor>
+                                <R>255</R>
+                                <G>255</G>
+                                <B>255</B>
+                </TabTextColor>
+                <TabTextActiveColor>
+                                <R>255</R>
+                                <G>255</G>
+                                <B>0</B>
+                </TabTextActiveColor>
+                <Style_Sizable>true</Style_Sizable>
+                        <Pieces>CTW_TimerList</Pieces>
+        </Page>
+        
+        <Page item = "CTW_SettingsPage">
+                <ScreenID>CTW_SettingsPage</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <!-- Pages are sized and positioned by their parent tab box -->
+
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <DrawTemplate>WDT_Def</DrawTemplate>
+                <TabText>Settings</TabText>
+                <TabTextColor>
+                                <R>255</R>
+                                <G>255</G>
+                                <B>255</B>
+                </TabTextColor>
+                <TabTextActiveColor>
+                                <R>255</R>
+                                <G>255</G>
+                                <B>0</B>
+                </TabTextActiveColor>
+                <Style_Sizable>true</Style_Sizable>
+                
+                <Pieces>CTW_ShowTargetLabel</Pieces>
+                <Pieces>CTW_ShowNPCLabel</Pieces>
+                <Pieces>CTW_ShowPCLabel</Pieces>
+                <Pieces>CTW_ShowPETLabel</Pieces>
+                <Pieces>CTW_ShowMERCLabel</Pieces>
+                <Pieces>CTW_ShowEVENTLabel</Pieces>
+                
+                <Pieces>CTW_ShowMYLabel</Pieces>
+                <Pieces>CTW_ShowOTHERLabel</Pieces>
+                <Pieces>CTW_InGROUPLabel</Pieces>
+                <Pieces>CTW_MRECASTLabel</Pieces>
+
+                <Pieces>CTW_ShowTargetCheckbox</Pieces>
+                <Pieces>CTW_ShowNPCCheckbox</Pieces>
+                <Pieces>CTW_ShowPCCheckbox</Pieces>
+                <Pieces>CTW_ShowPETCheckbox</Pieces>
+                <Pieces>CTW_ShowMERCCheckbox</Pieces>
+                <Pieces>CTW_ShowEVENTCheckbox</Pieces>
+
+                <Pieces>CTW_ShowMYCheckbox</Pieces>
+                <Pieces>CTW_ShowOTHERCheckbox</Pieces>
+                <Pieces>CTW_InGROUPCheckbox</Pieces>
+                <Pieces>CTW_MRECASTCheckbox</Pieces>
+        </Page>
+
+        <Label item ="CTW_ShowTargetLabel">
+                <ScreenID>CTW_ShowTargetLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>0</TopAnchorOffset>            
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Target:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+        
+        <Label item ="CTW_ShowNPCLabel">
+                <ScreenID>CTW_ShowNPCLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Npc:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+        
+        <Label item ="CTW_ShowPCLabel">
+                <ScreenID>CTW_ShowPCLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>40</TopAnchorOffset>           
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Pc:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor> 
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+        
+        <Label item ="CTW_ShowPETLabel">
+                <ScreenID>CTW_ShowPETLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>60</TopAnchorOffset>           
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Pet:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor> 
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+
+        <Label item ="CTW_ShowMERCLabel">
+                <ScreenID>CTW_ShowMERCLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+
+                <TopAnchorOffset>80</TopAnchorOffset>
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Merc:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+
+        <Label item ="CTW_ShowEVENTLabel">
+                <ScreenID>CTW_ShowEVENTLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+
+                <TopAnchorOffset>100</TopAnchorOffset>
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Events:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+
+        <Label item ="CTW_ShowMYLabel">
+                <ScreenID>CTW_ShowMYLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>0</TopAnchorOffset>            
+                <LeftAnchorOffset>90</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>My Spells:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor> 
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>                
+        
+        <Label item ="CTW_ShowOTHERLabel">
+                <ScreenID>CTW_ShowOTHERLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>90</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Other's Spells:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+
+        <Label item ="CTW_InGROUPLabel">
+                <ScreenID>CTW_InGROUPLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+
+                <TopAnchorOffset>40</TopAnchorOffset>
+                <LeftAnchorOffset>90</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Must be Group:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>
+
+        <Label item ="CTW_MRECASTLabel">
+                <ScreenID>CTW_MRECASTLabel</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                
+                <TopAnchorOffset>60</TopAnchorOffset>           
+                <LeftAnchorOffset>90</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+
+                <Text>Manual Recast:</Text>
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor> 
+                <NoWrap>true</NoWrap>
+                <AlignCenter>false</AlignCenter>
+                <AlignRight>false</AlignRight>
+        </Label>        
+        
+        <Button item= "CTW_ShowTargetCheckbox">
+                <ScreenID>CTW_ShowTargetCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+                
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                
+                <TopAnchorOffset>0</TopAnchorOffset>
+                <LeftAnchorOffset>60</LeftAnchorOffset>
+                <RightAnchorOffset>72</RightAnchorOffset>
+                <BottomAnchorOffset>12</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowNPCCheckbox">
+                <ScreenID>CTW_ShowNPCCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+                
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>60</LeftAnchorOffset>
+                <RightAnchorOffset>72</RightAnchorOffset>
+                <BottomAnchorOffset>32</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowPCCheckbox">
+                <ScreenID>CTW_ShowPCCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+                
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                
+                <TopAnchorOffset>40</TopAnchorOffset>
+                <LeftAnchorOffset>60</LeftAnchorOffset>
+                <RightAnchorOffset>72</RightAnchorOffset>
+                <BottomAnchorOffset>52</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowPETCheckbox">
+                <ScreenID>CTW_ShowPETCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+                
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                
+                <TopAnchorOffset>60</TopAnchorOffset>
+                <LeftAnchorOffset>60</LeftAnchorOffset>
+                <RightAnchorOffset>72</RightAnchorOffset>
+                <BottomAnchorOffset>72</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowMERCCheckbox">
+                <ScreenID>CTW_ShowMERCCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+
+                <TopAnchorOffset>80</TopAnchorOffset>
+                <LeftAnchorOffset>60</LeftAnchorOffset>
+                <RightAnchorOffset>72</RightAnchorOffset>
+                <BottomAnchorOffset>92</BottomAnchorOffset>
+
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowEVENTCheckbox">
+                <ScreenID>CTW_ShowEVENTCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                
+                <TopAnchorOffset>100</TopAnchorOffset>
+                <LeftAnchorOffset>60</LeftAnchorOffset>
+                <RightAnchorOffset>72</RightAnchorOffset>
+                <BottomAnchorOffset>112</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowMYCheckbox">
+                <ScreenID>CTW_ShowMYCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+                
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                
+                <TopAnchorOffset>0</TopAnchorOffset>
+                <LeftAnchorOffset>200</LeftAnchorOffset>
+                <RightAnchorOffset>212</RightAnchorOffset>
+                <BottomAnchorOffset>12</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_ShowOTHERCheckbox">
+                <ScreenID>CTW_ShowOTHERCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>200</LeftAnchorOffset>
+                <RightAnchorOffset>212</RightAnchorOffset>
+                <BottomAnchorOffset>32</BottomAnchorOffset>
+                
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item= "CTW_InGROUPCheckbox">
+                <ScreenID>CTW_InGROUPCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+
+                <TopAnchorOffset>40</TopAnchorOffset>
+                <LeftAnchorOffset>200</LeftAnchorOffset>
+                <RightAnchorOffset>212</RightAnchorOffset>
+                <BottomAnchorOffset>52</BottomAnchorOffset>
+
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Button item = "CTW_MRECASTCheckbox">
+                <ScreenID>CTW_MRECASTCheckbox</ScreenID>
+                <RelativePosition>true</RelativePosition>
+
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <BottomAnchorToTop>true</BottomAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+
+                <TopAnchorOffset>60</TopAnchorOffset>
+                <LeftAnchorOffset>200</LeftAnchorOffset>
+                <RightAnchorOffset>212</RightAnchorOffset>
+                <BottomAnchorOffset>72</BottomAnchorOffset>
+
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>true</Style_Checkbox>
+
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                  <Normal>A_CheckBoxNormal</Normal>
+                  <Pressed>A_CheckBoxPressed</Pressed>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Listbox item = "CTW_TimerList">
+                <ScreenID>CTW_TimerList</ScreenID>
+                <DrawTemplate>WDT_Inner</DrawTemplate>
+                <Font>2</Font>
+                <AutoStretch>true</AutoStretch>
+                <RelativePosition>true</RelativePosition>       
+                <TopAnchorToTop>true</TopAnchorToTop>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <RightAnchorToLeft>false</RightAnchorToLeft>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+        
+                <TopAnchorOffset>0</TopAnchorOffset>
+                <LeftAnchorOffset>0</LeftAnchorOffset>
+                <RightAnchorOffset>0</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+        
+                <TextColor>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                
+                <Style_Border>false</Style_Border>
+                <Style_VScroll>true</Style_VScroll>
+                <Columns>
+                        <Sortable>true</Sortable>
+                        <Width>45</Width>
+                        <Heading>Time</Heading>
+                </Columns>
+                <Columns>
+                        <Sortable>true</Sortable>
+                        <Width>50</Width>
+                        <Heading>Tags</Heading>
+                </Columns>
+                <Columns>
+                        <Sortable>true</Sortable>
+                        <Width>300</Width>
+                        <Heading>Spell Name</Heading>
+                </Columns>
+                <Columns>
+                        <Sortable>true</Sortable>
+                        <Width>300</Width>
+                        <Heading>Spawn Name</Heading>
+                </Columns>              
+        </Listbox>
+
+        <Button item = "CTW_StopButton">
+                <ScreenID>CTW_StopButton</ScreenID>
+                <Font>1</Font>
+                <RelativePosition>true</RelativePosition>
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>3</LeftAnchorOffset>
+                <RightAnchorOffset>38</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>        
+                <TopAnchorToTop>false</TopAnchorToTop>
+                <TopAnchorToBottom>true</TopAnchorToBottom>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <BottomAnchorToBottom>false</BottomAnchorToBottom>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <LeftAnchorToRight>false</LeftAnchorToRight>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                <RightAnchorToRight>false</RightAnchorToRight>
+
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>false</Style_Checkbox>
+                <Text>Pause</Text>
+                <TooltipReference>Click to Pause</TooltipReference>
+                <TextColor>
+                        <R>40</R>
+                        <G>180</G>
+                        <B>40</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                        <Normal>A_BtnNormal</Normal>
+                        <Pressed>A_BtnPressed</Pressed>
+                        <Flyby>A_BtnFlyby</Flyby>
+                        <Disabled>A_BtnDisabled</Disabled>
+                        <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+                </ButtonDrawTemplate>
+        </Button>
+        
+        <Combobox item="CTW_SelectActorBoxLeft">
+                <ScreenID>CTW_SelectActorBoxLeft</ScreenID>
+                <Font>3</Font>
+                <RelativePosition>true</RelativePosition>
+                <AutoStretch>true</AutoStretch>
+                
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>39</LeftAnchorOffset>
+                <RightAnchorOffset>150</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+          
+                <TopAnchorToTop>false</TopAnchorToTop>
+                <TopAnchorToBottom>true</TopAnchorToBottom>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <BottomAnchorToBottom>false</BottomAnchorToBottom>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <LeftAnchorToRight>false</LeftAnchorToRight>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                <RightAnchorToRight>false</RightAnchorToRight>
+                <TextColor>
+                        <Alpha>255</Alpha>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Border>true</Style_Border>
+                <DrawTemplate>WDT_Inner</DrawTemplate>
+                <Button>BDT_Combo</Button>
+                <ListHeight>120</ListHeight>
+        </Combobox>
+
+        <Combobox item="CTW_SelectActorBoxRight">
+                <ScreenID>CTW_SelectActorBoxRight</ScreenID>
+                <Font>3</Font>
+                <RelativePosition>true</RelativePosition>
+                <AutoStretch>true</AutoStretch>
+                
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>151</LeftAnchorOffset>
+                <RightAnchorOffset>262</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>
+          
+                <TopAnchorToTop>false</TopAnchorToTop>
+                <TopAnchorToBottom>true</TopAnchorToBottom>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <BottomAnchorToBottom>false</BottomAnchorToBottom>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <LeftAnchorToRight>false</LeftAnchorToRight>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                <RightAnchorToRight>false</RightAnchorToRight>
+                <TextColor>
+                        <Alpha>255</Alpha>
+                        <R>255</R>
+                        <G>255</G>
+                        <B>255</B>
+                </TextColor>
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Border>true</Style_Border>
+                <DrawTemplate>WDT_Inner</DrawTemplate>
+                <Button>BDT_Combo</Button>
+                <ListHeight>120</ListHeight>
+        </Combobox>             
+        
+        <Button item = "CTW_WatchSpawnButton">
+                <ScreenID>CTW_WatchSpawnButton</ScreenID>
+                <Font>1</Font>
+                <RelativePosition>true</RelativePosition>
+                <AutoStretch>true</AutoStretch>
+                <TopAnchorOffset>20</TopAnchorOffset>
+                <LeftAnchorOffset>263</LeftAnchorOffset>
+                <RightAnchorOffset>342</RightAnchorOffset>
+                <BottomAnchorOffset>0</BottomAnchorOffset>        
+                <TopAnchorToTop>false</TopAnchorToTop>
+                <TopAnchorToBottom>true</TopAnchorToBottom>
+                <BottomAnchorToTop>false</BottomAnchorToTop>
+                <BottomAnchorToBottom>false</BottomAnchorToBottom>
+                <LeftAnchorToLeft>true</LeftAnchorToLeft>
+                <LeftAnchorToRight>false</LeftAnchorToRight>
+                <RightAnchorToLeft>true</RightAnchorToLeft>
+                <RightAnchorToRight>false</RightAnchorToRight>
+
+                <Style_Transparent>false</Style_Transparent>
+                <Style_Checkbox>false</Style_Checkbox>
+                <Text>Watch Spawn</Text>
+                <TooltipReference>Click to Watch Spawn</TooltipReference>
+                <TextColor>
+                        <R>40</R>
+                        <G>180</G>
+                        <B>40</B>
+                </TextColor>
+                <ButtonDrawTemplate>
+                        <Normal>A_BtnNormal</Normal>
+                        <Pressed>A_BtnPressed</Pressed>
+                        <Flyby>A_BtnFlyby</Flyby>
+                        <Disabled>A_BtnDisabled</Disabled>
+                        <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+                </ButtonDrawTemplate>
+        </Button>
+
+        <Screen item = "CastTimerWnd">
+                <RelativePosition>false</RelativePosition>
+                <Location>
+                        <X>50</X>
+                        <Y>100</Y>
+                </Location>
+                <Size>
+                        <CX>206</CX>
+                        <CY>242</CY>
+                </Size>
+                <Text>Timers: Total: 0 Showing: 0</Text>
+                <Style_VScroll>false</Style_VScroll>
+                <Style_HScroll>false</Style_HScroll>
+                <Style_Transparent>false</Style_Transparent>
+                <!--<TooltipReference>This is the active Timers Window.</TooltipReference>-->
+                <DrawTemplate>WDT_Def</DrawTemplate>
+                <Style_Titlebar>true</Style_Titlebar>
+                <Style_Closebox>true</Style_Closebox>
+                <Style_Minimizebox>true</Style_Minimizebox>
+                <Style_Border>true</Style_Border>
+                <Style_Sizable>true</Style_Sizable>
+                <Pieces>CTW_Pages</Pieces>
+                <Pieces>CTW_StopButton</Pieces>
+                <Pieces>CTW_SelectActorBoxLeft</Pieces>
+                <Pieces>CTW_SelectActorBoxRight</Pieces>
+                <Pieces>CTW_WatchSpawnButton</Pieces>
+        </Screen>
+</XML>

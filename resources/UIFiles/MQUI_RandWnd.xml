@@ -1,0 +1,179 @@
+<?xml version = "1.0"?>
+<XML ID = "EQInterfaceDefinitionLanguage">
+  <Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+
+  <Listbox item = "RW_List">
+    <ScreenID>RW_List</ScreenID>
+    <DrawTemplate>WDT_Inner</DrawTemplate>
+    <Location>
+      <X>1</X>
+      <Y>21</Y>
+    </Location>
+    <Size>
+      <CX>300</CX>
+      <CY>50</CY>
+    </Size>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Style_Border>false</Style_Border>
+    <Columns> <Width>20</Width> <Heading> </Heading> <Sortable>true</Sortable> </Columns>
+    <Columns> <Width>20</Width> <Heading> </Heading> <Sortable>true</Sortable> </Columns>
+    <Columns> <Width>20</Width> <Heading> </Heading> <Sortable>true</Sortable> </Columns>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_VScroll>true</Style_VScroll>
+  </Listbox>
+
+  
+
+  <Button item = "RW_Btn1">
+    <ScreenID>RW_Btn1</ScreenID>
+     <Location>
+      <X>1</X>
+      <Y>1</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Text>O</Text>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+
+  <Button item = "RW_Btn2">
+    <ScreenID>RW_Btn2</ScreenID>
+    <Location>
+      <X>1</X>
+      <Y>1</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Text>O</Text>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+
+  <Button item = "RW_Btn3">
+	<ScreenID>RW_Btn3</ScreenID>
+    <Location>
+      <X>1</X>
+      <Y>1</Y>
+    </Location>
+    <Size>
+      <CX>20</CX>
+      <CY>20</CY>
+    </Size>
+    <Text>O</Text>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>false</Style_Checkbox>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+      <Normal>A_BtnNormal</Normal>
+      <Pressed>A_BtnPressed</Pressed>
+      <Flyby>A_BtnFlyby</Flyby>
+      <Disabled>A_BtnDisabled</Disabled>
+      <PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+    </ButtonDrawTemplate>
+  </Button>
+
+
+
+  <Label item="RW_Label">
+    <ScreenID>RW_Label</ScreenID>
+    <Font>3</Font>
+    <Text>Status</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>140</CX>
+      <CY>20</CY>
+    </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>
+      <X>211</X>
+      <Y>4</Y>
+    </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+
+
+  <Editbox item="RW_Edit">
+	<ScreenID>RW_Edit</ScreenID>
+	<DrawTemplate>WDT_Inner</DrawTemplate>
+	<Style_Border>true</Style_Border>
+	<Location>        <X>1</X>    <Y>132</Y>  </Location>
+	<Size>          <CX>240</CX>  <CY>20</CY> </Size>
+	<TextColor>      <R>255</R> <G>255</G> <B>255</B> </TextColor>
+</Editbox>
+
+  
+  <Screen item = "RandWnd">
+    <RelativePosition>false</RelativePosition>
+    <Location>
+      <X>100</X>
+      <Y>100</Y>
+    </Location>
+    <Size>
+      <CX>10</CX>
+      <CY>10</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Text>Random Helper</Text>
+    <DrawTemplate>WDT_Rounded</DrawTemplate>
+    <Style_Titlebar>true</Style_Titlebar>
+    <Style_Closebox>true</Style_Closebox>
+    <Style_Minimizebox>true</Style_Minimizebox>
+    <Style_Border>true</Style_Border>
+    <Style_Sizable>true</Style_Sizable>
+    <Pieces>RW_Label</Pieces>
+	<Pieces>RW_Edit</Pieces>
+    <Pieces>RW_List</Pieces>
+    <Pieces>RW_Btn1</Pieces>
+    <Pieces>RW_Btn2</Pieces>
+    <Pieces>RW_Btn3</Pieces>
+  </Screen>
+</XML>

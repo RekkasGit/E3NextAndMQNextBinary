@@ -1,0 +1,4 @@
+REM must run as admin
+REM change 255 to fit your purpose.  255 spreads across all 8 cores.  # to use = 2^N - 1 where N=num cores
+REM $($Proc | measure-object -Property NumberOfLogicalProcessors -sum).Sum -gt $($Proc | measure-object -Property NumberOfCores -sum).Sum
+powershell "$hyperenabled=$($Proc | measure-object -Property NumberOfLogicalProcessors -sum).Sum -gt $($Proc | measure-object -Property NumberOfCores -sum).Sum;if($hyperenabled) {$process=GET-PROCESS eqgame; $counter=1; foreach ($i in $process) {$i.ProcessorAffinity=[int]([Math]::Pow(2,$counter));$counter=$counter+2;}}else{$process=GET-PROCESS eqgame; $counter=1; foreach ($i in $process) {$i.ProcessorAffinity=[int]([Math]::Pow(2,$counter));$counter=$counter+1;}};"

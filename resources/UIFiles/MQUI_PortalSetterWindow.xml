@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<XML ID="EQInterfaceDefinitionLanguage">
+	<Schema xmlns="EverQuestData" xmlns:dt="EverQuestDataTypes" />
+	<!-- Version: Nov 26 2016  -->
+
+	<!-- Guild Banner Button -->
+	<Button item="GuildBannerButton">
+		<ScreenID>GuildBannerButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>10</Y>
+		</Location>
+		<Size>
+			<CX>240</CX>
+			<CY>24</CY>
+		</Size>
+		<Text>Guild Banner</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+	
+	
+  <Button item="StratosButton">
+    <ScreenID>OStratosButton</ScreenID>
+    <Location>
+      <X>10</X>
+      <Y>44</Y>
+    </Location>
+    <Size>
+      <CX>240</CX>
+      <CY>24</CY>
+    </Size>
+    <Text>Stratos</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Template>BDT_BigNormal</Template>
+  </Button>
+	
+
+  <Button item="OverthereButton">
+    <ScreenID>OverthereButton</ScreenID>
+    <Location>
+      <X>10</X>
+      <Y>78</Y>
+    </Location>
+    <Size>
+      <CX>240</CX>
+      <CY>24</CY>
+    </Size>
+    <Text>Overthere</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Template>BDT_BigNormal</Template>
+  </Button>
+
+  <Button item="LceaniumButton">
+    <ScreenID>LceaniumButton</ScreenID>
+    <Location>
+      <X>10</X>
+      <Y>112</Y>
+    </Location>
+    <Size>
+      <CX>240</CX>
+      <CY>24</CY>
+    </Size>
+    <Text>Lceanium</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Template>BDT_BigNormal</Template>
+  </Button>
+
+  <!-- Katta Castrum: Deluge Button -->
+	<Button item="KattaCastrumDelugeButton">
+		<ScreenID>KattaCastrumDelugeButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>146</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>32</CY>
+		</Size>
+		<Text>Katta Castrum: Deluge</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- West Karana Button -->
+	<Button item="WestKaranaButton">
+		<ScreenID>WestKaranaButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>146</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>32</CY>
+		</Size>
+		<Text>Ethernere Tainted West Karana</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Shard's Landing Button -->
+	<Button item="ShardsLandingButton">
+		<ScreenID>ShardsLandingButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>189</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Shard's Landing</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Argath Button -->
+	<Button item="ArgathButton">
+		<ScreenID>ArgathButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>189</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Argath</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+
+	<!-- Feerrott Button -->
+	<Button item="FeerrottButton">
+		<ScreenID>FeerrottButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>213</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Feerrott</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Brell's Rest Button -->
+	<Button item="BrellsRestButton">
+		<ScreenID>BrellsRestButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>213</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Brells's Rest</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Dragonscale Hills Button -->
+	<Button item="DragonscaleHillsButton">
+		<ScreenID>DragonscaleHillsButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>237</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Dragonscale Hills</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Plane of Time Button -->
+	<Button item="PlaneOfTimeButton">
+		<ScreenID>PlaneOfTimeButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>237</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Plane of Time</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Katta Castrum Button -->
+	<Button item="KattaCastrumButton">
+		<ScreenID>KattaCastrumButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>261</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Katta Castrum</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Goru`kar Mesa Button -->
+	<Button item="GorukarMesaButton">
+		<ScreenID>GorukarMesaButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>261</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Goru`kar Mesa</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Arcstone Button -->
+	<Button item="ArcstoneButton">
+		<ScreenID>ArcstoneButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>285</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Arcstone</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Plane of Sky Button -->
+	<Button item="PlaneOfSkyButton">
+		<ScreenID>PlaneOfSkyButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>285</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Plane of Sky</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Cobalt Scar Button -->
+	<Button item="CobaltScarButton">
+		<ScreenID>CobaltScarButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>309</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Cobalt Scar</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Plane of Hate Button -->
+	<Button item="PlaneOfHateButton">
+		<ScreenID>PlaneOfHateButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>309</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Plane of Hate</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Barindu Button -->
+	<Button item="BarinduButton">
+		<ScreenID>BarinduButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>333</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Barindu</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Wall of Slaughter Button -->
+	<Button item="WallOfSlaughterButton">
+		<ScreenID>WallOfSlaughterButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>333</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Wall of Slaughter</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Twilight Sea Button -->
+	<Button item="TwilightSeaButton">
+		<ScreenID>TwilightSeaButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>357</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Twilight Sea</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Undershore Button -->
+	<Button item="UndershoreButton">
+		<ScreenID>UndershoreButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>357</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Undershore</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Dreadlands Button -->
+	<Button item="DreadlandsButton">
+		<ScreenID>DreadlandsButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>381</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Dreadlands</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Stonebrunt Button -->
+	<Button item="StonebruntButton">
+		<ScreenID>StonebruntButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>381</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Stonebrunt</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Iceclad Ocean Button -->
+	<Button item="IcecladOceanButton">
+		<ScreenID>IcecladOceanButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>405</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Iceclad Ocean</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Lavastorm Button -->
+	<Button item="LavastormButton">
+		<ScreenID>LavastormButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>405</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Lavastorm</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Toxxulia Button -->
+	<Button item="ToxxuliaButton">
+		<ScreenID>ToxxuliaButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>429</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Toxxulia</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- North Karana Button -->
+	<Button item="NorthKaranaButton">
+		<ScreenID>NorthKaranaButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>429</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>North Karana</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Commonlands Button -->
+	<Button item="CommonlandsButton">
+		<ScreenID>CommonlandsButton</ScreenID>
+		<Location>
+			<X>10</X>
+			<Y>453</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Commonlands</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Greater Faydark Button -->
+	<Button item="GreaterFaydarkButton">
+		<ScreenID>GreaterFaydarkButton</ScreenID>
+		<Location>
+			<X>135</X>
+			<Y>453</Y>
+		</Location>
+		<Size>
+			<CX>115</CX>
+			<CY>18</CY>
+		</Size>
+		<Text>Greater Faydark</Text>
+		<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+		</TextColor>
+		<Template>BDT_BigNormal</Template>
+	</Button>
+
+	<!-- Portal Setter Window -->
+	<Screen item="PortalSetterWindow">
+		<ScreenID />
+		<RelativePosition>false</RelativePosition>
+		<Location>
+			<X>90</X>
+			<Y>47</Y>
+		</Location>
+		<Size>
+			<CX>265</CX>
+			<CY>501</CY>
+		</Size>
+		<Text>Portal Setter</Text>
+		<TooltipReference />
+		<DrawTemplate>WDT_Def</DrawTemplate>
+		<Style_Titlebar>true</Style_Titlebar>
+		<Style_Closebox>true</Style_Closebox>
+		<Style_Minimizebox>true</Style_Minimizebox>
+		<Style_Border>true</Style_Border>
+		<Style_Sizable>false</Style_Sizable>
+		
+		<Pieces>StratosButton</Pieces>
+		<Pieces>OverthereButton</Pieces>
+		<Pieces>LceaniumButton</Pieces>
+		<Pieces>KattaCastrumDelugeButton</Pieces>
+		<Pieces>WestKaranaButton</Pieces>
+		<Pieces>ShardsLandingButton</Pieces>
+		<Pieces>ArgathButton</Pieces>
+		<Pieces>GuildBannerButton</Pieces>
+		<Pieces>FeerrottButton</Pieces>
+		<Pieces>BrellsRestButton</Pieces>
+		<Pieces>DragonscaleHillsButton</Pieces>
+		<Pieces>PlaneOfTimeButton</Pieces>
+		<Pieces>KattaCastrumButton</Pieces>
+		<Pieces>GorukarMesaButton</Pieces>
+		<Pieces>ArcstoneButton</Pieces>
+		<Pieces>PlaneOfSkyButton</Pieces>
+		<Pieces>CobaltScarButton</Pieces>
+		<Pieces>PlaneOfHateButton</Pieces>
+		<Pieces>BarinduButton</Pieces>
+		<Pieces>WallOfSlaughterButton</Pieces>
+		<Pieces>TwilightSeaButton</Pieces>
+		<Pieces>UndershoreButton</Pieces>
+		<Pieces>DreadlandsButton</Pieces>
+		<Pieces>StonebruntButton</Pieces>
+		<Pieces>IcecladOceanButton</Pieces>
+		<Pieces>LavastormButton</Pieces>
+		<Pieces>ToxxuliaButton</Pieces>
+		<Pieces>NorthKaranaButton</Pieces>
+		<Pieces>CommonlandsButton</Pieces>
+		<Pieces>GreaterFaydarkButton</Pieces>
+	
+  </Screen>
+</XML>

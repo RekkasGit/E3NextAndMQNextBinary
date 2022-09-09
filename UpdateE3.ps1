@@ -2,7 +2,7 @@ Write-Host "A simple E3 updater"
 Write-Host "Written by Rekka/Rekken from Lazarus to save sanity. (Mine and yours!)"
 Write-Host "please modify the Invoke-WebREquest URL to change the file to download"
 ############################################################################
-$downloadURL="https://github.com/Ewiclip/lazarus_mq2_e3/archive/refs/heads/master.zip"
+$downloadURL="https://github.com/Ewiclip/lazarus_mq2_e3/archive/refs/heads/feature/mq2next.zip"
 ############################################################################
 Add-Type -Assembly System.IO.Compression.FileSystem
 #Download the file 

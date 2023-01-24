@@ -1,0 +1,111 @@
+| HandIn.mac
+|
+| Usage:
+| - /macro handin.mac <pp|gp|sp|cp|"Item Name"> <amount> <wait time> ["destroy"]
+|    The you must type "destroy" for the macro to destroy items returned.
+|
+| Example:
+| - /macro handin.mac "Batwing" 4 0 "destroy"
+|    Will hand in 4 Batwing's and destroy the item(s) returned from the NPC. Will do handins without waiting between.
+|
+| - /macro handin.mac "Batwin" 4 80
+|   Will hand in 4 batwings, keep the resulting items, and wait 8 seconds between sets of handins.
+
+
+Sub Main(string TheItem, int TheAmount, int ForceDelay, string DoDestroy)
+
+    /declare Loopcount int local
+    /declare Timeout timer local
+    /declare Itemtype string local
+    /declare Itemsleft int local
+
+    :GiveItem
+        /varset Itemsleft ${FindItemCount[=${TheItem}]}
+        /if (${Itemsleft} < ${TheAmount}) {
+            /goto :Done
+        }
+
+        /if (!${Defined[TheItem]} || !${Defined[TheAmount]}) /call Syntax
+        /for Loopcount 1 to ${TheAmount}
+ /if (${TheAmount}==0) /break
+            /if (${TheItem.Equal[pp]}) {
+                /ctrl /notify InventoryWindow IW_Money0 leftmouseup
+                /varset Itemtype coin
+            } else /if (${TheItem.Equal[gp]}) {
+                /ctrl /notify InventoryWindow IW_Money1 leftmouseup
+                /varset Itemtype coin
+            } else /if (${TheItem.Equal[sp]}) {
+                /ctrl /notify InventoryWindow IW_Money2 leftmouseup
+                /varset Itemtype coin
+            } else /if (${TheItem.Equal[cp]}) {
+                /ctrl /notify InventoryWindow IW_Money3 leftmouseup
+                /varset Itemtype coin
+            } else {
+                /ctrl /itemnotify "${TheItem}" leftmouseup
+                /varset Itemtype item
+            }
+
+            :WaitForItem
+            /varset Timeout 5s
+            /if (!${Cursor.ID}) {
+                /if (!${Timeout.Value}) {
+                    /goto :Done
+                }
+                /delay 0
+                /goto :WaitForItem
+            }
+
+            /if (${Loopcount} == 1 || ${Itemtype.Equal[coin]}) {
+                /click left target
+            } else {
+                /if (${Itemtype.Equal[item]}) {
+                    /notify GiveWnd GVW_MyItemSlot${Int[${Math.Calc[${Loopcount}-1]}]} leftmouseup
+                }
+            }
+
+            :Wait
+            /varset Timeout 10s
+            /if (${Cursor.ID}) {
+                /if (!${Timeout.Value}) {
+                    /goto :Done
+                }
+                /delay 0
+                /goto :Wait
+            }
+        /next Loopcount
+        /notify GiveWnd GVW_Give_Button leftmouseup
+        /delay 5
+
+        :ClearCursor
+        /if (${Cursor.ID}) {
+            /if (${Defined[DoDestroy]} && ${DoDestroy.Equal[destroy]}) {
+                /destroy
+            } else {
+                /autoinv
+            }
+            /delay 0
+            /goto :ClearCursor
+        }
+
+        /delay ${ForceDelay}
+
+    /goto :GiveItem
+    :Done
+    /endmacro
+/return
+
+Sub Syntax
+    /echo Syntax: /macro handin <pp|gp|sp|cp|"Item Name"> <#> <#> [destroy]
+    /echo ..
+    /echo Example: /macro handin gp 2 0 destroy
+    /echo Will hand in 2 pieces of gold to the targeted NPC, waiting 0 seconds between gives, and then click give, and will destroy anything you get back on your cursor.
+    /echo ..
+    /echo Example: /macro handin "Batwing" 4 0
+    /echo Will hand in 4 batwings to the targeted NPC, waiting 0 seconds between gives, and then click give, and will keep anything you get back on your cursor.
+    /echo
+    /echo Example: /macro handin "Batwing" 3 80
+    /echo Will hand in 3 batwings at a time, and wait 8 seconds between handins
+    /echo
+    /echo WARNING!! Be carefull with "destroy", if you pick up an item from your inventory it will be destroyed.
+    /endmacro
+/return

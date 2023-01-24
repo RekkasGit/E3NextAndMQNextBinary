@@ -1,0 +1,232 @@
+| alctol.mac
+| Takes you to 590 Alcohol Tolerance
+| Version 3.1
+| Date: 11-02-2010
+
+| By Bror
+| Updated by Maskoi
+| Updated by Wirlin 12-30-2019
+| MerchantName is the name of the merchant that sells your booze
+| MaxWanted is where you want to stop: Default is max skill for your level
+| Booze is the alcohol you want to buy: Default is Brandy
+|  Updated 12-30-2019
+|  Now uses the vendor behind the small bank next to the brew barrel by default...
+|  Also fixed the /Useitem to not care where your booze is stored.
+|  Works anywhere as long as you have enough (1500ish for 0 to 590)Brandy somewhere in your bags.
+|  Added option to camp on max skill... defalut is on Change /varset CampOnMax 1 ... to 0 to not camp... 
+| 1/2/2020 added ${Me.SkillCap[Alcohol Tolerance]} cause duh... and CampOnMax waits until you are sober to camp
+| And fixed it to not spam when you run out of alcohol in a zone that doesn't have a barmaid.
+| Still buys 100 when it thinks that it is buying 20, but beer is cheap...
+| Requirements:
+| Slot 8 in your inventory must be empty <--- Fixed...
+| Must be standing next to the merchant you buying alcohol from. <--- only if you want to buy more...can stock 2000 in bags...
+
+
+	#event Explode "#*#If you consumed any more drink you would explode#*#"
+	#event Explode "#*#You could not possibly drink any more, you would explode#*#"
+	#event TooDrunk "#*#You could not possibly consume more alcohol or become more intoxicated#*#"
+	#event SkillUp  "#*#You have become better at Alcohol Tolerance#*#"
+
+
+| --------------------------------------------------------------------------------------------
+| SUB: Main
+| --------------------------------------------------------------------------------------------
+	Sub Main
+	/declare OldSkill int outer ${Me.Skill[Alcohol Tolerance]}
+	/declare MaxWanted int outer
+	/declare MerchantName string outer i
+	/declare Booze string outer
+	/declare Amount		int 	outer
+	/declare DrinkCounter int outer
+	/declare MaxTime int outer
+	/declare CampOnMax int outer
+
+| ***********************************************
+| *   Change these settings if you want.        *
+| ***********************************************
+
+	/varset MerchantName Brewmaster Berina
+	/varset Booze Brandy
+	/varset MaxWanted ${Me.SkillCap[Alcohol Tolerance]}
+	/varset CampOnMax 0
+
+	/echo Alcohol Tolerance is at ${Me.Skill[Alcohol Tolerance]} of ${MaxWanted}
+	/call MaxSkill
+:Start
+	/call BuyBooze
+	/call Drink
+	/call MaxSkill
+	/goto :Start
+	/return
+
+| ***********************************************
+| Buy Booze                                     *
+| ***********************************************
+| --------------------------------------------------------------------------------------------
+| SUB: BuyBooze
+| --------------------------------------------------------------------------------------------
+	sub BuyBooze
+	/if (${FindItemCount[${Booze}]} > 0) /return
+	/if (${Spawn[${MerchantName}].ID}>0) {
+	/echo Time to buy more booze
+	/target ${MerchantName}
+	/delay 1s
+	/click right target
+	/delay 3s
+	/call Buy "${Booze}" 20
+	/keypress esc
+	/delay 1s
+	/return
+	}
+	/echo Drank it all and cannot buy more because the barmaid is not around.
+	/end
+
+| ***********************************************
+| Sub Drink                      				*
+| ***********************************************
+| --------------------------------------------------------------------------------------------
+| SUB: Drink
+| --------------------------------------------------------------------------------------------
+	Sub Drink
+	:DrinkMore
+		/if (${Me.Drunk}==200) /delay 6s
+		/useitem "${Booze}"
+		/delay 1s
+		/doevents
+	/goto :DrinkMore
+
+	/return
+
+| ***********************************************
+| sUB event too much drink                      *
+| ***********************************************
+
+
+| --------------------------------------------------------------------------------------------
+| SUB: Event_Explode
+| --------------------------------------------------------------------------------------------
+	Sub Event_Explode
+	/declare WaitSober string local ${Math.Calc[40+${Math.Rand[30]}]}s
+	/echo Too full, Waiting ${WaitSober} seconds.
+	/delay ${WaitSober}
+	/varcalc DrinkCounter ${DrinkCounter}-1
+	/return
+
+| ***********************************************
+| SUB event too drunk                           *
+| ***********************************************
+
+
+| --------------------------------------------------------------------------------------------
+| SUB: Event_TooDrunk
+| --------------------------------------------------------------------------------------------
+	Sub Event_TooDrunk
+	/declare WaitSober string local ${Math.Calc[8+${Math.Rand[8]}]}s
+	/echo Too Drunk, Waiting ${WaitSober} seconds.
+	/delay ${WaitSober}
+	/varcalc DrinkCounter ${DrinkCounter}-1
+
+	/return
+
+| ***********************************************
+| SUB event skillup                             *
+| ***********************************************
+
+
+| --------------------------------------------------------------------------------------------
+| SUB: Event_SkillUp
+| --------------------------------------------------------------------------------------------
+	Sub Event_SkillUp
+	/varcalc MaxTime ${MaxWanted}-${Me.Skill[Alcohol Tolerance]}
+	/echo Alcohol Tolerance increased >> ${Me.Skill[Alcohol Tolerance]} <<
+	/delay 1
+	/if (${Me.Skill[Alcohol Tolerance]}>=${MaxWanted}) {
+		/echo Alcohol Tolerance is at or greater than ${MaxWanted}. Quiting!
+		/if (${CampOnMax}==1) /call SoberCamp
+		/endmacro
+	}
+	/return
+
+| ***********************************************
+| SUB Max skill check                        	*
+| ***********************************************
+
+
+| --------------------------------------------------------------------------------------------
+| SUB: MaxSkill
+| --------------------------------------------------------------------------------------------
+	Sub MaxSkill
+	/if (${Me.Skill[Alcohol Tolerance]}>=${MaxWanted}) {
+		/echo Alcohol Tolerance is at or greater than ${MaxWanted}. Quiting!
+		/if (${CampOnMax}==1) { 
+			/call SoberCamp
+			}
+	/endmacro
+	}
+	/return
+
+|---------------------------------------------------------------------------------------------
+| SUB: SoberCamp
+|---------------------------------------------------------------------------------------------
+	Sub SoberCamp
+	/echo Waiting to camp until I am sober so that I do not wake up with a hangover.
+	:NoHangover
+	/if (${Me.Drunk}>0) {
+		/delay 12s
+		/goto :NoHangover
+		}
+	/camp
+	/endmacro
+| ***********************************************
+| Sub Buy                            			*
+| ***********************************************
+
+
+| --------------------------------------------------------------------------------------------
+| SUB: Buy
+| --------------------------------------------------------------------------------------------
+	Sub Buy(string ItemToBuy, int amount)
+	/declare i int local
+	/echo Buying ${ItemToBuy}!
+	/declare QTY int local
+	/declare ListItem int local
+	/varset QTY ${Math.Calc[${amount}-${FindItemCount[${ItemToBuy}]}]}
+	/delay 1s
+
+	/if (${FindItemCount[${ItemToBuy}]}>= ${amount}) {
+		/echo Done!
+		/return
+	}
+	/varset ListItem ${Window[MerchantWnd].Child[ItemList].List[=${ItemToBuy},2]}
+	/if (!${ListItem}) {
+		/echo couldn't find ${ItemToBuy}
+		/return
+	} else {
+		/notify MerchantWnd ItemList listselect ${ListItem}
+		/delay 1s
+	}
+	/echo Buying ${ItemToBuy} Till I get ${amount}
+:Loop
+	/if (${QTY}>1) {
+		/if (${QTY}>19) {
+			/Shiftkey /notify merchantwnd MW_buy_Button leftmouseup
+			/delay 30s ${FindItemCount[${ItemToBuy}]}>=${amount}
+			/echo ${FindItemCount[${ItemToBuy}]} ${ItemToBuy} in inventory
+			/varset QTY ${Math.Calc[${amount}-${FindItemCount[${ItemToBuy}]}]}
+			/delay 3
+			/if (${QTY}<=0) /return
+			/goto :Loop
+		}
+		/if (${QTY}>0 && ${QTY}<20) {
+			/for i 1 to ${QTY}
+ /if (${QTY}==0) /break
+				/notify merchantwnd MW_buy_Button leftmouseup
+				/echo Buying ${ItemToBuy} ${i} of ${QTY}
+				/varcalc QTY ${amount}-${FindItemCount[${ItemToBuy}]}
+				/echo ${QTY}
+				/if (${QTY}<=0) /return
+			/next i
+		}
+	}
+	/return
+|  [+++  Formatted by MQ2fusing tabs for indents +++]

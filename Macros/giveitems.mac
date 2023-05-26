@@ -1,0 +1,680 @@
+| giveitems.mac - Sym 8.26.2017 exclusively for RedGuides.com
+| 10.13.17	v1.21 kaen01 fixed some variables, fixed the command wait loop.
+| 02.27.19	v2.7.0 toadwart added functionality for a string variable to flag items to be given to a target, allowing for the grouping of items based on user preference to be given to others
+| 01.09.20	v2.7.2 toadwart Fixed an aberrant /return in the processing code that would early out on a nodrop item, now it also informs you what it is NOT trading as it's NoDrop, and then moves on to next item.
+|
+| Mac was originally designed to give all tradeskill items or one of each collection item to targeted pc or banker. This functionality still exists
+| Usage: /mac giveitems
+|
+| Once running the following commands are available. Only first two characters of flags (pc/npc/banker/group) are checked for ease of typing. Full group names (flags) are required if used.
+|
+| The "flag" referenced below can be any text string which should match the flag defined in your ini for what specific items would be given to a specific target, non-case sensitive.
+|	for example: /giveitem pc tr bob would give all items listed under the header flag of [bob] to the pc you have targeted, and only those items. Those items with a number greater
+|	than 1 will respect the figure used, and try to give that number of items to the pc in this example.
+|
+|/giveitem pc tradeskill or /giveitem pc tr
+|   Gives all tradeskill items, to targeted pc, unless the item is on the exclude list
+|
+|/giveitem pc collection or /giveitem pc co
+|   Gives all collection items, to targeted pc, unless the item is on the exclude list
+|
+|/giveitem pc group flag or /giveitem pc gr flag
+|	Gives all/# of items that fit the group flag to the targeted pc if found in the ini file. If defined as -1, then gives all, otherwise will respect the number used.
+|
+|/giveitem np group flag or /giveitem np gr flag
+|	Gives items that fit the group flag to the targeted npc if found in the ini file, unless on the exclude list
+|	
+|/giveitem exclude or /giveitem ex
+|   Add item on cursor to exclude list then autoinventory the item
+|
+|/giveitem group flag or /giveitem gr flag
+|	Add item on cursor to flagged list in ini using the defined "flag" that is user defined, then autoinventory the item
+|
+|/giveitem banker tradeskill or /giveitem ba tr
+|   Opens targeted banker (if not already open) and /autobanks all tradeskill items you have, unless the item is on the exclude list
+|
+|/giveitem banker collection or /giveitem ba co
+|   Opens selected banker (if not already open) and /autobanks all collection items you have
+|
+|/giveitem banker group flag or /giveitem ba gr flag
+|	Gives all items that fit the group flag to the targeted pc if found in the ini file
+|	
+| /giveitem dryrun or /giveitem dr
+|   Toggles dryrun mode. This just goes through the motions and tells you what would be given so you can make sure your exclude list is correct.
+|
+| /giveitem fullstack or /giveitem fu
+|   Forces full stack pickups. Useful to bank all of your collection items.
+|
+| /giveitem cursor or /giveitem cu
+|   Uses MQ2Cursor command /cursor 1 stack on each collection item. If you don't use MQ2Cursor, ignore this.
+|
+|- TODO List:
+|-	Things I'm potentially looking at adding yet for my own use, and/or if demand supports it:
+|-		1. /giveitem pc gr "bugaboo ears" 9
+|-			-Allows a certain number of any item to be given to a player or npc. Can be defined at this point, or if no number it defaults to ini defined number. Could be used to give items that aren't defined in the ini at all as well.
+|-		2. Multiple ini's, and allow /giveitems to default to the giveitem.ini or take a string input to pull entries from a specific ini when the mac is initially
+|-			run, and/or add a command to change within the mac after operational. Purpose would be to prevent the giveitems file from growing too cumbersome in size.
+|-			2a)Perhaps even going with some include files in a subfolder, organized by npc name, so that a generic turn-in can be executed and check your active tasks against items in inventory and turn in if you have the items needed for a task. Not sure if this is a complication beyond my capabilities, but I'm considering it as an option.
+|-		3. Getitems subcommand to remove items from a bank based on these pick-lists
+
+#warning
+#bind GiveCommand	/giveitem
+
+Sub Main
+	/declare Debug				int		outer	0
+	/declare Debugging			bool	outer	FALSE    
+	/declare IniFile 			string 	outer 	giveitems.ini
+    /declare MaxInvSlots 		int 	outer 	10
+    /declare Bag 				int 	outer
+    /declare Slot 				int 	outer
+    /declare ItemType 			int 	outer 	0
+	/declare TradeGroupDefine 	string 	outer
+	/declare TradeGroupExec 	string 	outer
+	/declare FlaggedItems 		string 	outer
+    /declare DryRun 			int 	outer 	0
+    /declare ItemName 			string 	outer
+    /declare FullStack 			int 	outer 	0
+    /declare ForceFullStack 	int 	outer 	0
+    /declare Pickup 			int 	outer 	0
+	/declare ItemNbrNeed 		int 	outer 	-1
+	/declare NbrIHave 			int 	outer 	0
+	/declare BagNum        		int    	outer   0
+	/declare BagSlot    		int    	outer   0
+	/declare OrigNumToTrade		int		outer	0
+	/declare NewItemNbrNeed		int		outer	0
+	/declare Settings			string	outer	
+	
+    /echo \atGiveItems.mac :: v1.2 :: by Sym for RedGuides.com
+|	/echo \atGiveItems.mac :: v2.6 :: by Toadwart for Redguides.com - added grouping code - npc give option - with group and item quantity for quests or misc transfers
+	/echo \atGiveItems.mac :: v2.7.2 :: by Toadwart for Redguides.com - Added functionality for a string variable to flag items to be given to a target, allowing for the grouping of items based on user preference to be given to others. Fixed collectible/tradeskill trading
+    /echo \ayGives tradeskill or collection items to another player or bank. Fires off first two characters of each command (tr/co/ba etc)
+    /echo \at
+    /echo \ag/giveitem pc tr, or /giveitem pc co\ay - Gives all tradeskill/collection items to targeted pc, ignoring exclude list
+	/echo \ag/giveitem pc gr poison\ay - Gives all flagged items in giveitems.ini with the given string, Poison in this case
+	/echo \ay     The word "poison" or "funky" used above can be any text string you define with which to group your given items, full string needed
+	/echo \ag/giveitem np gr quest1\ay - Gives all flagged items in giveitems.ini with the given string, quest1 in this case
+    /echo \ag/giveitem ba tr\ay - /autobanks all tradeskill items you have to targeted banker NPC, ignoring exclude list
+    /echo \ag/giveitem ba co\ay - /autobanks all collection items you have to targeted banker NPC
+    /echo \ag/giveitem ex\ay - Add item on cursor to exclude list then autoinventory the item
+	/echo \ag/giveitem gr string\ay - add item on cursor to flagged items with text used in place of "string", then autoinventory the item
+    /echo \ag/giveitem dr\ay - Toggles dryrun mode. Notifies only, no actual item touching
+    /echo \ag/giveitem fu\ay - Forces full stack pickups. Used to bank or give all of your collection items instead of just one.
+    /echo \ag/giveitem cursor\ay - Executes \at/cursor 1 stack\ay on each collection item. If you don't use MQ2Cursor, ignore this.
+	/echo \at
+	/echo \ag/giveitem help <variable>\ay Where \ag<variable> \ayis one of the flags above, such as \ag/giveitem help gr \ay would give help on
+	/echo \ay     what \aggr \ay would be used for in method and effect.
+	/echo \at
+	/echo \ar/giveitem debug \aywill toggle debug mode on and off
+	/echo \at
+	/echo \ag/giveitem help\ay will repeat these instructions
+	/echo \at
+	/echo \ay Sitting will end the macro.
+    
+    /while (${Me.Standing}) {
+		/call CommandSub
+	}
+/return
+
+Sub CommandSub
+	/doevents
+	/delay 1s
+/return
+
+:OnExit 
+    /if (!${MacroQuest.LastCommand.Find[/end]}) {
+		/varset Debugging FALSE
+		/call IniChange "General" "Debugging" "FALSE"
+	}
+	/endmacro
+/return
+
+Sub Bind_GiveCommand(string pp0,string pp1,string pp2,string pp3)
+
+	/if (!${pp0.Length}) {
+		/echo You need a command to pair with the \ag/giveitem\ax command \ay(group/collection/tradeskill/banker/exclude/cursor/dryrun/npc/pc/debug/help)\ax!
+		/return
+	} else {
+		/if (!${Select[${pp0.Left[2]},gr,co,tr,he,ba,ex,cu,dr,pc,np,de]}) {
+			/echo \arYou must use one of the approved commands to give items, and \ag${pp0}\ax is not. \ayUse (group/collection/tradeskill/banker/exclude/cursor/dryrun/npc/pc/debug/help)\ax!
+			/return
+		} else {
+			/if (${pp0.Equal[Debug]}) {
+				/if (!${Debugging}) {
+					/varset Debugging TRUE
+					/call IniChange "General" "Debugging" "TRUE"
+					/echo \arNow Debugging!
+				} else {
+					/if (${pp0.Equal[Debug]} && ${Debugging}) {
+						/varset Debugging FALSE
+						/call IniChange "General" "Debugging" "FALSE"
+						/echo \arDebugging halted!
+					}
+				}
+			} else {
+				/if (!${pp1.Length} && ${Select[${pp0.Left[2]},gr,ba,pc,np]}) {
+					/echo you need to include a string to go with (\ag${pp0}\ax)
+					/return
+				} else {
+					/if (${Debugging}) /echo \ag-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+					/if (${Debugging}) /echo Input strings from user -> First string passed in (pp0): \ay${pp0}\ax Second string passed in (pp1): \ay${pp1}\ax Third string passed in (pp2): \ay${pp2}\ax Fourth string passed in (pp3): \ay${pp3}
+					
+					|-Type 3 are Collections, Type 1 are Tradeskills and Type 2 are group items defined in the ini file, Type 4 represents a command line trade where the user defines number to be traded <- Last item not implemented as yet
+					/if (!${pp1.Length}) /varset pp1 NULL
+					/if (${pp1.Left[2].Equal[co]}) /varset ItemType 3
+					/if (${pp1.Left[2].Equal[tr]}) /varset ItemType 1
+					/if (${pp0.Left[2].Equal[gr]}) /varset TradeGroupDefine ${pp1}	
+					/if (${pp1.Left[2].Equal[gr]} && ${pp0.Left[2].NotEqual[he]}) {
+						/if (${pp2.Length}) {
+							/varset ItemType 2
+							/varset TradeGroupExec ${pp2}
+						} else {
+							/echo \arYou have no group defined!
+							/autoinventory
+							/return
+						}
+					}
+|					/if (${pp3} > 0) /varset ItemType 4
+					
+					/if (${pp0.Left[2].NotEqual[he]} && ${Debugging}) /echo First variable passed in (pp0) isn't \ayhe\ax so don't show general help
+					/if (${pp0.Left[2].Equal[gr]} && ${Debugging}) /echo First Variable (pp0) is verified to be \aygr\ax, so we'll go to adding to a group in the ini	
+					/if (${Debugging}) /echo The ItemType is \ay${ItemType}\ax and the Group Execution Name is: \ay${TradeGroupExec}
+					
+					|- Dryrun mode lets you echo what would be traded in reality as a test run before any trading is actually done	
+					/if (${pp0.Left[2].Equal[dr]}) {
+						/if (${DryRun}) {
+							/echo \atDryRun mode is \ar*OFF*
+							/varset DryRun 0
+						} else {
+							/echo \atDryRun mode is \ag*ON*
+							/varset DryRun 1
+						}
+					}       
+			   
+					|- Fullstack is a toggle to say trade an entire stack of items, or a single item, or whatever number of trade items are defined in the ini file, overriding predefined settings
+					/if (${Defined[pp0]} && ${pp0.Left[2].Equal[fu]}) {
+						/if (${ForceFullStack}) {
+							/echo \atForceFullStack is \ar*OFF*
+							/varset ForceFullStack 0
+						} else {
+							/echo \atForceFullStack is \ag*ON*
+							/varset ForceFullStack 1
+						}
+					}
+
+					|- Variable used to differentiate an intermediate quantity yet to be traded when multiple stacks are handed over. If you have 3 stacks of 20 of an item and have 24 defined in the ini to be traded it will trade 20 from the first stack and this variable would say, "wait, there's 4 more that need to be traded" and so the next iteration through the inventory that finds a stack or partial stack would pull 4 more items. If defined 5 to trade and you have a stack of 1, 2, 3 it will take the first two stacks and 2 from the third stack to make up the 5. This variable keeps track of what has been traded and what hasn't while iterating through the inventory.
+					/varset NewItemNbrNeed -1
+
+					/if (${pp0.Left[2].Equal[pc]} || ${pp0.Left[2].Equal[np]}) /call GiveItemsToOther "${pp0}" "${pp1}"
+					/if (${pp0.Left[2].Equal[ba]}) /call GiveItemsToBanker
+					/if (${pp0.Left[2].Equal[ex]}) /call ExcludeItem
+					/if (${pp0.Left[2].Equal[cu]}) /call SetCursor
+					/if (${pp0.Left[2].Equal[gr]}) /call GroupItem "${pp1}"
+					/if (${pp0.Left[2].Equal[he]} && ${pp1.Left[2].Equal[gr]}) /call GRHelp
+					/if (${pp0.Left[2].Equal[he]} && (${pp1.Left[2].Equal[pc]} || ${pp1.Left[2].Equal[np]} || ${pp1.Left[2].Equal[ba]})) /call PCNPHelp
+					/if (${pp0.Left[2].Equal[he]} && ${pp1.Left[2].Equal[ex]}) /call EXHelp
+					/if (${pp0.Left[2].Equal[he]} && ${pp1.Left[2].Equal[dr]}) /call DRHelp
+					/if (${pp0.Left[2].Equal[he]} && ${pp1.Left[2].Equal[fu]}) /call FUHelp
+					/if (${pp0.Left[2].Equal[he]} && ${pp1.Left[2].Equal[cu]}) /call CUHelp
+					/if (${pp0.Left[2].Equal[he]} && ${pp1.Equal[NULL]}) /call CmdHelp
+				}
+			}
+		}
+	}
+
+/return
+
+Sub SetCursor
+
+    /if (${Plugin[MQ2Cursor].Name.Equal[NULL]}) {
+        /echo \arThis option only works if you have MQ2Cursor setup.
+        /return
+    }
+    /varset ItemType 0
+    /varset ForceFullStack 1
+    /for Bag ${MaxInvSlots} downto 1
+        /if (${InvSlot[pack${Bag}].Item.Container}) {
+            /if (!${Window[Pack${Bag}].Open}) /itemnotify pack${Bag} rightmouseup
+            /delay 5
+            /delay 2s ${Window[Pack${Bag}].Open}
+
+            /for Slot ${InvSlot[pack${Bag}].Item.Container} downto 1
+                /call ProcessItem
+                /if (${Cursor.ID}) {
+                    /cursor 1 st
+                    /delay 1s !${Cursor.ID}
+                    /delay 5
+                }
+            /next Slot
+        }
+    /next Bag
+    
+    /echo \agFinished setting keep/destroy
+
+/return
+
+Sub GiveItemsToOther(pp0, pp1, NewItemNbrNeed)
+
+	/if (!${pp1.Length}) {
+		/echo You need to define what you're giving to \ag${pp0}\ax, currently you left it blank.
+		/return
+	} else {
+		|- Makes sure you're trading with the flagged creature you think you are, and that they're close enough to trade with them as well
+		/if (!${Target.ID} || ${Target.Distance} > 24) {
+			/echo \arYou must either choose a target, or move closer to your target to give items to them.
+			/return
+		} else {
+			/if (${pp0.Left[2].Equal[pc]} && ${Target.Type.NotEqual[PC]}) {
+				/echo \arThat target is not a Player Character.
+				/return
+			} else {
+				/if (${pp0.Left[2].Equal[np]} && ${Target.Type.NotEqual[NPC]}) {
+					/echo \arThat target is not a Non-Player Character.
+					/return
+				} else {
+					|- Get list of all headers in the ini file
+					/declare IniHeaders ${Ini[${IniFile}]}
+					
+					/if (${Debugging}) /echo The inifile I'm searching through: \ag${IniFile}\ax, The header I'm looking for: \ag${TradeGroupExec}\ax and the headers in the file are: \ag${IniHeaders}
+					
+					/if (!${IniHeaders.Find[${TradeGroupExec}]} && ${TradeGroupExec.Length}) {	
+						/echo \ayThe group flag \ag${TradeGroupExec}\ay is not found in any of the categories within the Ini File: ${IniFile}
+						/return
+					} else {
+						/if (!${Window[InventoryWindow].Open}) {
+							/keypress INVENTORY
+							/keypress OPEN_INV_BAGS
+						}
+						/echo \agGiving item(s) to ${Target.CleanName}
+						/echo \ayIf giving Tradeskill items by bulk it will default to entire stacks, otherwise will only give entire stacks if \ag/giveitem fu\ax has been toggled.
+						/for Bag 1 to ${MaxInvSlots}
+							/if (${InvSlot[pack${Bag}].Item.Container}) {
+								/for Slot 1 to ${InvSlot[pack${Bag}].Item.Container}
+									/call ProcessItem 1
+									/if (${Cursor.ID}) {                
+										/echo \awGiving \at${Cursor.Name}
+										/nomodkey /click left target
+										/delay 2s !${Cursor.ID}
+										/delay 1s
+										/if (${Window[TradeWnd].Child[TRDW_TradeSlot7].Tooltip.Length}) {
+											/echo \agClicking Trade
+											/notify TradeWnd TRDW_Trade_Button LeftMouseUp
+											:WaitWindow
+												/delay 1s
+											/if (${Window[TradeWnd].Open}) /goto :WaitWindow
+											/delay 5
+										}   
+									}
+									/if (${DryRun} && ${Pickup} && ${ItemName.NotEqual[NULL]}) {
+										/if (${NbrIHave} >= ${ItemNbrNeed}) {
+											/echo \awWould have given \ag${ItemNbrNeed}\ax of \at${ItemName}\ax
+										} else {
+											/echo I would not have had enough of \ag${ItemName}\ax to give, as I only have \ag${NbrIHave}
+										}
+									}
+								/next Slot
+							} else {
+								/if (${InvSlot[pack${Bag}].Item.ItemSlot}) {
+									/call ProcessItem 1
+									/if (${Cursor.ID}) {                
+										/echo \awGiving \at${Cursor.Name}
+										/nomodkey /click left target
+										/delay 2s !${Cursor.ID}
+										/delay 1s
+										/if (${Window[TradeWnd].Child[TRDW_TradeSlot7].Tooltip.Length}) {
+											/echo \agClicking Trade
+											/notify TradeWnd TRDW_Trade_Button LeftMouseUp
+											:WaitWindow
+												/delay 1s
+											/if (${Window[TradeWnd].Open}) /goto :WaitWindow
+											/delay 5
+											/varset ItemNbrNeed ${Math.Calc[${ItemNbrNeed} - ${Cursor.Stack}]}
+											/if (${Debugging}) /echo The new number of items I need is (ItemNbrNeed): \ag${ItemNbrNeed}
+										}   
+									}
+									/if (${DryRun} && ${Pickup} && ${ItemName.NotEqual[NULL]}) {
+										/echo \awWould have given \at${ItemName}
+									}
+								}
+							}
+						/next Bag
+
+						/if (${Window[TradeWnd].Open} || ${Window[GiveWnd].Open}) {
+							/echo \agClicking Trade
+							/notify TradeWnd TRDW_Trade_Button LeftMouseUp
+						}
+						/echo \agFinished giving items to ${Target.CleanName}
+						/if (${Window[InventoryWindow].Open}) {
+							/keypress INVENTORY
+							/keypress CLOSE_INV_BAGS
+						}
+					}
+				}    
+			}
+		}
+	}
+
+/return
+
+Sub GiveItemsToBanker
+
+    /if (!${Target.ID} || ${Target.Distance} > 24) {
+		/echo \arYou must have a close banker targeted.
+		/return
+    } else {
+		/if (${Target.Surname.NotEqual[Banker]}) {
+			/echo \arThat target is not a Banker.
+			/return
+		}
+	}
+    
+    /if (!${Window[BigBankWnd].Open}) {
+        /nomodkey /click right target
+        /delay 1s
+        /delay 2s ${Window[BigBankWnd].Open}
+    }
+    /if (!${Window[BigBankWnd].Open}) {
+        /echo \arBank window isn't opening. Please open it manually.
+        /return
+    }
+
+    /if (!${Window[InventoryWindow].Open}) /keypress i
+	/varset FullStack 1
+
+    /echo \agDepositing items into bank
+    /for Bag 1 to ${MaxInvSlots}
+        /if (${InvSlot[pack${Bag}].Item.Container}) {
+            /if (${Cursor.ID}) {
+                /echo \arLooks like we are out of bank space
+                /return
+            }
+            /if (!${Window[Pack${Bag}].Open}) /itemnotify pack${Bag} rightmouseup
+            /delay 5
+            /delay 2s ${Window[Pack${Bag}].Open}
+
+            /for Slot 1 to ${InvSlot[pack${Bag}].Item.Container}
+                /call ProcessItem
+                /if (${Cursor.ID}) {                
+                    /echo \awDepositing \at${Cursor.Name}
+                    /autobank
+                    /delay 2s !${Cursor.ID}
+                    /delay 1s
+                }
+                /if (${DryRun} && ${Pickup} && ${ItemName.NotEqual[NULL]}) {
+                    /echo \awWould have Deposited \at${ItemName}
+                }
+            /next Slot
+        }
+    /next Bag
+
+    /echo \agFinished depositing items into bank.
+	/notify BigBankWnd BigB_DoneButton LeftMouseUp
+
+/return
+
+Sub ProcessItem(NewItemNbrNeed)
+
+	|- Once bags are open search through for the items in the ini file and choose to pick the item up in the singular, numeric, or all designation depending on criteria in the ini file or given at the command prompt <- Still under development
+    /varset Pickup 0
+    /varset ItemName NULL
+	/varset OrigNumToTrade 0
+	
+	/if (${InvSlot[pack${Bag}].Item.Item[${Slot}].NoDrop} && !${InvSlot[pack${Bag}].Item.Item[${Slot}].Quest}) {
+		/if (${Debugging}) {
+			/echo The \ag${InvSlot[pack${Bag}].Item.Item[${Slot}].Name}\ax is No Drop, and not a quest item so we're not going to process it as tradeable.
+		}
+		/varset Pickup 0
+	} else {
+		/if (${InvSlot[pack${Bag}].Item.Item[${Slot}].NoDrop} && ${Target.Type.Equal[PC]}) {
+|-			/echo The \ag${InvSlot[pack${Bag}].Item.Item[${Slot}].Name}\ax you are attempting to trade is NoDrop. You cannot give NoDrop items to PC's. Proceeding to next item.
+			/varset Pickup 0
+		} else {
+			/if (${ItemType} == 3 && ${InvSlot[pack${Bag}].Item.Item[${Slot}].Collectible}) {
+				/if (${Debugging}) /echo Itemtype: \ag${ItemType}\ax is Collectible flagged.
+				/if (${ForceFullStack}) {
+					/varset FullStack 1
+				} else {
+					/varset FullStack 0
+				}
+				/varset Pickup 1
+			} else {
+				/if (${ItemType} == 1 && ${InvSlot[pack${Bag}].Item.Item[${Slot}].Tradeskills}) {
+					/if (${Debugging}) /echo Itemtype: \ag${ItemType}\ax is a Tradeskill flagged item.
+					/varset FullStack 1
+					/varset Pickup 1
+				} else {
+					/if (${ItemType} == 2) {
+						/if (${Debugging}) /echo Itemtype: \ag${ItemType}\ax
+						/if (${InvSlot[pack${Bag}].Item.Container}) {
+							/varset ItemName ${InvSlot[pack${Bag}].Item.Item[${Slot}].Name}
+						} else {
+							/varset ItemName ${InvSlot[pack${Bag}].Item.Name}
+						}
+						/if (${Ini[${IniFile},${TradeGroupExec},${ItemName}]}) {
+							/if (${ForceFullStack} || ${Ini[${IniFile},${TradeGroupExec},${ItemName}]}==-1) {
+								/varset FullStack 1
+							} else {
+								/varset FullStack 0
+							}
+							/if (${Debugging}) /echo Number defined in \ag${IniFile}\ax: ${Ini[${IniFile},${TradeGroupExec},${ItemName}]}
+							/if (${FullStack}==0 && ${Ini[${IniFile},${TradeGroupExec},${ItemName}]}==1) /echo \arWarning! Only giving one item, is that what you intended? If not then toggle fullstack with \ag/giveitem fu
+							/if (${Debugging}) /echo Number of \ag${ItemName}\ax to be given: \ag${Ini[${IniFile},${TradeGroupExec},${ItemName}]}
+							/if (${Ini[${IniFile},${TradeGroupExec},${ItemName}].Length}) {
+								/varset Pickup 1
+								/varset ItemNbrNeed ${Ini[${IniFile},${TradeGroupExec},${ItemName}]}
+								/if (${Debugging}) /echo Processing commands, and the number of Items I need from the ini file is: \ag${ItemNbrNeed}\ax (If -1 here, then it will try to trade all items that match this item name: \ag${ItemName}\ax)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	|- Once all variables are defined, then decide to pick it up and hand it over or not
+    /if (${Pickup}) {
+	
+		/if (${Debugging}) /echo Group from the ini that I'm trying to trade: \ag${TradeGroupExec}
+		
+		/if (${InvSlot[pack${Bag}].Item.Container}) {
+			/varset ItemName ${InvSlot[pack${Bag}].Item.Item[${Slot}].Name}
+		} else {
+			/varset ItemName ${InvSlot[pack${Bag}].Item.Name}
+		}
+		
+		/varset NbrIHave ${Math.Calc[${FindItemCount[${InvSlot[pack${Bag}].Item.Item[${Slot}]}]} + ${FindItemCount[${InvSlot[pack${Bag}].Item.Name}]}]}
+
+		/if (${Debugging}) /echo Number of items in all of the stack(s) of \ag${ItemName}\ax that I have found: \ag${NbrIHave}
+		
+		/if (${NbrIHave} < ${ItemNbrNeed}) {
+				/echo \arYou do not have enough items to give (\ag${NbrIHave}\ax) based on what is defined in the ini file \ag${ItemNbrNeed}\ax.
+				/return
+		}
+		
+		/if (${Ini[${IniFile},ExcludedItems,${ItemName}]} && ${Ini[${IniFile},${TradeGroupExec},${ItemName}].Length}) {
+			/echo \ag${ItemName}\ax is an excluded item, so I'm going to the next item
+			/return
+		} else {
+			/if (${Ini[${IniFile},ExcludedItems,${ItemName}]} && !${Ini[${IniFile},${TradeGroupExec},${ItemName}].Length}) {
+				/varset ItemName NULL
+			} else {
+				/if (!${DryRun}) {
+					/if (${FullStack} || (${ItemNbrNeed} == -1 && ${NbrIHave} >= 1)) {
+						/if (${InvSlot[pack${Bag}].Item.Container}) {
+							/nomodkey /shiftkey /itemnotify in pack${Bag} ${Slot} leftmouseup
+						} else {
+							/if (${InvSlot[pack${Bag}].Item.Stackable}) {
+								/nomodkey /shiftkey /itemnotify pack${Bag} leftmouseup
+							} else {
+							/echo ${InvSlot[pack${Bag}].Item}
+								/nomodkey /itemnotify pack${Bag} leftmouseup
+							}
+						}
+					} else {
+						/if (${Debugging})  /echo Number of Items I need: \ag${ItemNbrNeed}\ax Number of Items I have: \ag${NbrIHave}
+						/if (${ItemNbrNeed} == 1 && ${NbrIHave} == 1) {
+							/echo Giving just one item to your target
+							/nomodkey /ctrlkey /itemnotify in pack${Bag} ${Slot} leftmouseup
+						} else {
+							/if (${ItemNbrNeed} >= 1 && ${NbrIHave} >= 1) {
+								/if (${NbrIHave} >= (${ItemNbrNeed} && ${NewItemNbrNeed})) {
+								
+									/if (${Debugging}) /echo Multi-Number needed, and the number I have is: \ag${NbrIHave}\at the original number I needed was/is: \ag${ItemNbrNeed} \atand the New number I still need is: \ag${NewItemNbrNeed}
+								
+									/if (${NewItemNbrNeed} == -1) {
+								
+										|-This will give items based on the numerical values in the ini file, making the assumption that this is potentially a quest turn-in, or limited trade, and the ini defines how many are needed for that turn-in.
+										/if (${Debugging}) /echo Handing over the number of items I need: \ag${ItemNbrNeed}\ax A -1 indicates all items will be handed over
+										
+										/itemnotify in pack${Bag} ${Slot} leftmouseup
+										/notify QuantityWnd QTYW_Slider newvalue ${ItemNbrNeed}
+										/notify QuantityWnd QTYW_Accept_Button leftmouseup
+										/varset NewItemNbrNeed ${Math.Calc[${ItemNbrNeed} - ${Cursor.Stack}]}
+										
+										/if (${Debugging}) /echo I've handed over some items, but the new number of items left to hand over, perhaps from another stack is: \ag${NewItemNbrNeed}
+										
+									} else {
+									
+										/if (${Debugging}) /echo \arThis will give items based on the numerical values in the ini file, making the assumption that this is potentially a quest turn-in, or limited trade, and the ini defines how many are needed for that turn-in.
+										/if (${Debugging}) /echo The number of items I need is: \ag${ItemNbrNeed}\at, and if I've given from one stack already, then the new item left to give is: \ag${NewItemNbrNeed}
+										
+										/itemnotify in pack${Bag} ${Slot} leftmouseup
+										/notify QuantityWnd QTYW_Slider newvalue ${NewItemNbrNeed}
+										/notify QuantityWnd QTYW_Accept_Button leftmouseup
+										/if (${Math.Calc[${NewItemNbrNeed} - ${Cursor.Stack}]} <= 0) {
+											/varset NewItemNbrNeed 0
+										} else {
+											/varset NewItemNbrNeed ${Math.Calc[${NewItemNbrNeed} - ${Cursor.Stack}]}
+										}
+										
+										/if (${Debugging}) /echo I've handed over what I needed to give from the current stack, I may be required to give more, and here's what's being required yet: \ag${NewItemNbrNeed}
+									
+									}
+								}
+								/delay 1s ${Cursor.ID}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+/return
+
+Sub ExcludeItem
+
+	|-Add Item to excluded item list in ini file
+    /if (!${Cursor.ID}) {
+        /echo \arPut an item on your cursor first!
+        /return
+    }
+    
+    /ini ${IniFile} ExcludedItems "${Cursor.Name}" 1
+    /echo \atAdded \ag${Cursor.Name}\at as an excluded trade item to ${IniFile}.
+    /autoinv
+
+/return
+
+Sub GroupItem(pp1)
+
+	|- Add item to group header in ini file
+	/if (!${Cursor.ID}) {
+		/echo \arPut an item on your cursor first!
+		/return
+	} else {
+		/if (!${pp1.Length} || ${pp1.Equal[NULL]}) {
+			/echo you must have a group name to add this item to the ini file
+			/return
+	} else {
+		/ini ${IniFile} "${TradeGroupDefine}" "${Cursor.Name}" -1
+		/echo Added \ag${Cursor.Name}\ax as a grouped item to \ag${IniFile}\ax in a group of \ag${TradeGroupDefine}.
+		/if (${Cursor.Item.Stackable}) {
+			/echo If you intend to give a specific number of this item to some target, then edit the \ag${IniFile}\ax file and change the number after the equal sign to the desired amount.
+		}
+		/autoinv
+	}
+	
+/return
+
+Sub IniChange(Section,Key,Value)
+	/ini ${IniFile} "${Section}" "${Key}" "${Value}"
+/return
+
+Sub CmdHelp
+    /echo \atGiveItems.mac :: v1.2 :: by Sym for RedGuides.com
+	/echo \atGiveItems.mac :: v2.7 :: by Toadwart for Redguides.com - added grouping code - npc give option - with group and item quantity for quests or misc transfers
+    /echo \atGives tradeskill or collection items to another player or bank. Fires off first two characters of each command (tr/co/ba etc)
+    /echo \at
+    /echo \ag/giveitem pc tr, or /giveitem pc co\ay - Gives all tradeskill/collection items to targeted pc, ignoring exclude list
+	/echo \ag/giveitem pc gr poison\ay - Gives all flagged items in giveitems.ini with the given string, Poison in this case
+	/echo \arThe word "poison" or "funky" used above can be any text string you define with which to group your given items, full string needed
+	/echo \ag/giveitem np gr quest1\ay - Gives all flagged items in giveitems.ini with the given string, quest1 in this case
+    /echo \ag/giveitem ba tr\ay - /autobanks all tradeskill items you have to targeted banker NPC, ignoring exclude list
+    /echo \ag/giveitem ba co\ay - /autobanks all collection items you have to targeted banker NPC
+    /echo \ag/giveitem ex\ay - Add item on cursor to exclude list then autoinventory the item
+	/echo \ag/giveitem gr string\ay - add item on cursor to flagged items with text used in place of "string", then autoinventory the item
+    /echo \ag/giveitem dr\ay - Toggles dryrun mode. Notifies only, no actual item touching
+    /echo \ag/giveitem fu\ay - Forces full stack pickups. Used to bank or give all of your collection items instead of just one.
+    /echo \ag/giveitem cursor\ay - Executes \at/cursor 1 stack\ay on each collection item. If you don't use MQ2Cursor, ignore this.
+	/echo \at
+	/echo \ay Sitting will end the macro.
+/return
+
+Sub GRHelp
+	/echo \agCommand Syntax: 
+	/echo \ay/giveitem gr string
+	/echo \agor \ay/giveitem pc gr string
+	/echo \aggr or group can be used in the second or third position of the command and gives two different results depending on position.
+	/echo \ay/giveitem gr string \ag would assign the item currently on your cursor to a group label in your giveitems.ini file with the item name=1
+	/echo \ag Example from the exact command given on the line above this is what would be added to the giveitems.ini:
+	/echo \ay[string]
+	/echo \ayItem name from cursor=1
+	/echo \at
+	/echo \agUsing \ay/giveitem pc gr string\ag would then be used to give items to another pc in game
+	/echo \agExample from the line above would use the pc you have targeted at the moment, and would search giveitem.ini for a category
+	/echo \aglabeled [string] and for any item(s) listed beneath that header it would give 1 item to your targeted pc
+	/echo \agIf a full stack is wanted to be transferred then a \ay/giveitem fu \agwould need to be issued before trying to transfer items
+	/echo \ag
+	/echo \agThe pc gr combination is used to give a group of items to a pc, while the np gr combination is used to give a group to an npc
+/return
+
+Sub PCNPHelp
+	/echo \agThe use of pc, ba or np in the second position is to be used to designate target type for transaction
+	/echo \agpc is a player character target, and will not let you enact the command with a banker or any other npc.
+	/echo \agba is a designation for trading with a banker, which is separate from other npc's in how they interact with the items you provide them.
+	/echo \agnp is used for trading with any non-banking non-player character. Primary use of this command was created for the
+	/echo \agpurposes of giving quest items to npcs. Use of an ini header and an item list allows the turn-ins to be semi-
+	/echo \agautomated, or at least allow for easy eqbcs or dannet style group execute commands to have all players on the 
+	/echo \agchannel hand over a stack of quest items automatically without needing to open any inventories or click and hand 
+	/echo \agitems to an npc.
+	/echo \ag
+	/echo \agThe combination of pc gr, pc tr, or pc co give different, albeit similar results. Giving a group of items to a pc, or all tradeskill
+	/echo \agflagged items to a pc, or all collectible flagged items to a pc respectively. The same is true when using a np in place of the pc,
+	/echo \agin the above examples. The use of gr in combination with the banker will not work at this time, as it is designed to function between
+	/echo \agthe player character and either another pc, or a non-banker npc at this time.
+/return
+
+Sub EXHelp
+	/echo \agThe use of ex in the second position while holding an item on your cursor is the means by which you can automatically add the held item to
+	/echo \agthe list of excluded items that will not be traded regardless of which command you're using from this macro. Things like water flasks are a prime
+	/echo \agexample, as they are tradeskill items, but you almost never want to be trading them with a macro like this. You would typically individually
+	/echo \agtrade items in that situation. So, gems used as spell focuses, and some consumable type items that you don't want to be trading with tradeskill
+	/echo \agflags, or collectible flags would be excluded this way. You can also add items manually to the ini file to make them excluded.
+/return
+
+Sub DRHelp
+	/echo \agThe dr flag is used to toggle the dryrun mode. This mode lets you define a flag that will let all of the functionality of this macro function,
+	/echo \agexcept that the actual trade from you to a banker, pc, or npc will not actually take place. This is a means to test your commands, and ini settings
+	/echo \agwithout the trade taking place, and you can verify that "yes, those are the items that are supposed to be traded"
+/return
+
+Sub FUHelp
+	/echo \agThe fu flag is used to toggle the FullStack variable. This variable is set to off by default unless you're transferring tradeskill items, in
+	/echo \agwhich case it is toggled on by default. The grouping function assumes that if you are
+	/echo \aggoing to give a group of items based on an ini definition, then you've defined how many you want to be
+	/echo \agtrading within the ini file.
+/return
+
+Sub CUHelp
+	/echo \agThe cu flag is used with MQ2Cursor, and at this time I am unfamiliar with it's usage, and this help file is merely a placeholder until I can
+	/echo \agunderstand well enough to be able to speak to it's use.
+/return

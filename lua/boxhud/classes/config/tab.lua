@@ -1,8 +1,8 @@
 --[[
 The Tab class represents the static configuration of a tab defined in boxhud-settings
 --]]
-local BaseClass = require 'classes.base'
-local state = require 'state'
+local BaseClass = require(BOXHUD_REQUIRE_PREFIX..'classes.base')
+local state = require(BOXHUD_REQUIRE_PREFIX..'state')
 
 local Tab = BaseClass(function(t,tabSettings)
     t.Name = tabSettings['Name']

@@ -1,8 +1,8 @@
 --[[
 The Column class represents the static configuration of a column defined in boxhud-settings
 --]]
-local BaseClass = require 'classes.base'
-local state = require 'state'
+local BaseClass = require(BOXHUD_REQUIRE_PREFIX..'classes.base')
+local state = require(BOXHUD_REQUIRE_PREFIX..'state')
 
 local Column = BaseClass(function(c,columnSettings)
     c.Name = columnSettings['Name']

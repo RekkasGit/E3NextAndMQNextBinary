@@ -1,8 +1,8 @@
 --[[
 The PropertyInput class holds the inputs for creating a new Property
 --]]
-local BaseClass = require 'classes.base'
-local Input = require 'classes.inputs.input'
+local BaseClass = require(BOXHUD_REQUIRE_PREFIX..'classes.base')
+local Input = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.input')
 
 local PropertyInput = BaseClass(Input(), function(p)
     p.Type=1

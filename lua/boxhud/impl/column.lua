@@ -1,8 +1,8 @@
-local Column = require 'classes.config.column'
-local ColumnInput = require 'classes.inputs.columninput'
-local helpers = require 'utils.uihelpers'
-local state = require 'state'
-local settings = require 'settings.settings'
+local state = require(BOXHUD_REQUIRE_PREFIX..'state')
+local Column = require(BOXHUD_REQUIRE_PREFIX..'classes.config.column')
+local ColumnInput = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.columninput')
+local helpers = require(BOXHUD_REQUIRE_PREFIX..'utils.uihelpers')
+local settings = require(BOXHUD_REQUIRE_PREFIX..'settings.settings')
 
 local classes = {'all', 'melee', 'caster', 'hybrids', 'ranged', 'ber', 'brd',
         'bst', 'clr', 'dru', 'enc', 'mag', 'mnk', 'nec', 'pal', 'shd', 'rng',

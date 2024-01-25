@@ -2,7 +2,7 @@
 The ConfigurationPanel class stores the runtime settings of the configuration tab,
 including what is selected, and the input objects for creating new configurations.
 --]]
-local BaseClass = require 'classes.base'
+local BaseClass = require(BOXHUD_REQUIRE_PREFIX..'classes.base')
 
 local ConfigurationPanel = BaseClass(function(c, name)
     c.Name = name

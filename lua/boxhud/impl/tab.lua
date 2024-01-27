@@ -1,8 +1,8 @@
-local Tab = require 'classes.config.tab'
-local TabInput = require 'classes.inputs.tabinput'
-local helpers = require 'utils.uihelpers'
-local state = require 'state'
-local settings = require 'settings.settings'
+local state = require(BOXHUD_REQUIRE_PREFIX..'state')
+local Tab = require(BOXHUD_REQUIRE_PREFIX..'classes.config.tab')
+local TabInput = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.tabinput')
+local helpers = require(BOXHUD_REQUIRE_PREFIX..'utils.uihelpers')
+local settings = require(BOXHUD_REQUIRE_PREFIX..'settings.settings')
 
 function TabInput:toTab()
     local tab = Tab({})

@@ -1,8 +1,8 @@
 --[[
 The Property class represents the static configuration of a property defined in boxhud-settings
 --]]
-local BaseClass = require 'classes.base'
-local state = require 'state'
+local BaseClass = require(BOXHUD_REQUIRE_PREFIX..'classes.base')
+local state = require(BOXHUD_REQUIRE_PREFIX..'state')
 
 local Property = BaseClass(function(p,propSettings)
     p.Name = propSettings['Name']

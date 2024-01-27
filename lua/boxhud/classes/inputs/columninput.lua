@@ -1,8 +1,8 @@
 --[[
 The ColumnInput class holds the inputs for creating a new Column
 --]]
-local BaseClass = require 'classes.base'
-local Input = require 'classes.inputs.input'
+local BaseClass = require(BOXHUD_REQUIRE_PREFIX..'classes.base')
+local Input = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.input')
 
 local ColumnInput = BaseClass(Input(), function(c)
     c.Type=1

@@ -1,3 +1,4 @@
+--- @type ImGui
 require 'ImGui'
 local lfs = require 'lfs'
 

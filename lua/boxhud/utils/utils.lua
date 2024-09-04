@@ -1,8 +1,9 @@
+--- @type Mq
 local mq = require 'mq'
-local state = require(BOXHUD_REQUIRE_PREFIX..'state')
+local state = require 'state'
 
-function print_msg(msg, ...) printf('\at[\ayBOXHUD\at] \at' .. msg, ...) end
-function print_err(msg, ...) printf('\at[\ayBOXHUD\at] \ar' .. msg, ...) end
+function print_msg(msg) print('\at[\ayBOXHUD\at] \at' .. msg) end
+function print_err(msg) print('\at[\ayBOXHUD\at] \ar' .. msg) end
 
 local utils = {}
 

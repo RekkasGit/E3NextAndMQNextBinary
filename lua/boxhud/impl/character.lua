@@ -1,6 +1,6 @@
-local state = require(BOXHUD_REQUIRE_PREFIX..'state')
-local Character = require(BOXHUD_REQUIRE_PREFIX..'classes.hud.character')
-local utils = require(BOXHUD_REQUIRE_PREFIX..'utils.utils')
+local Character = require 'classes.hud.character'
+local utils = require 'utils.utils'
+local state = require 'state'
 
 --- @type Mq
 local mq = require 'mq'
@@ -77,10 +77,10 @@ function Character:removeObserver(propName, force)
     if self.Observers[propName] or force then
         if force or mq.TLO.DanNet(self.Name).ObserveSet(propName)() then
             mq.cmdf('/dobserve %s -q "%s" -drop', self.Name, propName)
-            local verifyStartTime = os.time()
+            local verifyStartTime = os.time(os.date("!*t"))
             while self:isObserverSet(propName) do
                 mq.delay(100)
-                if os.difftime(os.time(), verifyStartTime) > 10 then
+                if os.difftime(os.time(os.date("!*t")), verifyStartTime) > 10 then
                     print_err('Timed out waiting for observer to be removed for \ay'..self.Name)
                     self.Observers[propName] = 'ERR'
                 end
@@ -223,28 +223,6 @@ function Character:drawCmdButton(label, action)
     end
 end
 
-function Character:drawTargetButton(label)
-    if ImGui.SmallButton(label) then
-        ImGui.CloseCurrentPopup()
-        if mq.TLO.Spawn('pc ='..self.Name)() then
-            mq.cmdf('/mqt pc =%s', self.Name)
-        elseif mq.TLO.Spawn('pccorpse ="'..self.Name..'\'s Corpse"')() then
-            mq.cmdf('/mqt pccorpse ="%s\'s Corpse"', self.Name)
-        end
-    end
-end
-
-function Character:drawNavToTargetButton(label)
-    if ImGui.SmallButton(label) then
-        ImGui.CloseCurrentPopup()
-        if mq.TLO.Spawn('pc ='..self.Name)() then
-            mq.cmdf('/nav spawn pc =%s', self.Name)
-        elseif mq.TLO.Spawn('pccorpse ="'..self.Name..'\'s Corpse"')() then
-            mq.cmdf('/nav spawn pccorpse ="%s\'s Corpse"', self.Name)
-        end
-    end
-end
-
 function Character:getDisplayName()
     if state.Anonymize then
         if self.ClassName then
@@ -259,12 +237,12 @@ end
 
 function Character:drawContextMenu()
     if ImGui.BeginPopupContextItem("##popup"..self.Name) then
-        self:drawTargetButton('Target##'..self.Name)
+        self:drawCmdButton('Target##'..self.Name, '/target %s')
         ImGui.SameLine()
-        self:drawNavToTargetButton('Nav To##'..self.Name)
+        self:drawCmdButton('Nav To##'..self.Name, '/nav spawn %s')
         ImGui.SameLine()
         self:drawCmdButton('Come To Me##'..self.Name, '/dex %s /nav id ${Me.ID}')
-
+        
         self:drawCmdButton('G Inv##'..self.Name, '/invite %s')
         ImGui.SameLine()
         self:drawCmdButton('R Inv##'..self.Name, '/raidinvite %s')
@@ -272,7 +250,7 @@ function Character:drawContextMenu()
         self:drawCmdButton('DZAdd##'..self.Name, '/dzadd %s')
         ImGui.SameLine()
         self:drawCmdButton('TAdd##'..self.Name, '/taskadd %s')
-
+        
         if ImGui.SmallButton("Reset Obs##"..self.Name) then
             print_msg('Resetting observed properties for: \ay'..self.Name)
             ImGui.CloseCurrentPopup()
@@ -295,10 +273,7 @@ function Character:drawNameButton()
     local buttonText = self:getDisplayName()
     local col = nil
     if self.Properties.BotInZone then
-        if self.Properties['Me.Type'] == 'Corpse' then
-            col = state.Settings.Colors.NotInZone or {1,0,0}
-            buttonText = buttonText .. '\'s Corpse'
-        elseif self.Properties['Me.Invis'] == true then -- Me.Invis* isn't observed, just getting ANY invis from spawn data
+        if self.Properties['Me.Invis'] == true then -- Me.Invis* isn't observed, just getting ANY invis from spawn data
             col = state.Settings.Colors.Invis or {0.26, 0.98, 0.98}
             buttonText = '('..self:getDisplayName()..')'
         elseif self.Properties['Me.Invis'] == 1 then -- Me.Invis[1] is observed and toon has regular invis
@@ -370,13 +345,9 @@ end
 function Character:updateCharacterProperties(currTime, peerGroup)
     if not self.Properties then self.Properties = {} end
     local properties = self.Properties
-    local charSpawnData = mq.TLO.Spawn('pc ='..self.Name)
-    if not charSpawnData() then
-        charSpawnData = mq.TLO.Spawn('pccorpse ="'..self.Name..'\'s Corpse"')
-    end
+    local charSpawnData = mq.TLO.Spawn('='..self.Name)
     properties['Me.ID'] = charSpawnData.ID()
     properties['Me.Invis'] = charSpawnData.Invis()
-    properties['Me.Type'] = charSpawnData.Type()
 
     local nameTitleCase = utils.TitleCase(self.Name)
     -- Fill in data from this toons observed properties

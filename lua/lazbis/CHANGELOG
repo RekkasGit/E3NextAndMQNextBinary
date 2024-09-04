@@ -1,0 +1,59 @@
+2.4.2
+- Open item links from linkdb when left clicking an item (provided you have a working, populated MQ2LinkDB database)
+2.4.1
+- Fix: handle nil when incrementing count on looted item
+- Fix: nil check visible item table during looted item event
+- Move class specific sebilis weapon augs to specific classes
+- Remove dsk aug heal focus item from shd list
+- Misc item data updates
+
+2.4.0
+- Feature: Persist settings for show slots, show missing only, announce needs, announce channel
+- Feature: Add setting for channel to announce needs to
+- Fix: event handling for looted items
+- Fix: Announce button for manual announcing now includes all names shown that need the item
+
+2.3.0
+- Feature: Update table and database based on looted items
+- Fix: Banked visible item containers showing up as red should now show as yellow
+2.2.3
+- Fix script being stopped but not restarted on bots when changing character selection
+- Fix error in dumpinv startup command
+
+2.2.2
+- Fix tradeskills showing incorrectly in table when unselecting show driver character
+
+2.2.1
+- Fix item scanning for visible armor components (again)
+- Sort dropdown menu of characters and names in announce messages
+
+2.2.0
+- Add toggle to automatically announce in addition to the buttons for announcing needed items
+- When on, the driver will automatically report the toons who need the item into /rs if in a raid, otherwise in group, for each character which is currently selected to be shown in the table
+- BIS scans for links in say, group and raid chat
+
+2.1.2
+- Fix: Show correct have/need for linked items regardless what item list is currently selected
+
+2.1.1
+- Fix: Rearrange item lists checked during linked item scanning so veksar list works properly
+- Fix: Correct typos in stat foods
+
+2.1.0
+- Feature: Add 'Announce' button next to needed items to list who needs into /rs
+- Refactor: Remove hardcoded things and pull from config file
+- Refactor: Change layout of stat food tab
+
+2.0.0
+- Feature: Support for offline character data using sqlite3
+- Feature: Add stat food quest info
+- Fix: Handle detecting visible armor containers for linked item checks
+- Various item updates
+
+1.1.0
+- Feature: Add tooltips to indicate a different item was found for a given row
+- Fix: Allow script to run with whatever folder name like bis or lazbis
+- Various item updates
+
+1.0.0
+- Initial release

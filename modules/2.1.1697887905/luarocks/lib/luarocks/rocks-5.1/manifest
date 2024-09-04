@@ -1,13 +1,19 @@
 commands = {}
 dependencies = {
-   luafilesystem = {
-      ["1.8.0-1"] = {
+   lsqlite3 = {
+      ["0.9.5-1"] = {
          {
             constraints = {
                {
                   op = ">=",
                   version = {
                      5, 1, string = "5.1"
+                  }
+               },
+               {
+                  op = "<",
+                  version = {
+                     5, 5, string = "5.5"
                   }
                }
             },
@@ -17,19 +23,19 @@ dependencies = {
    }
 }
 modules = {
-   lfs = {
-      "luafilesystem/1.8.0-1"
+   lsqlite3 = {
+      "lsqlite3/0.9.5-1"
    }
 }
 repository = {
-   luafilesystem = {
-      ["1.8.0-1"] = {
+   lsqlite3 = {
+      ["0.9.5-1"] = {
          {
             arch = "installed",
             commands = {},
             dependencies = {},
             modules = {
-               lfs = "lfs.dll"
+               lsqlite3 = "lsqlite3.dll"
             }
          }
       }

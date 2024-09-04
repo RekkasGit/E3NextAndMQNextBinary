@@ -1,10 +1,11 @@
+--- @type Mq
 local mq = require 'mq'
 --[[
 Leftover stuff i didn't squeeze into a class somewhere, mostly shared info
 accessed from several places.
 --]]
 local state = {
-    Version = '2.8.0',
+    Version = '2.6.6',
 
     -- Get name once at startup so we don't get name while dead or anything weird
     MyName = mq.TLO.Me.CleanName(),
@@ -36,7 +37,6 @@ local state = {
 
     IsUsingDanNet = false,
     IsUsingNetBots = false,
-    Embedded = false,
 }
 
 return state

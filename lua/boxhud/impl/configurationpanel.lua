@@ -1,14 +1,15 @@
+--- @type Mq
 local mq = require 'mq'
-local state = require(BOXHUD_REQUIRE_PREFIX..'state')
-local helpers = require(BOXHUD_REQUIRE_PREFIX..'utils.uihelpers')
-local PropertyInput = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.propertyinput')
-local ColumnInput = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.columninput')
-local TabInput = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.tabinput')
-local WindowInput = require(BOXHUD_REQUIRE_PREFIX..'classes.inputs.windowinput')
-local ConfigurationPanel = require(BOXHUD_REQUIRE_PREFIX..'classes.config.configurationpanel')
-local settings = require(BOXHUD_REQUIRE_PREFIX..'settings.settings')
-local library = require(BOXHUD_REQUIRE_PREFIX..'library')
-local filedialog = nil
+local helpers = require 'utils.uihelpers'
+local PropertyInput = require 'classes.inputs.propertyinput'
+local ColumnInput = require 'classes.inputs.columninput'
+local TabInput = require  'classes.inputs.tabinput'
+local WindowInput = require 'classes.inputs.windowinput'
+local ConfigurationPanel = require 'classes.config.configurationpanel'
+local state = require 'state'
+local settings = require 'settings.settings'
+local library = require 'library'
+local filedialog = require 'utils.imguifiledialog'
 
 function ConfigurationPanel:drawDisplaySettingsSelector()
     ImGui.PushStyleColor(ImGuiCol.Text, 1, 1, 1, 1)
@@ -199,20 +200,18 @@ function ConfigurationPanel:drawLeftPaneWindow()
             ImGui.TableNextRow()
             ImGui.TableNextColumn()
             self:drawTabTreeSelector()
-            if state.PeerSource == 'dannet' and not state.Embedded then
+            if state.PeerSource == 'dannet' then
                 ImGui.TableNextRow()
                 ImGui.TableNextColumn()
                 self:drawWindowTreeSelector()
             end
-            if not state.Embedded then
-                filedialog = filedialog or require(BOXHUD_REQUIRE_PREFIX..'utils.ImGuiFileDialog')
-                ImGui.TableNextRow()
-                ImGui.TableNextColumn()
-                self:drawImportSelector()
-                ImGui.TableNextRow()
-                ImGui.TableNextColumn()
-                self:drawAboutSelector()
-            end
+            ImGui.TableNextRow()
+            ImGui.TableNextColumn()
+            self:drawImportSelector()
+            ImGui.TableNextRow()
+            ImGui.TableNextColumn()
+            self:drawAboutSelector()
+
             ImGui.EndTable()
         end
     end
@@ -220,39 +219,34 @@ function ConfigurationPanel:drawLeftPaneWindow()
 end
 
 function ConfigurationPanel:drawDisplaySettings()
-    local window = state.Settings.Windows[self.Name]
-    if not state.Embedded then
-        ImGui.TextColored(1, 0, 1, 1, 'Window Settings')
-        ImGui.Separator()
-        window.Transparency = helpers.DrawCheckBox('Transparent Window: ', '##transparency', window.Transparency, 'Check this box to toggle transparency of the window.')
-        window.TitleBar = helpers.DrawCheckBox('Show Title Bar: ', '##titlebar', window.TitleBar, 'Check this box to toggle showing the title bar.')
-    end
-    local nameColumn = state.Settings.Columns.Name
-    nameColumn['IncludeLevel'] = helpers.DrawCheckBox('Name includes Level: ', '##namewithlevel', nameColumn['IncludeLevel'], 'Check this box to toggle showing name and level together in the Name column.')
+    ImGui.TextColored(1, 0, 1, 1, 'Window Settings')
+    ImGui.Separator()
+    state.Settings.Windows[self.Name].Transparency = helpers.DrawCheckBox('Transparent Window: ', '##transparency', state.Settings.Windows[self.Name].Transparency, 'Check this box to toggle transparency of the window.')
+    state.Settings.Windows[self.Name].TitleBar = helpers.DrawCheckBox('Show Title Bar: ', '##titlebar', state.Settings.Windows[self.Name].TitleBar, 'Check this box to toggle showing the title bar.')
+    state.Settings.Columns['Name']['IncludeLevel'] = helpers.DrawCheckBox('Name includes Level: ', '##namewithlevel', state.Settings.Columns['Name']['IncludeLevel'], 'Check this box to toggle showing name and level together in the Name column.')
     ImGui.Separator()
     ImGui.Text('Column Text Colors:')
-    local colors = state.Settings.Colors
-    colors['Default'] = helpers.DrawColorEditor("Default Color", colors['Default'])
+    state.Settings['Colors']['Default'] = helpers.DrawColorEditor("Default Color", state.Settings['Colors']['Default'])
     ImGui.SameLine()
     ImGui.SetCursorPosX(175)
-    colors['InZone'] = helpers.DrawColorEditor("Character names in zone", colors['InZone'])
-    colors['Low'] = helpers.DrawColorEditor("Below Threshold", colors['Low'])
+    state.Settings['Colors']['InZone'] = helpers.DrawColorEditor("Character names in zone", state.Settings['Colors']['InZone'])
+    state.Settings['Colors']['Low'] = helpers.DrawColorEditor("Below Threshold", state.Settings['Colors']['Low'])
     ImGui.SameLine()
     ImGui.SetCursorPosX(175)
-    colors['Invis'] = helpers.DrawColorEditor("Invis characters in zone", colors['Invis'])
-    colors['Medium'] = helpers.DrawColorEditor("Medium Threshold", colors['Medium'])
+    state.Settings['Colors']['Invis'] = helpers.DrawColorEditor("Invis characters in zone", state.Settings['Colors']['Invis'])
+    state.Settings['Colors']['Medium'] = helpers.DrawColorEditor("Medium Threshold", state.Settings['Colors']['Medium'])
     ImGui.SameLine()
     ImGui.SetCursorPosX(175)
-    colors['IVU'] = helpers.DrawColorEditor("IVU characters in zone", colors['IVU'])
-    colors['High'] = helpers.DrawColorEditor("Above Threshold", colors['High'])
+    state.Settings['Colors']['IVU'] = helpers.DrawColorEditor("IVU characters in zone", state.Settings['Colors']['IVU'])
+    state.Settings['Colors']['High'] = helpers.DrawColorEditor("Above Threshold", state.Settings['Colors']['High'])
     ImGui.SameLine()
     ImGui.SetCursorPosX(175)
-    colors['DoubleInvis'] = helpers.DrawColorEditor("Double Invis characters in zone", colors['DoubleInvis'])
-    colors['True'] = helpers.DrawColorEditor("True values", colors['True'])
+    state.Settings['Colors']['DoubleInvis'] = helpers.DrawColorEditor("Double Invis characters in zone", state.Settings['Colors']['DoubleInvis'])
+    state.Settings['Colors']['True'] = helpers.DrawColorEditor("True values", state.Settings['Colors']['True'])
     ImGui.SameLine()
     ImGui.SetCursorPosX(175)
-    colors['NotInZone'] = helpers.DrawColorEditor("Characters not in zone", colors['NotInZone'])
-    colors['False'] = helpers.DrawColorEditor("False values", colors['False'])
+    state.Settings['Colors']['NotInZone'] = helpers.DrawColorEditor("Characters not in zone", state.Settings['Colors']['NotInZone'])
+    state.Settings['Colors']['False'] = helpers.DrawColorEditor("False values", state.Settings['Colors']['False'])
     ImGui.Separator()
     if ImGui.Button('Save##displaysettings') then
         settings.SaveSettings()
@@ -435,6 +429,7 @@ end
 
 function ConfigurationPanel:drawSplitter(thickness, size0, min_size0)
     local x,y = ImGui.GetCursorPos()
+    local delta = 0
     ImGui.SetCursorPosX(x + size0)
 
     ImGui.PushStyleColor(ImGuiCol.Button, 0, 0, 0, 0)
@@ -446,16 +441,16 @@ function ConfigurationPanel:drawSplitter(thickness, size0, min_size0)
     ImGui.SetItemAllowOverlap()
 
     if ImGui.IsItemActive() then
-        local dragDelta = ImGui.GetMouseDragDelta()
+        delta,_ = ImGui.GetMouseDragDelta()
 
-        if dragDelta.x < min_size0 - size0 then
-            dragDelta.x = min_size0 - size0
+        if delta < min_size0 - size0 then
+            delta = min_size0 - size0
         end
-        if dragDelta.x > 275 - size0 then
-            dragDelta.x = 275 - size0
+        if delta > 275 - size0 then
+            delta = 275 - size0
         end
 
-        size0 = size0 + dragDelta.x
+        size0 = size0 + delta
         self.LeftPaneSize = size0
     else
         self.BaseLeftPaneSize = self.LeftPaneSize

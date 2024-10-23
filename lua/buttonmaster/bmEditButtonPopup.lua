@@ -15,6 +15,7 @@ BMButtonEditor.editButtonUIChanged = false
 BMButtonEditor.tmpButton           = nil
 
 BMButtonEditor.selectedTimerType   = 1
+BMButtonEditor.selectedUpdateRate  = 1
 
 function BMButtonEditor:RenderEditButtonPopup()
     if not self.editButtonPopupOpen then
@@ -33,7 +34,6 @@ function BMButtonEditor:RenderEditButtonPopup()
 
     if self.editButtonPopupOpen and shouldDrawEditPopup then
         -- shallow copy original button incase we want to reset (close)
-
         if self.editButtonUseCursor then
             self.editButtonUseCursor = false
             if mq.TLO.CursorAttachment and mq.TLO.CursorAttachment.Type() then
@@ -43,7 +43,7 @@ function BMButtonEditor:RenderEditButtonPopup()
                 if attachmentType == "item" or attachmentType == "item_link" then
                     self.tmpButton.Label = mq.TLO.CursorAttachment.Item()
                     self.tmpButton.Cmd = string.format("/useitem \"%s\"", mq.TLO.CursorAttachment.Item())
-                    self.tmpButton.Icon = tostring(mq.TLO.CursorAttachment.Item.Icon() - 500)
+                    self.tmpButton.Icon = tostring((mq.TLO.CursorAttachment.Item.Icon() or 500) - 500)
                     self.tmpButton.IconType = "Item"
                     self.tmpButton.Cooldown = mq.TLO.CursorAttachment.Item()
                     self.tmpButton.TimerType = "Item"
@@ -61,10 +61,17 @@ function BMButtonEditor:RenderEditButtonPopup()
                     self.tmpButton.Icon = nil
                     self.tmpButton.Cooldown = buttonText
                     self.tmpButton.TimerType = "Ability"
+                elseif attachmentType == "melee_ability" then
+                    self.tmpButton.Label = buttonText
+                    self.tmpButton.Cmd = string.format("/disc %s", buttonText)
+                    self.tmpButton.Icon = mq.TLO.Spell(buttonText).SpellIcon()
+                    self.tmpButton.IconType = "Spell"
+                    self.tmpButton.Cooldown = buttonText
+                    self.tmpButton.TimerType = "Disc"
                 elseif attachmentType == "social" then
                     self.tmpButton.Label = buttonText
-                    if cursorIndex >= 120 then
-                        self.tmpButton.Cmd = string.format("/alt act %d", cursorIndex)
+                    if cursorIndex + 1 > 120 then
+                        self.tmpButton.Cmd = string.format("/alt act %d", cursorIndex - 120)
                         self.tmpButton.Icon = nil
                         self.tmpButton.Cooldown = buttonText
                         self.tmpButton.TimerType = "AA"
@@ -72,9 +79,10 @@ function BMButtonEditor:RenderEditButtonPopup()
                         if mq.TLO.Social then
                             self.tmpButton.Cmd = ""
                             for i = 0, 4 do
-                                local cmd = mq.TLO.Social(cursorIndex).Cmd(i)()
+                                local cmd = mq.TLO.Social(cursorIndex + 1).Cmd(i)() or ""
                                 if cmd:len() > 0 then
-                                    self.tmpButton.Cmd = string.format("%s%s%s", self.tmpButton.Cmd, self.tmpButton.Cmd:len() > 0 and "\n" or "", cmd)
+                                    self.tmpButton.Cmd = string.format("%s%s%s", self.tmpButton.Cmd,
+                                        self.tmpButton.Cmd:len() > 0 and "\n" or "", cmd)
                                 end
                             end
                         end
@@ -93,7 +101,7 @@ function BMButtonEditor:RenderEditButtonPopup()
         self:RenderButtonEditUI(self.tmpButton, true, true)
 
         -- save button
-        if ImGui.Button("Save") then
+        if ImGui.Button("Save") or (ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) and (ImGui.IsKeyPressed(ImGuiMod.Ctrl) and ImGui.IsKeyPressed(ImGuiKey.S))) then
             -- make sure the button label isn't nil/empty/spaces
             if self.tmpButton.Label ~= nil and self.tmpButton.Label:gsub("%s+", ""):len() > 0 then
                 BMSettings:GetSettings().Sets[self.editButtonSet][self.editButtonIndex] =
@@ -123,6 +131,21 @@ function BMButtonEditor:RenderEditButtonPopup()
         end
     end
 
+    if ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows) then
+        if ImGui.IsKeyPressed(ImGuiMod.Ctrl) and ImGui.IsKeyPressed(ImGuiKey.S) then
+            if self.tmpButton.Label ~= nil and self.tmpButton.Label:gsub("%s+", ""):len() > 0 then
+                BMSettings:GetSettings().Sets[self.editButtonSet][self.editButtonIndex] =
+                    ButtonKey                                                                      -- add the button key for this button set index
+                BMSettings:GetSettings().Buttons[ButtonKey] = btnUtils.shallowcopy(self.tmpButton) -- store the tmp button into the settings table
+                BMSettings:GetSettings().Buttons[ButtonKey].Unassigned = nil                       -- clear the unassigned flag
+
+                BMSettings:SaveSettings(true)
+                self.editButtonUIChanged = false
+            else
+                btnUtils.Output("\arSave failed.  Button Label cannot be empty.")
+            end
+        end
+    end
     ImGui.PopID()
     ImGui.End()
 end
@@ -139,6 +162,7 @@ function BMButtonEditor:OpenEditPopup(Set, Index)
     self.editButtonIndex = Index
     self.editButtonSet = Set
     self.selectedTimerType = 1
+    self.selectedUpdateRate = 1
     local button = BMSettings:GetButtonBySetIndex(Set, Index)
     self.tmpButton = btnUtils.shallowcopy(button)
 
@@ -146,6 +170,12 @@ function BMButtonEditor:OpenEditPopup(Set, Index)
         for index, type in ipairs(BMSettings.Constants.TimerTypes) do
             if type == button.TimerType then
                 self.selectedTimerType = index
+                break
+            end
+        end
+        for index, type in ipairs(BMSettings.Constants.UpdateRates) do
+            if type.Value == button.UpdateRate then
+                self.selectedUpdateRate = index
                 break
             end
         end
@@ -171,12 +201,14 @@ function BMButtonEditor:RenderButtonEditUI(renderButton, enableShare, enableEdit
 
     local colorChanged = false
     -- color pickers
-    colorChanged = btnUtils.RenderColorPicker(string.format("##ButtonColorPicker1_%s", renderButton.Label), 'Button', renderButton,
+    colorChanged = btnUtils.RenderColorPicker(string.format("##ButtonColorPicker1_%s", renderButton.Label), 'Button',
+        renderButton,
         'ButtonColorRGB')
     self.editButtonUIChanged = self.editButtonUIChanged or colorChanged
 
     ImGui.SameLine()
-    colorChanged = btnUtils.RenderColorPicker(string.format("##TextColorPicker1_%s", renderButton.Label), 'Text', renderButton, 'TextColorRGB')
+    colorChanged = btnUtils.RenderColorPicker(string.format("##TextColorPicker1_%s", renderButton.Label), 'Text',
+        renderButton, 'TextColorRGB')
     self.editButtonUIChanged = self.editButtonUIChanged or colorChanged
 
     ImGui.SameLine()
@@ -191,10 +223,11 @@ function BMButtonEditor:RenderButtonEditUI(renderButton, enableShare, enableEdit
         renderButton.IconType = picker.SelectedType
         picker:ClearSelection()
     end
+    -- default to show label.
+    if renderButton.ShowLabel == nil then renderButton.ShowLabel = true end
 
     if renderButton.Icon ~= nil then
         ImGui.SameLine()
-        if renderButton.ShowLabel == nil then renderButton.ShowLabel = true end
         renderButton.ShowLabel = ImGui.Checkbox("Show Button Label", renderButton.ShowLabel)
     end
 
@@ -231,6 +264,11 @@ function BMButtonEditor:RenderButtonEditUI(renderButton, enableShare, enableEdit
         renderButton.IconLua, textChanged = ImGui.InputText('Icon Lua', renderButton.IconLua or '')
         btnUtils.Tooltip(
             "Dynamically override the IconID with this Lua function. \nNote: This MUST return number, string : IconId, IconType")
+
+        self.selectedUpdateRate, _ = ImGui.Combo("Update Rate", self.selectedUpdateRate,
+            function(idx) return BMSettings.Constants.UpdateRates[idx].Display end,
+            #BMSettings.Constants.UpdateRates)
+        renderButton.UpdateRate = BMSettings.Constants.UpdateRates[self.selectedUpdateRate].Value
         self.editButtonUIChanged = self.editButtonUIChanged or textChanged
     end
 
@@ -284,6 +322,9 @@ function BMButtonEditor:RenderTimerPanel(renderButton)
     elseif BMSettings.Constants.TimerTypes[self.selectedTimerType] == "Ability" then
         renderButton.Cooldown = ImGui.InputText("Ability Name", tostring(renderButton.Cooldown))
         btnUtils.Tooltip("Name of the Ability that you want to track the cooldown of.")
+    elseif BMSettings.Constants.TimerTypes[self.selectedTimerType] == "Disc" then
+        renderButton.Cooldown = ImGui.InputText("Disc Name", tostring(renderButton.Cooldown))
+        btnUtils.Tooltip("Name of the Disc that you want to track the cooldown of.")
     end
 end
 
@@ -291,7 +332,7 @@ function BMButtonEditor:RenderIconPicker(renderButton)
     if renderButton.Icon then
         local objectID = string.format("##IconPicker_%s_%d", self.editButtonSet, self.editButtonIndex)
         ImGui.PushID(objectID)
-        if BMButtonHandlers.Render(renderButton, 20, false, 1) then
+        if BMButtonHandlers.Render(renderButton, 20, false, 1, false) then
             picker:SetOpen()
         end
         ImGui.PopID()

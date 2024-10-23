@@ -5,27 +5,46 @@ local settings_base = mq.configDir .. '/ButtonMaster'
 local settings_path = settings_base .. '.lua '
 
 
-local BMSettings                = {}
-BMSettings.__index              = BMSettings
-BMSettings.settings             = {}
-BMSettings.CharConfig           = string.format("%s_%s", mq.TLO.EverQuest.Server(), mq.TLO.Me.DisplayName())
-BMSettings.Constants            = {}
+local BMSettings                 = {}
+BMSettings.__index               = BMSettings
+BMSettings.settings              = {}
+BMSettings.CharConfig            = string.format("%s_%s", mq.TLO.EverQuest.Server(), mq.TLO.Me.DisplayName())
+BMSettings.Constants             = {}
 
-BMSettings.Globals              = {}
-BMSettings.Globals.Version      = 7
+BMSettings.Globals               = {}
+BMSettings.Globals.Version       = 7
+BMSettings.Globals.CustomThemes  = {}
 
-BMSettings.Constants.TimerTypes = {
+BMSettings.Constants.TimerTypes  = {
     "Seconds Timer",
     "Item",
     "Spell Gem",
     "AA",
     "Ability",
+    "Disc",
     "Custom Lua",
 }
+
+BMSettings.Constants.UpdateRates = {
+    { Display = "Unlimited",     Value = 0, },
+    { Display = "1 per second",  Value = 1, },
+    { Display = "2 per second",  Value = 0.5, },
+    { Display = "4 per second",  Value = 0.25, },
+    { Display = "10 per second", Value = 0.1, },
+    { Display = "20 per second", Value = 0.05, },
+}
+
 
 function BMSettings.new()
     local newSettings      = setmetatable({}, BMSettings)
     newSettings.CharConfig = string.format("%s_%s", mq.TLO.EverQuest.Server(), mq.TLO.Me.DisplayName())
+
+
+    local config, err = loadfile(mq.configDir .. '/Button_Master_Theme.lua')
+    if not err and config then
+        BMSettings.Globals.CustomThemes = config()
+    end
+
     return newSettings
 end
 
@@ -34,14 +53,21 @@ function BMSettings:SaveSettings(doBroadcast)
 
     if not self.settings.LastBackup or os.time() - self.settings.LastBackup > 3600 * 24 then
         self.settings.LastBackup = os.time()
-        mq.pickle(mq.configDir .. "/Buttonmaster-Backups/ButtonMaster-backup-" .. os.date("%m-%d-%y-%H-%M-%S") .. ".lua", self.settings)
+        mq.pickle(mq.configDir .. "/Buttonmaster-Backups/ButtonMaster-backup-" .. os.date("%m-%d-%y-%H-%M-%S") .. ".lua",
+            self.settings)
     end
 
     mq.pickle(settings_path, self.settings)
 
     if doBroadcast and mq.TLO.MacroQuest.GameState() == "INGAME" then
-        btnUtils.Output("\aySent Event from(\am%s\ay) event(\at%s\ay)", mq.TLO.Me.DisplayName(), "SaveSettings")
-        ButtonActors.send({ from = mq.TLO.Me.DisplayName(), script = "ButtonMaster", event = "SaveSettings", newSettings = self.settings, })
+        --btnUtils.Output("\aySent Event from(\am%s\ay) event(\at%s\ay)", mq.TLO.Me.DisplayName(), "SaveSettings")
+        ButtonActors.send({
+            from = mq.TLO.Me.DisplayName(),
+            script = "ButtonMaster",
+            event = "SaveSettings",
+            newSettings =
+                self.settings,
+        })
     end
 end
 
@@ -72,6 +98,14 @@ function BMSettings:GetCharacterWindow(windowId)
 end
 
 function BMSettings:GetCharacterWindowSets(windowId)
+    if not self.settings.Characters or
+        not self.settings.Characters[self.CharConfig] or
+        not self.settings.Characters[self.CharConfig].Windows or
+        not self.settings.Characters[self.CharConfig].Windows[windowId] or
+        not self.settings.Characters[self.CharConfig].Windows[windowId].Sets then
+        return {}
+    end
+
     return self.settings.Characters[self.CharConfig].Windows[windowId].Sets
 end
 
@@ -80,6 +114,12 @@ function BMSettings:GetCharConfig()
 end
 
 function BMSettings:GetButtonSectionKeyBySetIndex(Set, Index)
+    -- somehow an invalid set exists. Just make it empty.
+    if not self.settings.Sets[Set] then
+        self.settings.Sets[Set] = {}
+        btnUtils.Debug("Set: %s does not exist. Creating it.", Set)
+    end
+
     local key = self.settings.Sets[Set][Index]
 
     -- if the key doesn't exist, get the current button counter and add 1
@@ -130,7 +170,8 @@ function BMSettings:ImportSetAndSave(sharableSet, windowId)
     local setName = sharableSet.Key
     if self.settings.Sets[setName] ~= nil then
         local newSetName = setName .. "_Imported_" .. os.date("%m-%d-%y-%H-%M-%S")
-        btnUtils.Output("\ayImport Set Warning: Set name: \at%s\ay already exists renaming it to \at%s\ax", setName, newSetName)
+        btnUtils.Output("\ayImport Set Warning: Set name: \at%s\ay already exists renaming it to \at%s\ax", setName,
+            newSetName)
         setName = newSetName
     end
 
@@ -159,7 +200,8 @@ function BMSettings:ConvertToLatestConfigVersion()
             if type(value) == 'table' then
                 if key:find("^(Button_)") and value.Cmd1 or value.Cmd2 or value.Cmd3 or value.Cmd4 or value.Cmd5 then
                     btnUtils.Output("Key: %s Needs Converted!", key)
-                    value.Cmd  = string.format("%s\n%s\n%s\n%s\n%s\n%s", value.Cmd or '', value.Cmd1 or '', value.Cmd2 or '',
+                    value.Cmd  = string.format("%s\n%s\n%s\n%s\n%s\n%s", value.Cmd or '', value.Cmd1 or '',
+                        value.Cmd2 or '',
                         value.Cmd3 or '', value.Cmd4 or '', value.Cmd5 or '')
                     value.Cmd  = value.Cmd:gsub("\n+", "\n")
                     value.Cmd  = value.Cmd:gsub("\n$", "")
@@ -241,7 +283,7 @@ function BMSettings:ConvertToLatestConfigVersion()
         needsSave = true
         newSettings = self.settings
         newSettings.Version = 5
-        for charKey, _ in pairs(self.settings.Characters) do
+        for charKey, _ in pairs(self.settings.Characters or {}) do
             if self.settings.Characters[charKey] and self.settings.Characters[charKey].Sets ~= nil then
                 newSettings.Characters[charKey].Windows = {}
                 table.insert(newSettings.Characters[charKey].Windows,
@@ -268,8 +310,8 @@ function BMSettings:ConvertToLatestConfigVersion()
         newSettings.Version = 6
         newSettings.Defaults = nil
 
-        for _, curCharData in pairs(newSettings.Characters) do
-            for _, windowData in ipairs(curCharData.Windows) do
+        for _, curCharData in pairs(newSettings.Characters or {}) do
+            for _, windowData in ipairs(curCharData.Windows or {}) do
                 windowData.Locked = curCharData.Locked or false
                 windowData.HideTitleBar = curCharData.HideTitleBar or false
             end
@@ -294,8 +336,8 @@ function BMSettings:ConvertToLatestConfigVersion()
         newSettings = self.settings
         newSettings.Version = 7
 
-        for _, curCharData in pairs(newSettings.Characters) do
-            for _, windowData in ipairs(curCharData.Windows) do
+        for _, curCharData in pairs(newSettings.Characters or {}) do
+            for _, windowData in ipairs(curCharData.Windows or {}) do
                 windowData.Font = (newSettings.Global.Font or 1) * 10
                 windowData.ButtonSize = newSettings.Global.ButtnSize or 6
             end
@@ -310,6 +352,12 @@ function BMSettings:ConvertToLatestConfigVersion()
             self:SaveSettings(true)
             btnUtils.Output("\atUpgraded to \amv%d\at!", BMSettings.Globals.Version)
         end
+    end
+end
+
+function BMSettings:InvalidateButtonCache()
+    for _, button in pairs(self.settings.Buttons) do
+        button.CachedLabel = nil
     end
 end
 
@@ -367,6 +415,7 @@ function BMSettings:LoadSettings()
     self.settings.Characters[self.CharConfig].Windows = self.settings.Characters[self.CharConfig].Windows or
         { [1] = { Visible = true, Pos = { x = 10, y = 10, }, Sets = {}, Locked = false, }, }
 
+    self:InvalidateButtonCache()
     return true
 end
 

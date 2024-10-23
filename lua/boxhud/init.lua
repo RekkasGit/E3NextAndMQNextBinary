@@ -1,5 +1,5 @@
 --[[
-boxhud.lua 2.6.6 -- aquietone
+boxhud.lua 2.9.0 -- aquietone
 https://www.redguides.com/community/resources/boxhud.2088/
 
 Recreates the traditional MQ2NetBots/MQ2HUD based HUD with a DanNet observer
@@ -34,19 +34,8 @@ require 'ImGui'
 -- so do that first. This will open a dialog prompting to download lfs.dll
 -- if not already present.
 -- Include helper function so we can give user friendly messages
-function Include(...)
-    local status, lib = pcall(require, ...)
-    if(status) then
-        return lib
-    end
-    return nil
-end
-local lfs = Include('lfs')
-if not lfs then
-    local PackageMan = Include('mq.PackageMan')
-    lfs = PackageMan.InstallAndLoad('luafilesystem', 'lfs')
-end
-
+local PackageMan = require('mq.PackageMan')
+local lfs = PackageMan.Require('luafilesystem', 'lfs')
 if not lfs then
     print('\arError loading LuaFileSystem dependency, ending script\ax')
     mq.exit()
@@ -87,16 +76,50 @@ local HUDGUI = function()
         local flags = 0
         if not window.TitleBar then flags = ImGuiWindowFlags.NoTitleBar end
         if window.Transparency then flags = bit32.bor(flags, ImGuiWindowFlags.NoBackground) end
+        if window.Locked then flags = bit32.bor(flags, ImGuiWindowFlags.NoMove) end
+        if not ImGui.IsWindowDocked() and window.SavePos then
+            if window.pos then ImGui.SetNextWindowPos(ImVec2(window.pos.x, window.pos.y), ImGuiCond.Once) end
+            if window.size then ImGui.SetNextWindowSize(ImVec2(window.size.w, window.size.h), ImGuiCond.Once) end
+        end
+        local colorCount, styleCount = window:drawTheme()
+        local doPopRounding = false
+        if window.RoundedEdges then
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowRounding, 10)
+            doPopRounding = true
+        end
         if state.WindowStates[window.Name] and state.WindowStates[window.Name].Peers then
-            openGUI, shouldDrawGUI = ImGui.Begin('Box HUD##'..state.MyName..window.Name, openGUI, flags)
+            local windowVisibleName = 'Box HUD'
+            if window.Name ~= 'default' then
+                windowVisibleName = window.Name
+            end
+            local windowName = windowVisibleName..'##'..state.MyName..window.Name
+            if window.OverrideWindowName then
+                windowName =  windowVisibleName
+            end
+            openGUI, shouldDrawGUI = ImGui.Begin(windowName, openGUI, flags)
             if shouldDrawGUI then
-                if ImGui.GetWindowHeight() == 32 and ImGui.GetWindowWidth() == 32 then
+                local curWidth = ImGui.GetWindowWidth()
+                local curHeight = ImGui.GetWindowHeight()
+                if curWidth == 32 and curHeight == 32 then
                     ImGui.SetWindowSize(460, 177)
+                    window.size = {w=460, h=177}
+                else
+                    if window.AutoScaleHeight then
+                        local currentSize = ImGui.GetWindowWidth()
+                        local height = math.max(160, 25*(#state.WindowStates[window.Name].Peers or 0)+40)
+                        ImGui.SetWindowSize(currentSize, height)
+                    end
+                    window.size = {w=curWidth, h=curHeight}
                 end
+                local curPos = ImGui.GetWindowPosVec()
+                window.pos = {x=curPos.x, y=curPos.y}
                 window:drawTabs()
             end
             ImGui.End()
         end
+        if colorCount > 0 then ImGui.PopStyleColor(colorCount) end
+        if styleCount > 0 then ImGui.PopStyleVar(styleCount) end
+        if doPopRounding then ImGui.PopStyleVar(1) end
     end
 end
 
@@ -104,7 +127,7 @@ local Admin = function(action, name)
     if action == nil then
         adminMode = not adminMode
         openGUI = not adminMode
-        print_msg('Setting \ayadminMode\ax = \ay'..tostring(adminMode))
+        print_msg('Setting \ayadminMode\ax = \ay%s', adminMode)
     elseif action == 'anon' then
         state.Anonymize = not state.Anonymize
     elseif action  == 'reset' then
@@ -119,7 +142,7 @@ local Admin = function(action, name)
                 char:manageObservers(false)
             end
         else
-            print_msg('Resetting observed properties for: \ay'..name)
+            print_msg('Resetting observed properties for: \ay%s', name)
             state.Characters[name]:manageObservers(true)
             state.Characters[name]:manageObservers(false)
         end
@@ -139,7 +162,7 @@ local Help = function()
 end
 
 local ShowVersion = function()
-    print_msg('Version '..state.Version)
+    print_msg('Version %s', state.Version)
 end
 
 local function SetupBindings()
@@ -159,7 +182,7 @@ end
 local function CleanupStaleData(currTime)
     for name, char in pairs(state.Characters) do
         if os.difftime(currTime, char.Properties.lastUpdated) > state.StaleDataTimeout then
-            print_msg('Removing stale toon data: \ay'..name)
+            print_msg('Removing stale toon data: \ay%s', name)
             state.Characters[name] = nil
         end
     end
@@ -207,7 +230,7 @@ local function main()
         if state.StoredCommand then
             SendCommand()
         end
-        local currTime = os.time(os.date("!*t"))
+        local currTime = os.time()
         for windowName,window in pairs(state.Settings.Windows) do
             if not state.WindowStates[windowName] then
                 state.WindowStates[windowName] = WindowState(windowName, window.PeerGroup or utils.GetZonePeerGroup(), ConfigurationPanel(windowName))

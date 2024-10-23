@@ -10,6 +10,18 @@ local Window = BaseClass(function(w,windowSettings)
     w.Tabs = windowSettings['Tabs']
     w.Transparency = windowSettings['Transparency']
     w.TitleBar = windowSettings['TitleBar']
+    if windowSettings.pos then
+        w.pos = {x=windowSettings.pos.x, y=windowSettings.pos.y}
+    end
+    if windowSettings.size then
+        w.size = {w=windowSettings.size.w, h=windowSettings.size.h}
+    end
+    w.Locked = windowSettings['Locked']
+    w.SavePos = windowSettings['SavePos']
+    w.OverrideWindowName = windowSettings['OverrideWindowName']
+    w.AutoScaleHeight = windowSettings['AutoScaleHeight']
+    w.RoundedEdges = windowSettings['RoundedEdges']
+    w.Theme = windowSettings['Theme']
 end)
 
 local function GetTabByName(tabName)
@@ -26,7 +38,7 @@ function Window:validate()
     local valid = true
     if not self.Name or type(self.Name) ~= 'string' or string.len(self.Name) == 0 then
         message = 'Window name is invalid. Name must be a non-empty string'
-        print_err(string.format('[Window %s] %s', self.Name, message))
+        print_err('[Window %s] %s', self.Name, message)
         return false, message
     end
     if self.Tabs then
@@ -35,18 +47,18 @@ function Window:validate()
                 if string.len(tab) > 0 then
                     if not GetTabByName(tab) then
                         message = string.format('Window references a tab which does not exist. Tab=%s', tab)
-                        print_err(string.format('[Window %s] %s', self.Name, message))
+                        print_err('[Window %s] %s', self.Name, message)
                         valid = false
                     end
                 else
                     message = 'Window \'Tab\' values must be non-empty \'string\''
-                    print_err(string.format('[Window %s] %s', self.Name, message))
+                    print_err('[Window %s] %s', self.Name, message)
                     valid = false
                 end
             end
         else
             message = 'Window \'Tab\' is an unexpected format. \'Tabs\' must be a table.'
-            print_err(string.format('[Window %s] %s', self.Name, message))
+            print_err('[Window %s] %s', self.Name, message)
             valid = false
         end
     end

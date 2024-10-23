@@ -6,6 +6,7 @@ local helpers = require 'utils.uihelpers'
 local utils = require 'utils.utils'
 local state = require 'state'
 local settings = require 'settings.settings'
+local theme = utils.loadTheme()
 
 local adminPeerSelected = 0
 math.randomseed(os.time())
@@ -68,8 +69,8 @@ local function CompareWithSortSpecs(a, b)
 end
 
 function Window:drawTableTab(columns, tabName)
-    local flags = bit32.bor(ImGuiTableFlags.Resizable, ImGuiTableFlags.Reorderable, ImGuiTableFlags.Hideable, ImGuiTableFlags.Sortable, ImGuiTableFlags.MultiSortable,
-            ImGuiTableFlags.RowBg, ImGuiTableFlags.BordersOuter, ImGuiTableFlags.BordersV, ImGuiTableFlags.ScrollY, ImGuiTableFlags.NoSavedSettings)
+    local flags = bit32.bor(ImGuiTableFlags.Resizable, ImGuiTableFlags.Reorderable, ImGuiTableFlags.Hideable, ImGuiTableFlags.Sortable, ImGuiTableFlags.SortMulti,
+            ImGuiTableFlags.RowBg, ImGuiTableFlags.BordersOuter, ImGuiTableFlags.BordersV, ImGuiTableFlags.BordersH, ImGuiTableFlags.ScrollY, ImGuiTableFlags.NoSavedSettings)
     if ImGui.BeginTable('##bhtable'..tabName..tostring(tableRandom), #columns, flags, 0, 0, 0.0) then
         for i, columnName in ipairs(columns) do
             local column = state.Settings['Columns'][columnName]
@@ -132,6 +133,9 @@ function Window:drawTableTab(columns, tabName)
                         end
                     end
                     ImGui.PopID()
+                else
+                    ImGui.TableNextRow()
+                    ImGui.TableNextColumn()
                 end
             end
         end
@@ -141,10 +145,20 @@ function Window:drawTableTab(columns, tabName)
 end
 
 function Window:getPeerNameForIndex(index)
-    return state.WindowStates[self.Name].Peers[adminPeerSelected]
+    return state.WindowStates[self.Name].Peers[index]
 end
 
+local icons = require('mq.icons')
 function Window:drawTabs()
+    local lockedIcon = self.Locked and icons.FA_LOCK .. '##lock'..self.Name or icons.FA_UNLOCK .. '##lock'..self.Name
+    if ImGui.Button(lockedIcon) then
+        --ImGuiWindowFlags.NoMove
+        self.Locked = not self.Locked
+        if self.Locked then
+            settings.SaveSettings()
+        end
+    end
+    ImGui.SameLine()
     if ImGui.BeginTabBar('BOXHUDTABS##'..self.Name, ImGuiTabBarFlags.Reorderable) then
         for _,tabName in ipairs(self.Tabs) do
             local tab = utils.GetTabByName(tabName)
@@ -175,7 +189,9 @@ function Window:drawTabs()
                 if ImGui.Button('Reset All Observers') then
                     state.AdminPeerAction = 'reset'
                     state.AdminPeerName = self:getPeerNameForIndex(adminPeerSelected)
-                    print_msg('Resetting observed properties for: \ay'..state.AdminPeerName)
+                    if state.AdminPeerName then
+                        print_msg('Resetting observed properties for: \ay%s', state.AdminPeerName)
+                    end
                 end
                 ImGui.Text('Enter an observed property to check or drop:')
                 state.AdminPeerItem = ImGui.InputText('##checkobs', state.AdminPeerItem)
@@ -183,13 +199,17 @@ function Window:drawTabs()
                 if ImGui.Button('Check') then
                     state.AdminPeerAction = 'check'
                     state.AdminPeerName = self:getPeerNameForIndex(adminPeerSelected)
-                    print_msg('Check observed property \ay'..state.AdminPeerItem..'\ax for: \ay'..state.AdminPeerName)
+                    if state.AdminPeerName then
+                        print_msg('Check observed property \ay%s\ax for: \ay%s', state.AdminPeerItem, state.AdminPeerName)
+                    end
                 end
                 ImGui.SameLine()
                 if ImGui.Button('Drop') then
                     state.AdminPeerAction = 'drop'
                     state.AdminPeerName = self:getPeerNameForIndex(adminPeerSelected)
-                    print_msg('Drop observed property \ay'..state.AdminPeerItem..'\ax for: \ay'..state.AdminPeerName)
+                    if state.AdminPeerName then
+                        print_msg('Drop observed property \ay%s\ax for: \ay%s', state.AdminPeerItem, state.AdminPeerName)
+                    end
                 end
                 ImGui.Separator()
                 ImGui.TextColored(1, 0, 0, 1, 'BEWARE!')
@@ -201,7 +221,10 @@ function Window:drawTabs()
         end
 
         if ImGui.BeginTabItem('Configuration##'..self.Name) then
+            local currentSize = ImGui.GetWindowSizeVec()
+            ImGui.SetWindowSize(currentSize.x, -1)
             state.WindowStates[self.Name].ConfigPanel:draw()
+            ImGui.SetWindowSize(currentSize.x, currentSize.y)
             ImGui.EndTabItem()
         end
         ImGui.EndTabBar()
@@ -222,6 +245,18 @@ function WindowInput:toWindow()
     for idx,tab in ipairs(self.Tabs) do
         window.Tabs[idx] = tab
     end
+    if self.pos then
+        window.pos = {x=self.pos.x, y=self.pos.y}
+    end
+    if self.size then
+        window.size = {w=self.size.w, h=self.size.h}
+    end
+    window.Locked = self.Locked
+    window.SavePos = self.SavePos
+    window.OverrideWindowName = self.OverrideWindowName
+    window.RoundedEdges = self.RoundedEdges
+    window.AutoScaleHeight = self.AutoScaleHeight
+    window.Theme = self.Theme
     return window
 end
 
@@ -233,6 +268,18 @@ function WindowInput:fromWindow(window)
         o.Tabs[idx] = tab
     end
     o.TabCount = #window['Tabs']
+    if window.pos then
+        o.pos = {x=window.pos.x, y=window.pos.y}
+    end
+    if window.size then
+        o.size = {w=window.size.w, h=window.size.h}
+    end
+    o.Locked = window.Locked
+    o.SavePos = window.SavePos
+    o.OverrideWindowName = window.OverrideWindowName
+    o.RoundedEdges = window.RoundedEdges
+    o.AutoScaleHeight = window.AutoScaleHeight
+    o.Theme = window.Theme
     return o
 end
 
@@ -332,4 +379,32 @@ function Window:draw(configPanel)
             ImGui.TextColored(0, 1, 0, 1, tab)
         end
     end
+end
+
+---@return integer, integer -- returns the new counter values 
+function Window:drawTheme()
+    local StyleCounter = 0
+    local ColorCounter = 0
+    for tID, tData in pairs(theme.Theme) do
+        if tData.Name == self.Theme then
+            for pID, cData in pairs(tData.Color) do
+                ImGui.PushStyleColor(pID, ImVec4(cData.Color[1], cData.Color[2], cData.Color[3], cData.Color[4]))
+                ColorCounter = ColorCounter + 1
+            end
+            if tData['Style'] ~= nil then
+                if next(tData['Style']) ~= nil then
+                    for sID, sData in pairs (tData.Style) do
+                        if sData.Size ~= nil then
+                            ImGui.PushStyleVar(sID, sData.Size)
+                            StyleCounter = StyleCounter + 1
+                            elseif sData.X ~= nil then
+                            ImGui.PushStyleVar(sID, sData.X, sData.Y)
+                            StyleCounter = StyleCounter + 1
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return ColorCounter, StyleCounter
 end

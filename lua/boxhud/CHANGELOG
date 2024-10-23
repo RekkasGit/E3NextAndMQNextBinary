@@ -1,0 +1,210 @@
+2.9.0
+- Add support for Themez, pick a theme from config tab -> Display Settings
+2.8.1
+- Add auto scale height option to scale window to fit an army
+- Add rounded edges option to get rid of those scary sharp corners
+2.8.0
+- Added new window setting 'Use global window name' in case you want to use the same ImGui window name across all characters
+- Added new window setting 'Save window position in boxhud' in case you want to rely on ImGui configuration for window position (like if using global window name)
+- Would one setting ever be used without the other? who knows
+- Now checking if window is docked before applying saved position. If its docked, then it skips setting window size.
+2.7.1
+- Truncate numbers in netbots properties
+2.7.0
+- Add new lock/unlock button to lock window movement and save window position and size
+- Window position will save when locking the window position
+2.6.8
+- Update /target button to specify pc
+2.6.7
+- Use window name for imgui window name on non-default windows
+2.6.6
+- nil check on level when appending to name button
+2.6.5
+- fix error in sort
+- fix error in add new tab
+2.6.4
+- Just put back waiting for ObserveSet true
+2.6.3
+- Add slight delay back on add observer loop
+2.6.2
+- Use group leader name when constructing dannet group name for eq group
+2.6.1
+- fix flickering distance numbers
+2.6.0
+- Removes some delays that may or may not have been necessary on observer setup
+- Mark sorting dirty when switching between tabs
+2.5.5
+- Fix reset observers for peer off by 1
+2.5.4
+- Move `boxhud.lua` to `boxhud/init.lua`
+2.5.3
+- Use new mq.PackageMan to load lfs.dll from MQ luarocks server if its not present
+- No longer exit the script when an observer fails to be added.. hopefully it will just display ERR instead. Try reset observers from right click or admin tab if some observer fails, or it might retry on its own.
+2.5.2
+- Remove /noparse in addition to the /dex name when sending a command to the local character
+2.5.1
+- Fix adding spawn or netbots properties after property validation change
+- Make column list drag/droppable when editing tab configuration
+2.5.0
+- Add new `Import Configuration` to `Configuration` tab. This allows you to select another boxhud-settings.lua file from your config folder and import selected properties and columns from it into your current configuration.
+- Adds dependency on lfs.dll which adds dependency on MicroSoft vc_redist as well.
+2.4.0
+- Finally add some basic property input validation
+2.3.4
+- Init some column properties to false
+- Add # of characters to name column header
+2.3.3
+- % symbol no longer needs escaping in percentage columns?
+2.3.2
+- Option to prettify number values in columns.
+2.3.1
+- Add setting under `Display Settings` to include levels in name column, like `Myname (120)`.
+- Add column specific color settings which will override global color settings.
+2.3.0
+- Add new property and column library
+- Fix save location for settings to new config dir location
+- Changes around managing observers
+2.2.2
+- Some updates around creating dannet observers and timeouts
+2.2.1
+- fix to column buttons no longer doing anything
+2.2.0
+- OOP-ify the code, maybe not the best decision
+- Add multiple window support
+- Add ability to set the dannet peer group for the window
+- Add 'group' as an option for the peer group similar to 'zone'
+- Add admin dannet helpers for checking and dropping observers
+- Set name once at startup to avoid reading funny names while dead or loading
+2.1.4
+- Update to work with non-default luaDir
+2.1.3
+- Update to persist window transparency setting in boxhud-settings.lua
+- Update to add title bar toggle setting under general settings
+- Attempt to add some protection in sorting method for some edge cases
+2.1.2
+- Add ImGuiTableFlags.Sortable for ImGui upgrade
+2.1.1
+- Fix bug while zoning
+2.1.0
+- Make column buttons with "/dex #botName# " work for self
+- Add more name coloring options if Me.Invis[1] or Me.Invis[2] are observed
+2.0.11
+- Move a couple EndChild outside of if
+2.0.10
+- Add an extra nil check setting text in tables
+2.0.9
+- Small update related to ImGui.Begin/End
+2.0.8
+- Fix number text on settings panel
+2.0.7
+- Fix error when toons zone
+2.0.6
+- Added color options for true/false values
+- Added toggle for window transparency
+- More refactoring
+2.0.5
+- Just refactoring things for no reason
+2.0.4
+- Fix tab editing
+- Add some more input validation
+2.0.3
+- Fix crash in property and column settings view
+2.0.2
+- Add color picking to general settings
+- Fix to allow saving more than once
+- Refactor some code
+2.0.1
+- Add info text on config panel when nothing selected
+- Add peer group to admin tab
+- Text wrap config error messages
+- Right align percent numbers
+2.0.0
+- Add in game configuration of tabs, columns and properties
+- Rearrange configuration a bit
+- Break up the script into a few files in a boxhud folder
+- Add persistence.lua library for dumping table to save configuration
+1.8.1
+- Updated for RG build 216 changes
+- Switch to use mq.cmd and mq.cmdf
+- Updates to some conditions due to type changes
+1.8.0
+- Add handling for observing TLOs that may not be present on all toons
+  Relies on defining dependencies between observed properties. For example:
+    If you have the MQ2Monk, MQ2Eskay and MQ2Rogue plugins, which add TLO `CWTN`, and you want to observe `CWTN.Mode`, then it may interfere
+    with macros running on toons without a CWTN class plugin loaded, like bards.
+    This can be handled by defining the observed property as:
+```
+     { Name='Me.Class.ShortName' },
+     { Name='CWTN.Mode', DependsOnName='Me.Class.ShortName', DependsOnValue='MNK,SHD,ROG' }
+```
+    This will result in the `CWTN.Mode` property only being observed on monks, shadow knights and rogues.
+- Set initial window size if window has default 32x32 size.
+- Exit if game state is not INGAME.
+- Append character name to window ID so characters can have separate window settings.
+- Add strict settings validation to try and make sure data is correct
+- Update button command handling a bit for crashes
+1.7.3
+- Fix for toons being randomly removed from the table while sorting by something other than the default Name column
+1.7.2
+- Remove debug accidentally left in 1.7.1 which caused an immediate crash
+1.7.1
+- Fixes to Push/PopID for context menus and buttons in table
+1.7.0
+- Update to use ImGui Table API
+1.6.0
+- Add sorting by columns
+- Add PeerSource to allow getting peer list from either dannet or netbots
+- Add "FromIDProperty" to spawn properties to allow getting spawn properties
+  for something other than botName. The referred property must be a Spawn ID.
+  For example:
+    NetBots property: {Name='TargetID'}
+    Spawn property:   {Name='CleanName',FromIDProperty='TargetID'}
+    Then assign a column to display property 'CleanName'
+- Move /boxhudanon under new /bhadmin
+- Add some commands to reset observers under /bhadmin:
+  /bhadmin (enables admin mode, hides the UI)
+  /bhadmin reset toonname (resets observers for the toon toonname)
+- Add a /bhversion command
+- Add a /bhhelp command
+1.5.0
+- Add some right click actions on name buttons
+- Add /boxhudanon binding to replace names with class names in name column
+  Mostly so I don't have to draw over names in screenshots
+- Try to adjust observe timeouts based on # of peers
+- Misc cleanup
+1.4.4
+- Fix for some columns showing |server_name instead of correct data
+- Make sure peer list is initialized before UI
+1.4.3
+- Fix conditions broken by 1.4.2 tostring() replacements
+1.4.2
+- Fix gsub in button commands
+- Fix handling button commands with /noparse
+- Swap tostrings for mq.TLO.Property()
+1.4.1
+- Fix for zone shortname formats
+- Fix text coloring
+1.4
+- Add in option to use NetBots properties incase people want them
+- Changes to text threshold based coloring, can now define ascending/descending
+  to say whether values should be red to green or green to red
+- Fixes to escape values in observed property names
+- Fix zone peer group name crash
+- Try out a send command option on right click toon name
+1.3.1
+- Small fixes
+- Properly escape some values for observed properties with [ ], etc.
+- Don't use DanNet.Joined to find zone group name, construct it instead.
+- Support buttons with user defined actions
+1.3
+- Tab support
+- Property mappings (see Macro.Paused example)
+- Cleanup/refactoring
+1.2:
+- Correct zone peer group when in instance and when zoning
+- Stop observing Me.ID, Me.Invis and Zone.ID and just use spawn data instead
+- Change left click button to /dex name /foreground
+1.1
+- Configuration options externalized
+1.0
+- Initial release, static configuration UI

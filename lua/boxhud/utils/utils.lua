@@ -2,10 +2,22 @@
 local mq = require 'mq'
 local state = require 'state'
 
-function print_msg(msg) print('\at[\ayBOXHUD\at] \at' .. msg) end
-function print_err(msg) print('\at[\ayBOXHUD\at] \ar' .. msg) end
+function print_msg(msg, ...) printf('\at[\ayBOXHUD\at] \at' .. msg, ...) end
+function print_err(msg, ...) printf('\at[\ayBOXHUD\at] \ar' .. msg, ...) end
 
 local utils = {}
+
+local theme = nil
+local themeFile = mq.configDir..'/MyThemeZ.lua'
+function utils.loadTheme()
+    if theme then return theme end
+    if utils.FileExists(themeFile) then
+        theme = dofile(themeFile)
+    else
+        theme = require('settings.themes')
+    end
+    return theme
+end
 
 utils.FileExists = function(path)
     local f = io.open(path, "r")

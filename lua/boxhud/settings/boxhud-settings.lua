@@ -72,7 +72,6 @@ return {
     RefreshInterval = 250,
 
     StaleDataTimeout = 30,
-
     -- Global columns to display on all tabs
     Columns = {
         ['Name'] = { 

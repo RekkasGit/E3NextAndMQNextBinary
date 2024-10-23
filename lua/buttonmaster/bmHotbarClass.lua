@@ -1,4 +1,5 @@
 local mq                            = require('mq')
+local Set                           = require('mq.Set')
 local btnUtils                      = require('lib.buttonUtils')
 local BMButtonHandlers              = require('bmButtonHandlers')
 local themes                        = require('extras.themes')
@@ -13,6 +14,7 @@ BMHotbarClass.__index               = BMHotbarClass
 BMHotbarClass.id                    = 1
 BMHotbarClass.openGUI               = true
 BMHotbarClass.shouldDrawGUI         = true
+BMHotbarClass.setupComplete         = false
 BMHotbarClass.lastWindowX           = 0
 BMHotbarClass.lastWindowY           = 0
 BMHotbarClass.lastButtonPageHeight  = 0
@@ -44,11 +46,13 @@ BMHotbarClass.newHeight             = 0
 BMHotbarClass.newX                  = 0
 BMHotbarClass.newY                  = 0
 
+BMHotbarClass.searchText            = ""
+
 function BMHotbarClass.new(id, createFresh)
     local newBMHotbar = setmetatable({ id = id, }, BMHotbarClass)
 
     if createFresh then
-        BMSettings:GetCharConfig().Windows[id] = { Visible = true, Sets = {}, Locked = false, HideTitleBar = false, CompactMode = false, }
+        BMSettings:GetCharConfig().Windows[id] = { Visible = true, Sets = {}, Locked = false, HideTitleBar = false, CompactMode = false, AdvTooltips = true, ShowSearch = false, }
 
         -- if this character doesn't have the sections in the config, create them
         newBMHotbar.updateWindowPosSize = true
@@ -59,6 +63,8 @@ function BMHotbarClass.new(id, createFresh)
 
         BMSettings:SaveSettings(true)
     end
+
+    BMSettings:GetCharConfig().Windows[id].Sets = BMSettings:GetCharConfig().Windows[id].Sets or {}
 
     return newBMHotbar
 end
@@ -79,11 +85,94 @@ function BMHotbarClass:IsVisible()
     return BMSettings:GetCharacterWindow(self.id).Visible
 end
 
+---@return integer, integer
+function BMHotbarClass:StartTheme()
+    local theme = BMSettings:GetSettings().Themes and BMSettings:GetSettings().Themes[self.id] or nil
+
+    if not theme then
+        theme = BMSettings.Globals.CustomThemes and
+            BMSettings.Globals.CustomThemes[BMSettings:GetCharacterWindow(self.id).Theme] or nil
+    end
+
+    if not theme then
+        theme = themes[BMSettings:GetCharacterWindow(self.id).Theme or ""] or nil
+    end
+
+    local themeColorPop = 0
+    local themeStylePop = 0
+
+    if theme ~= nil then
+        for n, t in pairs(theme) do
+            if t.color then
+                ImGui.PushStyleColor(ImGuiCol[t.element], t.color.r, t.color.g, t.color.b, t.color.a)
+                themeColorPop = themeColorPop + 1
+            elseif t.stylevar then
+                ImGui.PushStyleVar(ImGuiStyleVar[t.stylevar], t.value)
+                themeStylePop = themeStylePop + 1
+            else
+                if type(t) == 'table' then
+                    if t['Dynamic_Color'] then
+                        local ret, colors = btnUtils.EvaluateLua(t['Dynamic_Color'])
+                        if ret then
+                            ---@diagnostic disable-next-line: param-type-mismatch
+                            ImGui.PushStyleColor(ImGuiCol[n], colors)
+                            themeColorPop = themeColorPop + 1
+                        end
+                    elseif t['Dynamic_Var'] then
+                        local ret, var = btnUtils.EvaluateLua(t['Dynamic_Var'])
+                        if ret then
+                            if type(var) == 'table' then
+                                ---@diagnostic disable-next-line: param-type-mismatch, deprecated
+                                ImGui.PushStyleVar(ImGuiStyleVar[n], unpack(var))
+                            else
+                                ---@diagnostic disable-next-line: param-type-mismatch
+                                ImGui.PushStyleVar(ImGuiStyleVar[n], var)
+                            end
+                            themeStylePop = themeStylePop + 1
+                        end
+                    elseif #t == 4 then
+                        local colors = btnUtils.shallowcopy(t)
+                        for i = 1, 4 do
+                            if type(colors[i]) == 'string' then
+                                local ret, color = btnUtils.EvaluateLua(colors[i])
+                                if ret then
+                                    colors[i] = color
+                                end
+                            end
+                        end
+                        ---@diagnostic disable-next-line: param-type-mismatch, deprecated
+                        ImGui.PushStyleColor(ImGuiCol[n], unpack(colors))
+                        themeColorPop = themeColorPop + 1
+                    else
+                        ---@diagnostic disable-next-line: param-type-mismatch, deprecated
+                        ImGui.PushStyleVar(ImGuiStyleVar[n], unpack(t))
+                        themeStylePop = themeStylePop + 1
+                    end
+                end
+            end
+        end
+    end
+
+    return themeColorPop, themeStylePop
+end
+
+---@param themeColorPop integer
+---@param themeStylePop integer
+function BMHotbarClass:EndTheme(themeColorPop, themeStylePop)
+    if themeColorPop > 0 then
+        ImGui.PopStyleColor(themeColorPop)
+    end
+    if themeStylePop > 0 then
+        ImGui.PopStyleVar(themeStylePop)
+    end
+end
+
 function BMHotbarClass:RenderHotbar(flags)
     if not self:IsVisible() then return end
 
     if self.updateWindowPosSize then
-        btnUtils.Debug("Setting new(%d: %s) pos: %d, %d and size: %d, %d", self.id, tostring(self), self.newX, self.newY, self.newWidth, self.newHeight)
+        btnUtils.Debug("Setting new(%d: %s) pos: %d, %d and size: %d, %d", self.id, tostring(self), self.newX, self.newY,
+            self.newWidth, self.newHeight)
         self.updateWindowPosSize = false
         ImGui.SetNextWindowSize(self.newWidth, self.newHeight)
 
@@ -94,46 +183,20 @@ function BMHotbarClass:RenderHotbar(flags)
         self.lastWindowY          = self.newY
     end
 
+    local colorPop, stylePop = self:StartTheme()
     ImGui.PushID("##MainWindow_" .. tostring(self.id))
-    self.openGUI, self.shouldDrawGUI = ImGui.Begin(string.format('Button Master - %d', self.id), self.openGUI, bit32.bor(flags))
+    self.openGUI, self.shouldDrawGUI = ImGui.Begin(string.format('Button Master - %d', self.id), self.openGUI,
+        bit32.bor(flags))
 
-    self.lastWindowX, self.lastWindowY = ImGui.GetWindowPos()
-    self.lastWindowHeight = ImGui.GetWindowHeight()
-    self.lastWindowWidth = ImGui.GetWindowWidth()
-
-    local theme = BMSettings:GetSettings().Themes and BMSettings:GetSettings().Themes[self.id] or nil
-    if not theme then
-        theme = themes[BMSettings:GetCharacterWindow(self.id).Theme or ""] or nil
+    if not ImGui.IsMouseDown(ImGuiMouseButton.Left) then
+        self.lastWindowX, self.lastWindowY = ImGui.GetWindowPos()
+        self.lastWindowHeight = ImGui.GetWindowHeight()
+        self.lastWindowWidth = ImGui.GetWindowWidth()
     end
-
-    local themeColorPop = 0
-    local themeStylePop = 0
 
     if self.openGUI and self.shouldDrawGUI then
         local startTimeMS = os.clock() * 1000
         local cursorScreenPos = ImGui.GetCursorScreenPosVec()
-
-        if theme ~= nil then
-            for n, t in pairs(theme) do
-                if t.color then
-                    ImGui.PushStyleColor(ImGuiCol[t.element], t.color.r, t.color.g, t.color.b, t.color.a)
-                    themeColorPop = themeColorPop + 1
-                elseif t.stylevar then
-                    ImGui.PushStyleVar(ImGuiStyleVar[t.stylevar], t.value)
-                    themeStylePop = themeStylePop + 1
-                else
-                    if type(t) == 'table' then
-                        if #t == 4 then
-                            ImGui.PushStyleColor(ImGuiCol[n], unpack(t))
-                            themeColorPop = themeColorPop + 1
-                        else
-                            ImGui.PushStyleVar(ImGuiStyleVar[n], unpack(t))
-                            themeStylePop = themeStylePop + 1
-                        end
-                    end
-                end
-            end
-        end
 
         self:RenderTabs()
 
@@ -150,15 +213,11 @@ function BMHotbarClass:RenderHotbar(flags)
             ImGui.SetWindowFontScale(1)
         end
     end
-    if themeColorPop > 0 then
-        ImGui.PopStyleColor(themeColorPop)
-    end
-    if themeStylePop > 0 then
-        ImGui.PopStyleVar(themeStylePop)
-    end
 
     ImGui.End()
     ImGui.PopID()
+
+    self:EndTheme(colorPop, stylePop)
 
     if self.openGUI ~= self:IsVisible() then
         self:SetVisible(self.openGUI)
@@ -167,6 +226,8 @@ function BMHotbarClass:RenderHotbar(flags)
             btnUtils.Output("Hotbar %d hidden! Use `/btn %d` to bring it back.", self.id, self.id)
         end
     end
+
+    self.setupComplete = true
 end
 
 function BMHotbarClass:RenderTabs()
@@ -177,7 +238,8 @@ function BMHotbarClass:RenderTabs()
         local start_x, start_y = ImGui.GetCursorPos()
 
         local iconPadding = 2
-        local settingsIconSize = math.ceil(((BMSettings:GetCharacterWindow(self.id).ButtonSize or 6) * 10) / 2) - iconPadding
+        local settingsIconSize = math.ceil(((BMSettings:GetCharacterWindow(self.id).ButtonSize or 6) * 10) / 2) -
+            iconPadding
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, 0, iconPadding)
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, 0, 0)
 
@@ -202,10 +264,10 @@ function BMHotbarClass:RenderTabs()
 
         ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, 0, 0)
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, 0, 0)
-        ImGui.BeginChild("##buttons_child", nil, nil, bit32.bor(ImGuiWindowFlags.AlwaysAutoResize))
+        ImGui.BeginChild("##buttons_child", nil, nil, bit32.bor(ImGuiChildFlags.AlwaysAutoResize, ImGuiChildFlags.AutoResizeY))
 
         if BMSettings:GetCharacterWindowSets(self.id)[1] ~= nil then
-            self:RenderButtons(BMSettings:GetCharacterWindowSets(self.id)[1])
+            self:RenderButtons(BMSettings:GetCharacterWindowSets(self.id)[1], "")
         end
 
         ImGui.EndChild()
@@ -242,7 +304,8 @@ function BMHotbarClass:RenderTabs()
                                     BMSettings:GetCharacterWindowSets(self.id)[i] = self.newSetName
 
                                     -- move the old button set to the new name
-                                    BMSettings:GetSettings().Sets[newSetLabel], BMSettings:GetSettings().Sets[SetLabel] = BMSettings:GetSettings().Sets[SetLabel], nil
+                                    BMSettings:GetSettings().Sets[newSetLabel], BMSettings:GetSettings().Sets[SetLabel] =
+                                        BMSettings:GetSettings().Sets[SetLabel], nil
 
                                     -- update the character button set name
                                     for curCharKey, curCharData in pairs(BMSettings:GetSettings().Characters) do
@@ -250,9 +313,11 @@ function BMHotbarClass:RenderTabs()
                                             for setIdx, oldSetName in ipairs(windowData.Sets) do
                                                 if oldSetName == set then
                                                     btnUtils.Output(string.format(
-                                                        "\awUpdating section '\ag%s\aw' renaming \am%s\aw => \at%s", curCharKey,
+                                                        "\awUpdating section '\ag%s\aw' renaming \am%s\aw => \at%s",
+                                                        curCharKey,
                                                         oldSetName, self.newSetName))
-                                                    BMSettings:GetSettings().Characters[curCharKey].Windows[windowIdx].Sets[setIdx] = self.newSetName
+                                                    BMSettings:GetSettings().Characters[curCharKey].Windows[windowIdx].Sets[setIdx] =
+                                                        self.newSetName
                                                 end
                                             end
                                         end
@@ -266,8 +331,14 @@ function BMHotbarClass:RenderTabs()
                             end
                             ImGui.EndPopup()
                         end
-
-                        self:RenderButtons(SetLabel)
+                        if BMSettings:GetCharacterWindow(self.id).ShowSearch then
+                            ImGui.Text("Search")
+                            ImGui.SameLine()
+                            self.searchText = ImGui.InputText("##SearchText", self.searchText, ImGuiInputTextFlags.None)
+                        else
+                            self.searchText = ""
+                        end
+                        self:RenderButtons(SetLabel, self.searchText)
                         ImGui.EndTabItem()
                     end
                 end
@@ -331,10 +402,12 @@ function BMHotbarClass:RenderTabContextMenu()
             for k, _ in pairs(BMSettings:GetSettings().Sets) do
                 if ImGui.MenuItem(k) then
                     -- clean up any references to this set.
-                    for charConfigKey, charConfigValue in pairs(BMSettings:GetSettings().Characters) do
-                        for setKey, setName in pairs(charConfigValue.Windows[self.id].Sets) do
-                            if setName == k then
-                                BMSettings:GetSettings().Characters[charConfigKey].Windows[self.id].Sets[setKey] = nil
+                    for charConfigKey, charConfigValue in pairs(BMSettings:GetSettings().Characters or {}) do
+                        for windowKey, windowData in ipairs(charConfigValue.Windows or {}) do
+                            for setKey, setName in pairs(windowData.Sets or {}) do
+                                if setName == k then
+                                    BMSettings:GetSettings().Characters[charConfigKey].Windows[windowKey].Sets[setKey] = nil
+                                end
                             end
                         end
                     end
@@ -423,8 +496,21 @@ function BMHotbarClass:RenderTabContextMenu()
         end
 
         if ImGui.BeginMenu("Set Theme") then
+            local checked = BMSettings:GetCharacterWindow(self.id).Theme == nil
+            if ImGui.MenuItem("Default", nil, checked) then
+                BMSettings:GetCharacterWindow(self.id).Theme = nil
+                BMSettings:SaveSettings(true)
+            end
             for n, _ in pairs(themes) do
-                local checked = (BMSettings:GetCharacterWindow(self.id).Theme or "") == n
+                checked = (BMSettings:GetCharacterWindow(self.id).Theme or "") == n
+                if ImGui.MenuItem(n, nil, checked) then
+                    BMSettings:GetCharacterWindow(self.id).Theme = n
+                    BMSettings:SaveSettings(true)
+                    break
+                end
+            end
+            for n, _ in pairs(BMSettings.Globals.CustomThemes or {}) do
+                checked = (BMSettings:GetCharacterWindow(self.id).Theme or "") == n
                 if ImGui.MenuItem(n, nil, checked) then
                     BMSettings:GetCharacterWindow(self.id).Theme = n
                     BMSettings:SaveSettings(true)
@@ -462,10 +548,7 @@ function BMHotbarClass:RenderTabContextMenu()
             table.sort(charList, function(a, b) return a.key < b.key end)
             for _, value in ipairs(charList) do
                 if ImGui.MenuItem(value.displayName) then
-                    local newTable = btnUtils.deepcopy(BMSettings:GetSettings().Characters[value.key])
-                    BMSettings:GetSettings().Characters[BMSettings.CharConfig] = newTable
-                    BMSettings:SaveSettings(true)
-                    BMUpdateSettings = true
+                    CopyLocalSet(value.key)
                 end
             end
             ImGui.EndMenu()
@@ -475,11 +558,28 @@ function BMHotbarClass:RenderTabContextMenu()
 
         if ImGui.BeginMenu("Display Settings") then
             if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).HideTitleBar and "Show" or "Hide") .. " Title Bar") then
-                BMSettings:GetCharacterWindow(self.id).HideTitleBar = not BMSettings:GetCharacterWindow(self.id).HideTitleBar
+                BMSettings:GetCharacterWindow(self.id).HideTitleBar = not BMSettings:GetCharacterWindow(self.id)
+                    .HideTitleBar
                 BMSettings:SaveSettings(true)
             end
             if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).CompactMode and "Normal" or "Compact") .. " Mode") then
-                BMSettings:GetCharacterWindow(self.id).CompactMode = not BMSettings:GetCharacterWindow(self.id).CompactMode
+                BMSettings:GetCharacterWindow(self.id).CompactMode = not BMSettings:GetCharacterWindow(self.id)
+                    .CompactMode
+                BMSettings:SaveSettings(true)
+            end
+            if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).AdvTooltips and "Disable" or "Enable") .. " Advanced Tooltips") then
+                BMSettings:GetCharacterWindow(self.id).AdvTooltips = not BMSettings:GetCharacterWindow(self.id)
+                    .AdvTooltips
+                BMSettings:SaveSettings(true)
+            end
+            if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).HideScrollbar and "Show" or "Hide") .. " Scrollbar") then
+                BMSettings:GetCharacterWindow(self.id).HideScrollbar = not BMSettings:GetCharacterWindow(self.id)
+                    .HideScrollbar
+                BMSettings:SaveSettings(true)
+            end
+            if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).ShowSearch and "Disable" or "Enable") .. " Search") then
+                BMSettings:GetCharacterWindow(self.id).ShowSearch = not BMSettings:GetCharacterWindow(self.id)
+                    .ShowSearch
                 BMSettings:SaveSettings(true)
             end
             local fps_scale = {
@@ -560,6 +660,44 @@ function BMHotbarClass:RenderTabContextMenu()
         if ImGui.BeginMenu("Dev") then
             if ImGui.MenuItem((btnUtils.enableDebug and "Disable" or "Enable") .. " Debug") then
                 btnUtils.enableDebug = not btnUtils.enableDebug
+            end
+            if ImGui.MenuItem("Remove All Duped Buttons") then
+                local duplicatekeys = Set.new({})
+                for buttonKey, buttonData in pairs(BMSettings:GetSettings().Buttons or {}) do
+                    btnUtils.Output("\awTesting Button: \am%s", buttonKey)
+                    for curBtnKey, curBtn in pairs(BMSettings:GetSettings().Buttons or {}) do
+                        if buttonKey ~= curBtnKey and curBtn.Cmd == buttonData.Cmd then
+                            btnUtils.Output("\awButton: \am%s \awis a duplicate!", buttonKey)
+                            duplicatekeys:add(curBtnKey)
+                            duplicatekeys:add(buttonKey)
+                            break
+                        end
+                    end
+                end
+
+                for _, key in ipairs(duplicatekeys:toList()) do
+                    btnUtils.Output("\awDuplicate: \am%s \aw(\at%s\aw)", key, BMSettings:GetSettings().Buttons[key].Label)
+                    local isUsed = false
+                    for _, setButtons in pairs(BMSettings:GetSettings().Sets) do
+                        for _, buttonName in pairs(setButtons) do
+                            if buttonName == key then
+                                isUsed = true
+                            end
+                        end
+                    end
+
+                    if isUsed then
+                        btnUtils.Output("   \ag-> Used")
+                    else
+                        if BMSettings:GetSettings().Buttons[key] then
+                            btnUtils.Output("   \ay-> Unused - Removing!")
+                            BMSettings:GetSettings().Buttons[key] = nil
+                        else
+                            btnUtils.Output("   \ay-> Unused - Previosuly Removed!")
+                        end
+                    end
+                end
+                BMSettings:SaveSettings(true)
             end
             ImGui.EndMenu()
         end
@@ -645,7 +783,8 @@ function BMHotbarClass:RenderContextMenu(Set, Index, buttonID)
 end
 
 ---@param Set string
-function BMHotbarClass:RenderButtons(Set)
+---@param searchText string
+function BMHotbarClass:RenderButtons(Set, searchText)
     ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, ImVec2(4, 4))
     if ImGui.GetWindowWidth() ~= self.lastButtonPageWidth or ImGui.GetWindowHeight() ~= self.lastButtonPageHeight or self.buttonSizeDirty then
         self:RecalculateVisibleButtons(Set)
@@ -657,46 +796,62 @@ function BMHotbarClass:RenderButtons(Set)
 
     for ButtonIndex = 1, renderButtonCount do
         local button = BMSettings:GetButtonBySetIndex(Set, ButtonIndex)
+        local searchMatch = true
 
-        local clicked = false
-
-        local buttonID = string.format("##Button_%s_%d", Set, ButtonIndex)
-        ImGui.PushID(buttonID)
-        clicked = BMButtonHandlers.Render(button, btnSize, true, (BMSettings:GetCharacterWindow(self.id).Font or 10) / 10)
-        ImGui.PopID()
-
-        -- TODO Move this to button config class and out of the UI thread.
-        if clicked then
-            if button.Unassigned then
-                BMEditPopup:CreateButtonFromCursor(Set, ButtonIndex)
-            else
-                BMButtonHandlers.Exec(button)
-            end
-        else
-            -- setup drag and drop
-            if ImGui.BeginDragDropSource() then
-                ImGui.SetDragDropPayload("BTN", ButtonIndex)
-                ImGui.Button(button.Label, btnSize, btnSize)
-                ImGui.EndDragDropSource()
-            end
-            if ImGui.BeginDragDropTarget() then
-                local payload = ImGui.AcceptDragDropPayload("BTN")
-                if payload ~= nil then
-                    ---@diagnostic disable-next-line: undefined-field
-                    local num = payload.Data;
-                    -- swap the keys in the button set
-                    BMSettings:GetSettings().Sets[Set][num], BMSettings:GetSettings().Sets[Set][ButtonIndex] = BMSettings:GetSettings().Sets[Set][ButtonIndex],
-                        BMSettings:GetSettings().Sets[Set][num]
-                    BMSettings:SaveSettings(true)
-                end
-                ImGui.EndDragDropTarget()
-            end
-
-            self:RenderContextMenu(Set, ButtonIndex, buttonID)
+        if searchText:len() > 0 then
+            searchMatch =
+                (button.CachedLabel or ""):lower():find(searchText:lower()) ~= nil
+                or
+                (button.Cmd or ""):lower():find(searchText:lower()) ~= nil
         end
 
-        -- button grid
-        if ButtonIndex % self.cachedCols ~= 0 then ImGui.SameLine() end
+        if searchMatch then
+            local clicked = false
+
+            local buttonID = string.format("##Button_%s_%d", Set, ButtonIndex)
+            local showLabel = true
+            local btnKey = BMSettings:GetButtonSectionKeyBySetIndex(Set, ButtonIndex)
+            if BMSettings.settings.Buttons[btnKey] ~= nil and BMSettings.settings.Buttons[btnKey].ShowLabel ~= nil then
+                showLabel = BMSettings.settings.Buttons[btnKey].ShowLabel
+            end
+            ImGui.PushID(buttonID)
+            clicked = BMButtonHandlers.Render(button, btnSize, showLabel, (BMSettings:GetCharacterWindow(self.id).Font or 10) / 10,
+                BMSettings:GetCharacterWindow(self.id).AdvTooltips)
+            ImGui.PopID()
+            -- TODO Move this to button config class and out of the UI thread.
+            if clicked then
+                if button.Unassigned then
+                    BMEditPopup:CreateButtonFromCursor(Set, ButtonIndex)
+                else
+                    BMButtonHandlers.Exec(button)
+                end
+            else
+                -- setup drag and drop
+                if ImGui.BeginDragDropSource() then
+                    ImGui.SetDragDropPayload("BTN", ButtonIndex)
+                    ImGui.Button(button.Label, btnSize, btnSize)
+                    ImGui.EndDragDropSource()
+                end
+                if ImGui.BeginDragDropTarget() then
+                    local payload = ImGui.AcceptDragDropPayload("BTN")
+                    if payload ~= nil then
+                        ---@diagnostic disable-next-line: undefined-field
+                        local num = payload.Data;
+                        -- swap the keys in the button set
+                        BMSettings:GetSettings().Sets[Set][num], BMSettings:GetSettings().Sets[Set][ButtonIndex] =
+                            BMSettings:GetSettings().Sets[Set][ButtonIndex],
+                            BMSettings:GetSettings().Sets[Set][num]
+                        BMSettings:SaveSettings(true)
+                    end
+                    ImGui.EndDragDropTarget()
+                end
+
+                self:RenderContextMenu(Set, ButtonIndex, buttonID)
+            end
+
+            -- button grid
+            if ButtonIndex % self.cachedCols ~= 0 then ImGui.SameLine() end
+        end
     end
     ImGui.PopStyleVar(1)
 end
@@ -858,13 +1013,15 @@ function BMHotbarClass:GiveTime()
     local config = BMSettings:GetCharacterWindow(self.id)
 
     if config then
-        if not config.Pos or (config.Pos.x ~= self.lastWindowX or config.Pos.y ~= self.lastWindowY) or config.Height ~= self.lastWindowHeight or config.Width ~= self.lastWindowWidth then
-            config.Pos    = config.Pos or {}
-            config.Pos.x  = self.lastWindowX
-            config.Pos.y  = self.lastWindowY
-            config.Height = self.lastWindowHeight
-            config.Width  = self.lastWindowWidth
-            BMSettings:SaveSettings(true)
+        if self.setupComplete and not BMUpdateSettings then -- wont have valid positions until the render loop has run once.
+            if not config.Pos or (config.Pos.x ~= self.lastWindowX or config.Pos.y ~= self.lastWindowY) or config.Height ~= self.lastWindowHeight or config.Width ~= self.lastWindowWidth then
+                config.Pos    = config.Pos or {}
+                config.Pos.x  = self.lastWindowX
+                config.Pos.y  = self.lastWindowY
+                config.Height = self.lastWindowHeight
+                config.Width  = self.lastWindowWidth
+                BMSettings:SaveSettings(true)
+            end
         end
     else
         btnUtils.Output("\ayError: No config found for bar: %d", self.id)

@@ -1,5 +1,6 @@
 --- @type Mq
 local mq = require 'mq'
+local utils = require 'utils.utils'
 local helpers = require 'utils.uihelpers'
 local PropertyInput = require 'classes.inputs.propertyinput'
 local ColumnInput = require 'classes.inputs.columninput'
@@ -10,6 +11,7 @@ local state = require 'state'
 local settings = require 'settings.settings'
 local library = require 'library'
 local filedialog = require 'utils.imguifiledialog'
+local theme = utils.loadTheme()
 
 function ConfigurationPanel:drawDisplaySettingsSelector()
     ImGui.PushStyleColor(ImGuiCol.Text, 1, 1, 1, 1)
@@ -185,7 +187,7 @@ end
 
 function ConfigurationPanel:drawLeftPaneWindow()
     local _,y = ImGui.GetContentRegionAvail()
-    if ImGui.BeginChild("left##"..self.Name, self.LeftPaneSize, y-1, true) then
+    if ImGui.BeginChild("left##"..self.Name, self.LeftPaneSize, y-1, ImGuiChildFlags.Border) then
         local flags = bit32.bor(ImGuiTableFlags.RowBg, ImGuiTableFlags.BordersOuter, ImGuiTableFlags.BordersV, ImGuiTableFlags.ScrollY)
         if ImGui.BeginTable('##configmenu'..self.Name, 1, flags, 0, 0, 0.0) then
             ImGui.TableNextRow()
@@ -218,40 +220,63 @@ function ConfigurationPanel:drawLeftPaneWindow()
     ImGui.EndChild()
 end
 
+local function DrawThemeComboBox(label, resultVar, options, bykey, helpText)
+    -- ImGui.SetCursorPosX(posX or ImGui.GetCursorPosX())
+    -- ImGui.SetCursorPosY((posY or ImGui.GetCursorPosY()) + 5)
+    -- if width then ImGui.SetNextItemWidth(width) end
+    if ImGui.BeginCombo(label, resultVar) then
+        for i,j in pairs(options) do
+            if ImGui.Selectable(j.Name, j.Name == resultVar) then
+                resultVar = j.Name
+            end
+        end
+        ImGui.EndCombo()
+    end
+    helpers.HelpMarker(helpText)
+    return resultVar
+end
+
 function ConfigurationPanel:drawDisplaySettings()
-    ImGui.TextColored(1, 0, 1, 1, 'Window Settings')
-    ImGui.Separator()
-    state.Settings.Windows[self.Name].Transparency = helpers.DrawCheckBox('Transparent Window: ', '##transparency', state.Settings.Windows[self.Name].Transparency, 'Check this box to toggle transparency of the window.')
-    state.Settings.Windows[self.Name].TitleBar = helpers.DrawCheckBox('Show Title Bar: ', '##titlebar', state.Settings.Windows[self.Name].TitleBar, 'Check this box to toggle showing the title bar.')
-    state.Settings.Columns['Name']['IncludeLevel'] = helpers.DrawCheckBox('Name includes Level: ', '##namewithlevel', state.Settings.Columns['Name']['IncludeLevel'], 'Check this box to toggle showing name and level together in the Name column.')
-    ImGui.Separator()
-    ImGui.Text('Column Text Colors:')
-    state.Settings['Colors']['Default'] = helpers.DrawColorEditor("Default Color", state.Settings['Colors']['Default'])
-    ImGui.SameLine()
-    ImGui.SetCursorPosX(175)
-    state.Settings['Colors']['InZone'] = helpers.DrawColorEditor("Character names in zone", state.Settings['Colors']['InZone'])
-    state.Settings['Colors']['Low'] = helpers.DrawColorEditor("Below Threshold", state.Settings['Colors']['Low'])
-    ImGui.SameLine()
-    ImGui.SetCursorPosX(175)
-    state.Settings['Colors']['Invis'] = helpers.DrawColorEditor("Invis characters in zone", state.Settings['Colors']['Invis'])
-    state.Settings['Colors']['Medium'] = helpers.DrawColorEditor("Medium Threshold", state.Settings['Colors']['Medium'])
-    ImGui.SameLine()
-    ImGui.SetCursorPosX(175)
-    state.Settings['Colors']['IVU'] = helpers.DrawColorEditor("IVU characters in zone", state.Settings['Colors']['IVU'])
-    state.Settings['Colors']['High'] = helpers.DrawColorEditor("Above Threshold", state.Settings['Colors']['High'])
-    ImGui.SameLine()
-    ImGui.SetCursorPosX(175)
-    state.Settings['Colors']['DoubleInvis'] = helpers.DrawColorEditor("Double Invis characters in zone", state.Settings['Colors']['DoubleInvis'])
-    state.Settings['Colors']['True'] = helpers.DrawColorEditor("True values", state.Settings['Colors']['True'])
-    ImGui.SameLine()
-    ImGui.SetCursorPosX(175)
-    state.Settings['Colors']['NotInZone'] = helpers.DrawColorEditor("Characters not in zone", state.Settings['Colors']['NotInZone'])
-    state.Settings['Colors']['False'] = helpers.DrawColorEditor("False values", state.Settings['Colors']['False'])
-    ImGui.Separator()
-    if ImGui.Button('Save##displaysettings') then
+    local window = state.Settings.Windows[self.Name]
+    if ImGui.Button('Save Window Settings##displaysettings') then
         settings.SaveSettings()
         self:clearSelection()
     end
+    ImGui.Separator()
+    window.OverrideWindowName = helpers.DrawCheckBox('Use global window name: ', '##overridewindowname', window.OverrideWindowName, 'Do not append per character details to ImGui window name, so same window definition is used across characters.')
+    window.Transparency = helpers.DrawCheckBox('Transparent Window: ', '##transparency', window.Transparency, 'Check this box to toggle transparency of the window.')
+    window.TitleBar = helpers.DrawCheckBox('Show Title Bar: ', '##titlebar', window.TitleBar, 'Check this box to toggle showing the title bar.')
+    window.SavePos = helpers.DrawCheckBox('Save Window Position in BoxHUD: ', '##savepos', window.SavePos, 'Save the windows position in boxhuds own config file.')
+    window.AutoScaleHeight = helpers.DrawCheckBox('Auto Scale Height: ', '##autoscale', window.AutoScaleHeight, 'Auto scale height to fit characters')
+    window.RoundedEdges = helpers.DrawCheckBox('Round Edges: ', '##roundedges', window.RoundedEdges, 'Use rounded edges for window style')
+    local nameColumn = state.Settings.Columns.Name
+    nameColumn['IncludeLevel'] = helpers.DrawCheckBox('Name includes Level: ', '##namewithlevel', nameColumn['IncludeLevel'], 'Check this box to toggle showing name and level together in the Name column.')
+    window.Theme = DrawThemeComboBox('Theme', window.Theme, theme.Theme, false, 'Select a ThemeZ theme')
+    theme.LoadTheme = window.Theme
+    ImGui.Separator()
+    ImGui.Text('Column Text Colors:')
+    local colors = state.Settings.Colors
+    colors['Default'] = helpers.DrawColorEditor("Default Color", colors['Default'])
+    ImGui.SameLine()
+    ImGui.SetCursorPosX(175)
+    colors['InZone'] = helpers.DrawColorEditor("Character names in zone", colors['InZone'])
+    colors['Low'] = helpers.DrawColorEditor("Below Threshold", colors['Low'])
+    ImGui.SameLine()
+    ImGui.SetCursorPosX(175)
+    colors['Invis'] = helpers.DrawColorEditor("Invis characters in zone", colors['Invis'])
+    colors['Medium'] = helpers.DrawColorEditor("Medium Threshold", colors['Medium'])
+    ImGui.SameLine()
+    ImGui.SetCursorPosX(175)
+    colors['IVU'] = helpers.DrawColorEditor("IVU characters in zone", colors['IVU'])
+    colors['High'] = helpers.DrawColorEditor("Above Threshold", colors['High'])
+    ImGui.SameLine()
+    ImGui.SetCursorPosX(175)
+    colors['DoubleInvis'] = helpers.DrawColorEditor("Double Invis characters in zone", colors['DoubleInvis'])
+    colors['True'] = helpers.DrawColorEditor("True values", colors['True'])
+    ImGui.SameLine()
+    ImGui.SetCursorPosX(175)
+    colors['NotInZone'] = helpers.DrawColorEditor("Characters not in zone", colors['NotInZone'])
+    colors['False'] = helpers.DrawColorEditor("False values", colors['False'])
 end
 
 function ConfigurationPanel:drawPropertyLibrary()
@@ -381,7 +406,7 @@ end
 
 function ConfigurationPanel:drawRightPaneWindow()
     local x,y = ImGui.GetContentRegionAvail()
-    if ImGui.BeginChild("right##"..self.Name, x, y-1, true) then
+    if ImGui.BeginChild("right##"..self.Name, x, y-1, ImGuiChildFlags.Border) then
         if self.SelectedItemType == 'displaysettings' then
             self:drawDisplaySettings()
         elseif self.SelectedItemType == 'addnewproperty' then

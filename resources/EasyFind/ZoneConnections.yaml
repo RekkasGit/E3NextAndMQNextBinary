@@ -1,0 +1,2065 @@
+FindLocations:
+    abysmal:
+        -   type: Translocator
+            name: Magus Pellen
+            destinations:
+                -   keyword: Natimbi
+                    targetZone: natimbi
+                -   keyword: Nedaria's Landing
+                    targetZone: nedaria
+    akheva:
+        -   type: ZoneConnection
+            location: [-1489, -70, 19]
+            targetZone: maiden
+            identifier: 2
+    akhevatwo:
+        -   type: ZoneConnection
+            location: [-1449.92, 125.33, 19]
+            targetZone: maidentwo
+    anniversarytower:
+        -   type: ZoneConnection
+            location: [42, 29, 30]
+            targetZone: anniversarytower
+            name: 'Tides of Time: A Time to Run'
+            switch: 1
+        -   type: ZoneConnection
+            location: [-73, -41, -17]
+            targetZone: northro
+            switch: 20
+    arcstone:
+        -   type: ZoneConnection
+            location: [-228, 1610, 5.64]
+            targetZone: freeportwest
+        -   type: ZoneConnection
+            location: [-203.97, 1307.16, 11.65]
+            targetZone: freeporteast
+            script: |
+                mq.cmd('/face fast heading 270')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(3000)
+                mq.cmd('/keypress forward')
+        -   type: ZoneConnection
+            location: [-583.96, -845.06, 574.87]
+            switch: 8
+            targetZone: skylance
+        -   type: ZoneConnection
+            location: [223.05, -970.97, 406.27]
+            switch: 6
+            targetZone: relic
+    arelis:
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: resplendent
+    argath:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: beastdomain
+    arthicrex:
+        -   type: ZoneConnection
+            switch: 33
+            targetZone: fungalforest
+        -   type: ZoneConnection
+            switch: 35
+            targetZone: lichencreep
+        -   type: ZoneConnection
+            switch: 31
+            targetZone: stonesnake
+    ashengate:
+        -   type: ZoneConnection
+            location: [-380.85, 5.25, 8.91]
+            targetZone: direwind
+            identifier: 4
+            script: |
+                mq.cmd('/face fast heading 180')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(3000)
+                mq.cmd('/keypress forward')
+    atiiki:
+        -   type: ZoneConnection
+            switch: 14
+            targetZone: kattacastrum
+    basilica:
+        -   type: ZoneConnection
+            location: [1.14, 45.53, -20.30]
+            switch: 1
+            targetZone: shadowvalley
+    beastdomain:
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: argath
+    beholder:
+        -   type: ZoneConnection
+            location: [902, -1869, 1]
+            targetZone: runnyeye
+    bertoxtemple:
+        -   type: ZoneConnection
+            location: [0.08, -14.78, 1.87]
+            targetZone: oceangreenvillage
+            script: |
+                mq.cmd('/face fast heading 90')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(500)
+                mq.cmd('/keypress forward')
+                mq.TLO.Switch("1")
+                mq.cmd('/click left door')
+    bixiewarfront:
+        -   type: ZoneConnection
+            location: [-1027.43, -2155.23, 34.69]
+            targetZone: crescent
+            script: |
+                mq.cmd('/face fast heading 305')
+                mq.delay(1000)
+                mq.cmd('/keypress page_up hold')
+                mq.delay(2000)
+                mq.cmd('/keypress page_up')
+                mq.cmd('/keypress forward hold')
+                mq.delay(3000)
+                mq.cmd('/keypress forward')
+    blackburrow:
+        -   type: ZoneConnection
+            targetZone: jaggedpine
+            switch: 35
+    bloodfields:
+        -   type: ZoneConnection
+            location: [1965, 1900, -864]
+            targetZone: dranik
+        -   type: ZoneConnection
+            location: [1965, 1900, -864]
+            targetZone: dranik
+            identifier: 1
+        -   type: ZoneConnection
+            location: [1965, 1900, -864]
+            targetZone: dranik
+            identifier: 2
+    bloodmoon:
+        -   type: ZoneConnection
+            switch: OBJ_MAIN_BLOODMOONDOOR
+            targetZone: lopingplains
+            identifier: 4
+    bothunder:
+        -   type: ZoneConnection
+            switch: 67
+            targetZone: potranquility
+    brellsrest:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: brellstemple
+    brellstemple:
+        -   type: ZoneConnection
+            switch: 12
+            targetZone: brellsrest
+    broodlands:
+        -   type: ZoneConnection
+            location: [-1114.36, -1973.87, 8.71]
+            targetZone: lavastorm
+    burningwood:
+        -   type: ZoneConnection
+            location: [-5070, -788, 201]
+            targetZone: dreadlands
+    butcher:
+        -   type: ZoneConnection
+            location: [3145, -180, 1.88]
+            targetZone: kaladima
+        -   type: Translocator
+            name: Magus Tira
+            keyword: Nedaria's Landing
+            targetZone: nedaria
+            expansion: Lost Dungeons of Norrath
+        -   type: Translocator
+            name: Magus Tira
+            destinations:
+                -   keyword: Commonlands
+                    targetZone: commonlands
+                -   keyword: Everfrost
+                    targetZone: everfrost
+                -   keyword: North Ro
+                    targetZone: northro
+                -   keyword: South Ro
+                    targetZone: southro
+            expansion: Lost Dungeons of Norrath
+            requiredAchievement: 500980300
+        -   type: Translocator
+            name: '#Translocator Fithop'
+            keyword: Travel to Ocean of Tears
+            targetZone: oceanoftears
+        -   type: Translocator
+            name: '#Translocator Gethia'
+            keyword: Travel to Timorous Deep
+            targetZone: timorous
+            expansion: Kunark
+    charasistwo:
+        -   type: ZoneConnection
+            location: [-464.37, -294.15, -16.26]
+            targetZone: charasisb
+        -   type: ZoneConnection
+            switch: OBJ_TELEPORTSTEP
+            location: [-39, -802.84, -7.25]
+            targetZone: overtheretwo
+    cityofbronze:
+        -   type: ZoneConnection
+            location: [-950, -2825, 52]
+            targetZone: resplendent
+    cobaltscartwo:
+        -   type: ZoneConnection
+            location: [2510, 1468, 163.28]
+            targetZone: westwastestwo
+    commonlands:
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: chapterhouse
+        -   type: Translocator
+            name: Magus Zeir
+            keyword: Nedaria's Landing
+            targetZone: nedaria
+            expansion: Lost Dungeons of Norrath
+        -   type: Translocator
+            name: Magus Zeir
+            destinations:
+                -   keyword: Butcherblock
+                    targetZone: butcher
+                -   keyword: Commonlands
+                    targetZone: commonlands
+                -   keyword: Everfrost
+                    targetZone: everfrost
+                -   keyword: North Ro
+                    targetZone: northro
+                -   keyword: South Ro
+                    targetZone: southro
+            expansion: Lost Dungeons of Norrath
+            requiredAchievement: 500980300
+    convorteum:
+        -   type: ZoneConnection
+            switch: 13
+            targetZone: stonesnake
+    corathus:
+        -   type: ZoneConnection
+            location: [-390.25, -135.46, -63.70]
+            targetZone: nektulos
+        -   type: ZoneConnection
+            switch: 109
+            targetZone: lichencreep
+    crescent:
+        -   type: ZoneConnection
+            location: [-880, -2760, -56.57]
+            targetZone: moors
+    dawnshroud:
+        -   type: ZoneConnection
+            location: [-711, -2150, 30]
+            targetZone: maiden
+    deadhills:
+        -   type: ZoneConnection
+            switch: 41
+            targetZone: towerofrot
+    devastation:
+        -   type: ZoneConnection
+            switch: 1
+            location: [164, 1376, 53]
+            targetZone: freeporteast
+    drachnidhive:
+        -   type: ZoneConnection
+            location: [283, 1108, 451]
+            targetZone: dreadspire
+        -   type: ZoneConnection
+            location: [22, 4, -6]
+            targetZone: westkorlach
+            identifier: 2
+    dragonscale:
+        -   type: ZoneConnection
+            switch: 6
+            location: [3734, -2383, 100]
+            targetZone: mechanotus
+        -   type: ZoneConnection
+            targetZone: steamfactory
+            remove: true
+        -   type: ZoneConnection
+            location: [-3181, 345, 109]
+            switch: OBJ_MECH_LAUNCHER
+            targetZone: gnomemtn
+    draniksscar:
+        -   type: Translocator
+            name: Elder Priest of Discord
+            keyword: go home
+            targetZone: poknowledge
+    dreadlands:
+        -   type: Translocator
+            name: Nexus Scion
+            keyword: journey to Luclin
+            targetZone: nexus
+    dreadspire:
+        -   type: ZoneConnection
+            location: [-1051, 1410.27, -571]
+            targetZone: drachnidhive
+    dulak:
+        -   type: ZoneConnection
+            location: [-1167, -93, -32]
+            targetZone: deadhills
+    eastkarana:
+        -   type: ZoneConnection
+            location: [-3104.22, -8338.80, 689.91]
+            targetZone: highpasshold
+        -   type: ZoneConnection
+            location: [3635, -2019, 1.75]
+            targetZone: beholder
+    eastkorlach:
+        -   type: ZoneConnection
+            location: [-1136, -1065, 270]
+            targetZone: corathus
+            identifier: 1
+        -   type: ZoneConnection
+            location: [-1568, 740, 70]
+            targetZone: illsalin
+        -   type: ZoneConnection
+            location: [553, 898, -35]
+            targetZone: westkorlach
+            identifier: 2
+    eastwastes:
+        -   type: ZoneConnection
+            location: [-1771.37, 6685, 198.47]
+            targetZone: greatdivide
+    eastwastestwo:
+        -   type: Translocator
+            name: '#Deaen Greyforge'
+            keyword: get on
+            targetZone: northro
+        -   type: ZoneConnection
+            switch: OBJ_SLEEPERTELEPORT
+            targetZone: sleepertwo
+    elddar:
+        -   type: ZoneConnection
+            switch: OBJ_TELEPORT
+            targetZone: takishruins
+    emeraldjungle:
+        -   type: ZoneConnection
+            location: [-1967.99, 5400, 1]
+            targetZone: fieldofbone
+        -   type: ZoneConnection
+            location: [-1967.99, 5400, 1]
+            identifier: 1
+            targetZone: fieldofbone
+        -   type: ZoneConnection
+            location: [-1967.99, 5400, 1]
+            identifier: 2
+            targetZone: fieldofbone
+        -   type: ZoneConnection
+            location: [-3445, 1550, -344]
+            targetZone: trakanon
+        -   type: ZoneConnection
+            location: [272.02, -1825.76, -334.97]
+            identifier: 1
+            targetZone: citymist
+        -   type: ZoneConnection
+            location: [327.05, -1843.20, -334.97]
+            identifier: 2
+            targetZone: citymist
+    erudnext:
+        -   type: Translocator
+            name: '#Translocator Eniela'
+            keyword: Erud's Crossing
+            targetZone: erudsxing
+    erudsxing:
+        -   type: Translocator
+            name: '#Translocator Jempar'
+            destinations:
+            -   keyword: Qeynos
+                targetZone: qeynos
+            -   keyword: Erudin
+                targetZone: erudin
+    everfrost:
+        -   type: Translocator
+            name: Magus Delin
+            keyword: Nedaria's Landing
+            targetZone: nedaria
+            expansion: Lost Dungeons of Norrath
+        -   type: Translocator
+            name: Magus Delin
+            destinations:
+            -   keyword: Nedaria's Landing
+                targetZone: nedaria
+            -   keyword: Butcherblock
+                targetZone: butcher
+            -   keyword: Commonlands
+                targetZone: commonlands
+            -   keyword: North Ro
+                targetZone: northro
+            -   keyword: South Ro
+                targetZone: southro
+            expansion: Lost Dungeons of Norrath
+            requiredAchievement: 500980300
+    fallen:
+        -   type: ZoneConnection
+            location: [-12.43, 64.65, -1.11]
+            switch: 18
+            targetZone: thulehouse1
+    feerrott:
+        -   type: ZoneConnection
+            location: [400, 3410, 6]
+            targetZone: rathemtn
+        -   type: ZoneConnection
+            location: [-1104, -3169, -9]
+            targetZone: innothuleb
+    feerrott2:
+        -   type: ZoneConnection
+            location: [-1400.38, 925.45, -3.11]
+            switch: 1
+            targetZone: thulehouse1
+    fieldofbone:
+        -   type: ZoneConnection
+            location: [-2100, -1275, 15]
+            targetZone: emeraldjungle
+        -   type: ZoneConnection
+            location: [-3390, 951, 15]
+            targetZone: swampofnohope
+            identifier: 1
+        -   type: ZoneConnection
+            location: [1440, 4350, 7]
+            targetZone: warslikswood
+            identifier: 1
+        -   type: ZoneConnection
+            location: [1552.60998, 4350, 15]
+            targetZone: warslikswood
+            identifier: 2
+    firiona:
+        -   type: Translocator
+            name: '#Translocator Drabilt'
+            keyword: travel to Timorous Deep
+            targetZone: timorous
+        -   type: ZoneConnection
+            location: [1245.12, 3538.5, 206.10]
+            targetZone: lakeofillomen
+        -   type: ZoneConnection
+            location: [5011.12, -2670, -0.070]
+            targetZone: swampofnohope
+            identifier: 1
+        -   type: ZoneConnection
+            location: [5011.12, -2630, -0.070]
+            targetZone: swampofnohope
+            identifier: 2
+        -   type: ZoneConnection
+            location: [5011.12, -2170, -8.07]
+            targetZone: swampofnohope
+            identifier: 3
+        -   type: ZoneConnection
+            location: [4950, 2696.38, 2.06]
+            targetZone: swampofnohope
+            identifier: 4
+    freeporteast:
+        -   type: Translocator
+            name: '#Translocator Setikan'
+            keyword: travel to Ocean of Tears
+            targetZone: oceanoftears
+        -   type: ZoneConnection
+            location: [828, -709, -51]
+            switch: OBJ_SULLONZEK
+            targetZone: devastation
+    freeportwest:
+        -   type: ZoneConnection
+            location: [290, -1730, -112]
+            targetZone: freeporteast
+            identifier: 1
+        -   type: ZoneConnection
+            location: [-100, -1515, -137]
+            targetZone: freeporteast
+            identifier: 2
+        -   type: ZoneConnection
+            location: [38.49, 410.92, -17.39]
+            targetZone: commonlands
+        -   type: ZoneConnection
+            switch: OBJ_POK_BOOK_
+            targetZone: poknowledge
+    frontiermtns:
+        -   type: ZoneConnection
+            location: [-2335, 4280, -454.46]
+            targetZone: burningwood
+        -   type: ZoneConnection
+            location: [5982.80, 1441.43, 472.04]
+            targetZone: overthere
+            identifier: 1
+    fungalforest:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: pellucid
+        -   type: ZoneConnection
+            switch: 4
+            targetZone: arthicrex
+    gfaydark:
+        -   type: Translocator
+            name: Nexus Scion
+            keyword: journey to Luclin
+            targetZone: nexus
+    gnomemtn:
+        -   type: Translocator
+            name: '#Ambassador Cogswold'
+            keyword: depart
+            targetZone: dragonscale
+    greatdivide:
+        -   type: ZoneConnection
+            location: [-1754.30, -5138.47, 194.99]
+            targetZone: eastwastes
+        -   type: ZoneConnection
+            switch: 14
+            targetZone: mischiefplane
+        -   type: Translocator
+            name: Nexus Scion
+            keyword: journey to Luclin
+            targetZone: nexus
+    grimling:
+        -   type: ZoneConnection
+            location: [855, 1935, -267]
+            targetZone: acrylia
+        -   type: ZoneConnection
+            location: [1700, -690, 69]
+            targetZone: tenebrous
+    grobb:
+        -   type: ZoneConnection
+            location: [-224, -3, -2]
+            targetZone: innothuleb
+    guildhall:
+        -   type: ZoneConnection
+            switch: OBJ_GUILD_DOOR
+            targetZone: guildlobby
+    guildhall3:
+        -   type: ZoneConnection
+            location: [2.1, 251.09, -10.82]
+            switch: GUILDHALL_DOOR_SWITCH
+            targetZone: neighborhood
+    guildhalllrg:
+        -   type: ZoneConnection
+            location: [1, 82, 0]
+            switch: OBJ_FRONTENTRANCE
+            targetZone: neighborhood
+    guildhallsml:
+        -   type: ZoneConnection
+            location: [0, 262, -13]
+            switch: OBJ_GUIILDHALL_SML_DOOR
+            targetZone: neighborhood
+    guildlobby:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: guildhall3
+            name: Neighborhood Guild Hall
+            identifier: 1
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: guildhallsml
+            name: Neighborhood Guild Hall
+            identifier: 2
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: guildhalllrg
+            name: Neighborhood Guild Hall
+            identifier: 3
+        -   type: ZoneConnection
+            switch: 3
+            targetZone: guildhall
+            name: Standard Guild Hall
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: poknowledge
+        -   type: Translocator
+            name: Magus Alaria
+            keyword: Nedaria's Landing
+            targetZone: nedaria
+            expansion: Lost Dungeons of Norrath
+        -   type: Translocator
+            name: Magus Alaria
+            destinations:
+                -   keyword: Butcherblock
+                    targetZone: butcher
+                -   keyword: Commonlands
+                    targetZone: commonlands
+                -   keyword: Everfrost
+                    targetZone: everfrost
+                -   keyword: North Ro
+                    targetZone: northro
+                -   keyword: South Ro
+                    targetZone: southro
+            expansion: Lost Dungeons of Norrath
+            requiredAchievement: 500980300
+        -   type: ZoneConnection
+            targetZone: neighborhood
+            switch: OBJ_IRONGATESWITCH
+            script: |
+                -- Wait for window to open and click the button on the right
+                mq.delay('10s', function() return mq.TLO.Window('RealEstateNeighborhoodWnd').Open() end)
+                if mq.TLO.Window('RealEstateNeighborhoodWnd').Open() then
+                    mq.TLO.Window('RealEstateNeighborhoodWnd/RENW_NeighborhoodList').LeftMouseUp()
+                    mq.delay(3000)
+                    mq.TLO.Window('RealEstateNeighborhoodWnd/RENW_Go_Button').LeftMouseUp()
+                end
+    guka:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: guktop
+    gukb:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: innothuleb
+    gukc:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: guktop
+    gukd:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: innothuleb
+    guke:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: guktop
+    gukf:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: innothuleb
+    gukg:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: innothuleb
+    gukh:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: innothuleb
+    gyrospireb:
+        -   type: ZoneConnection
+            switch: 2
+            location: [-748.37, -43.36, 4.19]
+            targetZone: mechanotus
+    gyrospirez:
+        -   type: ZoneConnection
+            switch: 2
+            location: [-749.25, -41.74, 4.24]
+            targetZone: mechanotus
+    hole:
+        -   type: ZoneConnection
+            location: [46.34, 359.41, -381.46]
+            targetZone: paineel
+            identifier: 2
+            script: |
+                mq.cmd('/face fast heading 90')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(2000)
+                mq.cmd('/keypress forward')
+        -   type: ZoneConnection
+            location: [46.34, 359.41, -381.46]
+            targetZone: erudnint
+            script: |
+                mq.cmd('/face fast heading 275')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(2000)
+                mq.cmd('/keypress forward')
+        -   type: ZoneConnection
+            location: [61.07, 344.77, -381.46]
+            targetZone: neriakc
+            script: |
+                mq.cmd('/face fast heading 360')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(2000)
+                mq.cmd('/keypress forward')
+    hatesfury:
+        -   type: ZoneConnection
+            location: [179.58, -1051.35, -4.00]
+            targetZone: nadox
+    hollowshade:
+        -   type: ZoneConnection
+            location: [1180, 3270, 111.97]
+            targetZone: sharvahl
+    housegarden:
+        -   type: ZoneConnection
+            location: [-958.15, -1641, -166.06]
+            script: |
+                mq.cmd('/face fast heading 180')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(1000)
+                mq.cmd('/keypress forward')
+            targetZone: well
+    iceclad:
+        -   type: Translocator
+            name: '#Translocator Kurione'
+            keyword: travel to North Ro
+            targetZone: northro
+        -   type: ZoneConnection
+            location: [1722.61, 2864.66, 117.31]
+            switch: 13
+            targetZone: frozenshadow
+    innothuleb:
+        -   type: ZoneConnection
+            location: [-2350, -1190, 10]
+            targetZone: grobb
+        -   type: ZoneConnection
+            location: [-12, -1185, 23]
+            targetZone: guktop
+    kaeltwo:
+        -   type: ZoneConnection
+            location: [-2160, 1550, -432.33]
+            targetZone: cobaltscartwo
+    kaladima:
+        -   type: ZoneConnection
+            location: [400.25, -260, 1.88]
+            targetZone: kaladimb
+            identifier: 1
+        -   type: ZoneConnection
+            location: [430, 330, -17.33]
+            targetZone: kaladimb
+            identifier: 2
+    kaladimb:
+        -   type: ZoneConnection
+            location: [345, -228, 3.86]
+            targetZone: kaladima
+            identifier: 1
+        -   type: ZoneConnection
+            location: [400, 340, -20]
+            targetZone: kaladima
+            identifier: 2
+    karnor:
+        -   type: ZoneConnection
+            location: [-80.34, 428.09, 0]
+            targetZone: dreadlands
+            identifier: 1
+        -   type: ZoneConnection
+            location: [117.65, 419.10, 0]
+            targetZone: dreadlands
+            identifier: 2
+    kattacastrum:
+        -   type: ZoneConnection
+            switch: 28
+            targetZone: thalassius
+        -   type: ZoneConnection
+            switch: 27
+            targetZone: atiiki
+        -   type: ZoneConnection
+            switch: 29
+            targetZone: zhisza
+        -   type: ZoneConnection
+            switch: 122
+            targetZone: buriedsea
+    kattacastrumb:
+        -   type: ZoneConnection
+            location: [-105.19, 0.69, 25.45]
+            switch: 122
+            targetZone: tempesttemple
+    kodtaz:
+        -   type: ZoneConnection
+            location: [-638, 2690, -405]
+            targetZone: qvic
+        -   type: ZoneConnection
+            targetZone: natimbi
+            identifier: 3
+            switch: 5
+    lakeofillomen:
+        -   type: ZoneConnection
+            location: [4325, 1190, 47]
+            targetZone: warslikswood
+    lakerathe:
+        -   type: ZoneConnection
+            location: [2719.86, -2509.92, 1.75]
+            targetZone: rathemtn
+    lavastorm:
+        -   type: ZoneConnection
+            location: [1113.98, 1082.89, -79.32]
+            targetZone: soldunga
+        -   type: ZoneConnection
+            location: [3868.66, 132.38, -4.31]
+            targetZone: broodlands
+            expansion: Dragons of Norrath
+    lceanium:
+        -   type: ZoneConnection
+            targetZone: nexus
+            location: [1340.52, 1431.23, -57.15]
+            script: |
+                -- FIXME
+                mq.cmd.docommand('/makemevisible')
+                mq.cmdf('/target Greeter')
+                mq.cmdf('/say Spire Stone of Lceanium')
+                mq.delay(2000)
+                if (mq.TLO.Cursor.Name() == "Spire Stone of Lceanium") then
+                    mq.cmd.autoinventory() 
+                    mq.cmd.nav('loc 1349.14 1454.84 -55.62')
+                end
+    lfaydark:
+        -   type: ZoneConnection
+            location: [2185, -1199, 0]
+            targetZone: gfaydark
+        -   type: ZoneConnection
+            location: [-105.60, 3866.93, -38.12]
+            switch: 10
+            targetZone: mmcj
+        -   type: ZoneConnection
+            location: [-773.90, 3841.95, -0.84]
+            targetZone: mmca
+    lichencreep:
+        -   type: ZoneConnection
+            switch: 19
+            targetZone: arthicrex
+        -   type: ZoneConnection
+            switch: 21
+            targetZone: corathus
+    lopingplains:
+        -   type: ZoneConnection
+            switch: OBJ_DOOR_BLDCOURTYRD
+            location: [-1779.72, 99.70, 210.55]
+            targetZone: bloodmoon
+        -   type: ZoneConnection
+            targetZone: dragonscale
+            remove: true
+    maiden:
+        -   type: ZoneConnection
+            location: [-2290, 70, -160]
+            targetZone: akheva
+            identifier: 1
+        -   type: ZoneConnection
+            location: [-2339, 246, -160]
+            targetZone: akheva
+            identifier: 2
+        -   type: ZoneConnection
+            location: [-404, -2331, -156]
+            targetZone: umbral
+        -   type: ZoneConnection
+            location: [1008, 2148, -234]
+            targetZone: dawnshroud
+    maidentwo:
+        -   type: ZoneConnection
+            location: [-1855, 53, -96]
+            targetZone: akhevatwo
+    mechanotus:
+        -   type: ZoneConnection
+            switch: 2
+            location: [-121.09, -1673.32, 395.33]
+            targetZone: gyrospirez
+        -   type: ZoneConnection
+            switch: 1
+            location: [-177, -1625, 400]
+            targetZone: gyrospireb
+    mira:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: everfrost
+    mirb:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: everfrost
+    mirc:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: everfrost
+    mird:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: everfrost
+    mire:
+        -   type: ZoneConnection
+            switch: 22
+            targetZone: everfrost
+    mirf:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: everfrost
+    mirg:
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: everfrost
+    mirh:
+        -   type: ZoneConnection
+            switch: 17
+            targetZone: everfrost
+    miri:
+        -   type: ZoneConnection
+            switch: 21
+            targetZone: everfrost
+    mirj:
+        -   type: ZoneConnection
+            switch: 13
+            targetZone: everfrost
+    mischiefplane:
+        -   type: ZoneConnection
+            location: [-1024.16, -357.87, 95.34]
+            switch: 226
+            targetZone: cobaltscar
+    mistmoore:
+        -   type: ZoneConnection
+            location: [-243.779, 357.845, -149.34]
+            switch: 2
+            targetZone: bloodfalls
+    mmca:
+        -   type: ZoneConnection
+            location: [-334.58, -598.29, 4.80]
+            switch: 1
+            targetZone: lfaydark
+    mmcb:
+        -   type: ZoneConnection
+            location: [4.42, -542.28, 23.46]
+            switch: 36
+            targetZone: lfaydark
+    mmcc:
+        -   type: ZoneConnection
+            location: [-95.74, -468.80, 6.31]
+            switch: 4
+            targetZone: lfaydark
+    mmcd:
+        -   type: ZoneConnection
+            location: [-641.15, -144.75, 2.76]
+            switch: 1
+            targetZone: lfaydark
+    mmce:
+        -   type: ZoneConnection
+            location: [389.50, -605.27, 3.94]
+            switch: 1
+            targetZone: lfaydark
+    mmcf:
+        -   type: ZoneConnection
+            location: [392.79, -204, -9.52]
+            switch: 1
+            targetZone: lfaydark
+    mmcg:
+        -   type: ZoneConnection
+            location: [399.84, 420.31, 6.76]
+            switch: 5
+            targetZone: lfaydark
+    mmch:
+        -   type: ZoneConnection
+            location: [-335.56, -382.35, 17.25]
+            switch: 5
+            targetZone: lfaydark
+    mmci:
+        -   type: ZoneConnection
+            location: [-263.02, 589.10, 7.76]
+            switch: 5
+            targetZone: lfaydark
+    mmcj:
+        -   type: ZoneConnection
+            location: [544.58, 268.65, 7.76]
+            switch: 6
+            targetZone: lfaydark
+    moors:
+        -   type: ZoneConnection
+            location: [-1754, -886, 38]
+            targetZone: stonehive
+    mseru:
+        -   type: ZoneConnection
+            location: [2200, -1200, 165]
+            targetZone: letalis
+        -   type: ZoneConnection
+            location: [-2143.81, -1095.26, -31.15]
+            targetZone: sseru
+    nadox:
+        -   type: ZoneConnection
+            location: [-1703.57, 1550.38, -107.52]
+            targetZone: hatesfury
+    natimbi:
+        -   type: Translocator
+            name: Magus Releua
+            destinations:
+                -   keyword: Abysmal Sea
+                    targetZone: abysmal
+                -   keyword: Nedaria
+                    targetZone: nedaria
+        -   type: Translocator
+            name: '#Madronoa'
+            keyword: wish to travel
+            targetZone: qvic
+    nedaria:
+        -   type: Translocator
+            name: Magus Wenla
+            destinations:
+                -   keyword: Abysmal Sea
+                    targetZone: abysmal
+                -   keyword: Natimbi
+                    targetZone: natimbi
+            expansion: Gates of Discord
+        -   type: Translocator
+            name: Magus Wenla
+            destinations:
+                -   keyword: Butcherblock
+                    targetZone: butcher
+                -   keyword: Commonlands
+                    targetZone: commonlands
+                -   keyword: Everfrost
+                    targetZone: everfrost
+                -   keyword: North Ro
+                    targetZone: northro
+                -   keyword: South Ro
+                    targetZone: southro
+            expansion: Lost Dungeons of Norrath
+        -   type: ZoneConnection
+            location: [-199.16, -1868, 253.66]
+            targetZone: jaggedpine
+    nexus:
+        -   type: ZoneConnection
+            targetZone: lceanium
+            location: [-48.76, -12.27, -30.96]
+            script: |
+                mq.cmd('/makemevisible')
+                mq.cmd('/target Kardador')
+                mq.cmd('/say Spire Stone of Lceanium')
+                mq.delay(2000)
+                if (mq.TLO.Cursor.Name() == "Spire Stone of Lceanium") then
+                    mq.cmd('/autoinventory')
+                    mq.cmd('/nav loc 0.69 -4.05 -30.24')
+                end
+            expansion: Empires of Kunark
+        -   type: ZoneConnection
+            targetZone: maidentwo
+            location: [-365.7, 64.8, -42.7]
+            script: |
+                mq.cmd('/makemevisible')
+                mq.cmd('/target a concerned shade')
+                mq.cmd('/say stones')
+                mq.delay(2000)
+                if (mq.TLO.Cursor.Name() == "Spire Stone of Maiden's Eye") then
+                    mq.cmd('/autoinventory')
+                    mq.cmd('/nav loc 0.50 -4.1 -30.25')
+                end
+            expansion: Terror of Luclin
+    neighborhood:
+        -   type: ZoneConnection
+            switch: 134
+            targetZone: guildlobby
+    neriakc:
+        -   type: ZoneConnection
+            location: [909, -1770, -70]
+            targetZone: neriakd
+    netherbian:
+        -   type: ZoneConnection
+            location: [-735, -53, 2]
+            targetZone: dawnshroud
+            identifier: 1
+        -   type: ZoneConnection
+            location: [2000, -435, -62]
+            targetZone: nexus
+            identifier: 1
+    northkarana:
+        -   type: ZoneConnection
+            location: [20, -3200, -33.59]
+            targetZone: eastkarana
+        -   type: Translocator
+            name: Nexus Scion
+            keyword: journey to Luclin
+            targetZone: nexus
+    northro:
+        -   type: ZoneConnection
+            location: [5221, -2533, -3.61]
+            targetZone: southro
+            identifier: 1
+        -   type: ZoneConnection
+            location: [5705, -2414, 25]
+            targetZone: anniversarytower
+            switch: 2
+        -   type: ZoneConnection
+            location: [5563.95, -1193.54, 23.44]
+            targetZone: taka
+            switch: 4
+        -   type: Translocator
+            name: Magus Arindri
+            keyword: Nedaria's Landing
+            targetZone: nedaria
+            expansion: Lost Dungeons of Norrath
+        -   type: Translocator
+            name: Magus Arindri
+            destinations:
+                -   keyword: Butcherblock
+                    targetZone: butcher
+                -   keyword: Everfrost
+                    targetZone: everfrost
+                -   keyword: South Ro
+                    targetZone: southro
+                -   keyword: Commonlands
+                    targetZone: commonlands
+            expansion: Lost Dungeons of Norrath
+            requiredAchievement: 500980300
+        -   type: Translocator
+            name: Belinda
+            keyword: get on
+            targetZone: eastwastestwo
+            expansion: Torment of Velious
+        -   type: Translocator
+            name: '#Translocator Ionie'
+            keyword: travel to Iceclad
+            targetZone: iceclad
+    oceangreenvillage:
+        -   type: ZoneConnection
+            location: [-847.02, 479.95, -28.98]
+            targetZone: bertoxtemple
+        -   type: ZoneConnection
+            location: [53.45, 71.09, 3.43]
+            targetZone: oceangreenhills
+    oceanoftears:
+        -   type: Translocator
+            name: '#Translocator Narrik'
+            destinations:
+                -   keyword: travel to Butcherblock
+                    targetZone: butcher
+                -   keyword: Freeport
+                    targetZone: freeporteast
+    oldfieldofbone:
+        -   type: ZoneConnection
+            switch: 43
+            targetZone: oldkaesoraa
+            identifier: 1
+        -   type: ZoneConnection
+            switch: 44
+            targetZone: oldkaesoraa
+            identifier: 2
+        -   type: ZoneConnection
+            switch: 36
+            targetZone: oldkaesorab
+    overthere:
+        -   type: ZoneConnection
+            location: [-6100, 1424, 364]
+            targetZone: frontiermtns
+            identifier: 1
+        -   type: Translocator
+            name: '#Translocator Breya'
+            keyword: travel to Timorous Deep
+            targetZone: timorous
+    overtheretwo:
+        -   type: ZoneConnection
+            switch: 6
+            targetZone: charasisb
+        -   type: ZoneConnection
+            location: [24, 2575, 21]
+            targetZone: skyfiretwo
+    paineel:
+        -   type: ZoneConnection
+            location: [733.72, 333.33, -9.61]
+            targetZone: hole
+            script: |
+                mq.cmd('/face fast heading 180')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(1000)
+                mq.cmd('/keypress forward')
+    pellucid:
+        -   type: ZoneConnection
+            switch: 3
+            targetZone: fungalforest
+    podisease:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: potranquility
+    poeartha:
+        -   type: ZoneConnection
+            location: [142, -1167, 71]
+            targetZone: poearthb
+            identifier: 3
+        -   type: ZoneConnection
+            location: [254.91, -1167, 71]
+            targetZone: potranquility
+    pohealth:
+        -   type: ZoneConnection
+            location: [1534, 20, 109]
+            switch: 35
+            targetZone: potranquility
+    pojustice:
+        -   type: ZoneConnection
+            switch: 33
+            location: [0.48, 364.99, -5.00]
+            targetZone: potranquility
+    poknowledge:
+        -   type: ZoneConnection
+            switch: 20
+            targetZone: everfrost
+            replace: false
+        -   type: ZoneConnection
+            switch: 17
+            targetZone: guildlobby
+            replace: false
+        -   type: ZoneConnection
+            targetZone: feerrott2
+            name: 'Feerrott: The Dream'
+            switch: POKOGPORT500
+            script: |
+                -- Wait for window to open and click the button on the left
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+            expansion: House of Thule
+        -   type: ZoneConnection
+            targetZone: feerrott
+            name: 'The Feerrott'
+            switch: POKOGPORT500
+            script: |
+                -- FIXME: Before House of Thule opens
+                -- Wait for window to open and click the button on the right
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_NoButton').LeftMouseUp()
+                end
+        -   type: ZoneConnection
+            switch: POKCABPORT500
+            targetZone: fieldofbone
+            replace: false
+        -   type: ZoneConnection
+            switch: 11
+            targetZone: firiona
+            replace: false
+        -   type: ZoneConnection
+            targetZone: greatdividetwo
+            name: 'The Great Divide'
+            switch: 15
+            expansion: Torment of Velious
+            script: |
+                -- Wait for window to open and click the button on the left
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+            expansion: Torment of Velious
+        -   type: ZoneConnection
+            targetZone: greatdivide
+            name: 'Great Divide'
+            switch: 15
+            script: |
+                -- FIXME: Before House of Thule opens
+                -- Wait for window to open and click the button on the right
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_NoButton').LeftMouseUp()
+                end
+        -   type: ZoneConnection
+            switch: 15
+            targetZone: greatdividetwo
+            name: 'Great Divide: ToV'
+            script: |
+                -- Wait for window to open and click the button on the left
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+        -   type: ZoneConnection
+            switch: 8
+            targetZone: overthere
+            name: 'The Overthere'
+            script: |
+                -- Wait for window to open and click the button on the right
+                mq.delay('10s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_NoButton').LeftMouseUp()
+                end
+        -   type: ZoneConnection
+            switch: 8
+            targetZone: overtheretwo
+            name: 'Ring of Scale: The Overthere'
+            script: |
+                -- Wait for window to open and click the button on the left
+                mq.delay('10s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+        -   type: ZoneConnection
+            switch: POKFELPORT500
+            targetZone: gfaydark
+            identifier: 1
+            replace: false
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: innothuleb
+            replace: false
+        -   type: ZoneConnection
+            switch: OBJ_PORT_CRESCENT
+            targetZone: moors
+            replace: false
+            expansion: Serpent's Spine
+        -   type: ZoneConnection
+            switch: 3
+            targetZone: nektulos
+            replace: false
+        -   type: ZoneConnection
+            switch: POKNPORT500
+            targetZone: nexus
+            replace: false
+        -   type: ZoneConnection
+            targetZone: overtheretwo
+            name: 'Overthere (Ring of Scale)'
+            switch: 8
+            script: |
+                -- Wait for window to open and click the button on the left
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+            expansion: Ring of Scale
+        -   type: ZoneConnection
+            targetZone: overthere
+            name: 'The Overthere'
+            switch: 8
+            script: |
+                -- FIXME: Before House of Thule opens
+                -- Wait for window to open and click the button on the right
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_NoButton').LeftMouseUp()
+                end
+        -   type: Translocator
+            name: Herald of Druzzil Ro
+            targetZone: potimea
+            keyword: time
+            expansion: Seeds of Destruction
+        -   type: ZoneConnection
+            switch: 12
+            targetZone: potranquility
+            replace: false
+        -   type: ZoneConnection
+            switch: OBJ_PORT_GUKTA
+            targetZone: rathemtn
+            replace: false
+            expansion: Legacy of Ykesha
+        -   type: ZoneConnection
+            targetZone: shadeweavertwo
+            name: 'Shar Vahl, Divided (Night of Shadows)'
+            switch: 14
+            script: |
+                -- Wait for window to open and click the button on the left
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+            expansion: Night of Shadows
+        -   type: ZoneConnection
+            targetZone: shadeweaver
+            switch: 14
+            script: |
+                -- FIXME: Before House of Thule opens
+                -- Wait for window to open and click the button on the right
+                mq.delay('5s', function() return mq.TLO.Window('LargeDialogWindow').Open() end)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_NoButton').LeftMouseUp()
+                end
+        -   type: ZoneConnection
+            switch: 9
+            targetZone: steamfontmts
+            replace: false
+        -   type: ZoneConnection
+            switch: 7
+            targetZone: toxxulia
+            identifier: 1
+            replace: false
+        -   type: ZoneConnection
+            switch: 18
+            targetZone: toxxulia
+            identifier: 2
+            replace: false
+        -   type: Translocator
+            name: Priest of Discord
+            keyword: wish to go to Discord
+            targetZone: draniksscar
+            expansion: Omens of War
+        -   type: ZoneConnection
+            switch: 25
+            targetZone: arena
+            replace: false
+        -   type: ZoneConnection
+            targetZone: airplane
+            remove: true
+    potimea:
+        -   type: Translocator
+            name: Herald of Druzzil Ro
+            targetZone: poknowledge
+            keyword: send
+            expansion: Seeds of Destruction
+        -   type: ZoneConnection
+            location: [-26.92, 78.15, 8.72]
+            switch: 2
+            targetZone: thevoida
+    potranquility:
+        -   type: ZoneConnection
+            location: [264, -2214, -934]
+            targetZone: pofire
+        -   type: ZoneConnection
+            location: [-152, -33, -618]
+            targetZone: potactics
+        -   type: ZoneConnection
+            switch: 80
+            location: [829, -687, -615]
+            targetZone: poair
+        -   type: ZoneConnection
+            location: [1903, -1110, -887]
+            switch: 11
+            targetZone: codecay
+        -   type: ZoneConnection
+            location: [-1538.79, -11.18, -921.24]
+            switch: 7
+            targetZone: poinnovation
+        -   type: ZoneConnection
+            location: [11.71, -610.53, -516.26]
+            switch: 37
+            targetZone: pojustice
+        -   type: ZoneConnection
+            location: [1718, -1447, -780]
+            targetZone: podisease
+        -   type: ZoneConnection
+            location: [-347.08, -1419.16, -933.27]
+            switch: 13
+            targetZone: pohealth
+            expansion: The Broken Mirror
+        -   type: ZoneConnection
+            location: [-650, 1186, -931]
+            switch: 15
+            targetZone: postorms
+        -   type: ZoneConnection
+            location: [-2172.27, 1193.77, -909.04]
+            switch: 17
+            targetZone: potimea
+        -   type: ZoneConnection
+            switch: 20
+            targetZone: povalor
+        -   type: ZoneConnection
+            switch: 18
+            targetZone: powar
+            expansion: Call of the Forsaken
+        -   type: ZoneConnection
+            switch: 83
+            targetZone: powater
+        -   type: ZoneConnection
+            switch: 21
+            targetZone: solrotower
+        -   type: ZoneConnection
+            location: [-697.95, 1785.66, -925.90]
+            targetZone: bothunder
+        -   type: ZoneConnection
+            location: [ -1335, 2192, -714]
+            targetZone: poeartha
+    provinggrounds:
+        -   type: ZoneConnection
+            location: [-2454.6499, -839.01, -309.77]
+            switch: CT_CRYSTAL
+            targetZone: riftseekers
+    qcat:
+        -   type: ZoneConnection
+            location: [240.42, 203.45, -38.84]
+            switch: 2
+            targetZone: toxxulia
+        -   type: ZoneConnection
+            location: [888.64, 216.91, -69.97]
+            identifier: 1
+            targetZone: qeynos2
+            script: |
+                mq.cmd('/keypress page_up hold')
+                mq.delay(2000)
+                mq.cmd('/keypress page_up')
+                mq.cmd('/keypress forward hold')
+                mq.delay(3000)
+                mq.cmd('/keypress forward')
+    qey2hh1:
+        -   type: ZoneConnection
+            location: [651, -16001, 0.12]
+            targetZone: northkarana
+            identifier: 1
+        -   type: ZoneConnection
+            location: [70, 70, -3]
+            targetZone: qeytoqrg
+    qeynos:
+        -   type: Translocator
+            name: '#Translocator Sedina'
+            keyword: Erud's Crossing
+            targetZone: erudsxing
+    qeynos2:
+        -   type: ZoneConnection
+            location: [1405.50, 440.50, 4.37]
+            targetZone: qeytoqrg
+            identifier: 1
+        -   type: ZoneConnection
+            location: [185.25, 346.13, -321.88]
+            targetZone: qcat
+            identifier: 1
+            script: |
+                mq.cmd('/keypress page_down hold')
+                mq.delay(2000)
+                mq.cmd('/keypress page_down')
+                mq.cmd('/keypress forward hold')
+                mq.delay(3000)
+                mq.cmd('/keypress forward')
+    qeytoqrg:
+        -   type: ZoneConnection
+            location: [1240, -2475, 0]
+            targetZone: qey2hh1
+            identifier: 1
+        -   type: ZoneConnection
+            location: [-450, 250, -4]
+            targetZone: qeynos2
+            identifier: 1
+        -   type: ZoneConnection
+            location: [5205, 84, -6]
+            targetZone: qrg
+    qrg:
+        -   type: ZoneConnection
+            targetZone: jaggedpine
+            switch: 3
+    qvic:
+        -   type: ZoneConnection
+            location: [766, -2570, -649]
+            targetZone: kodtaz
+        -   type: ZoneConnection
+            targetZone: natimbi
+            remove: true
+    rathechamber:
+        -   type: ZoneConnection
+            location: [89.53, 33.60, -25.20]
+            targetZone: korascian
+    rathemtn:
+        -   type: ZoneConnection
+            location: [3408.75, 3043.38, -3.87]
+            targetZone: lakerathe
+    relic:
+        -   type: ZoneConnection
+            location: [560.67, 833.47, -274.63]
+            targetZone: freeporteast
+            script: |
+                mq.cmd('/face fast heading 90')
+                mq.delay(1000)
+                mq.cmd('/keypress forward hold')
+                mq.delay(3000)
+                mq.cmd('/keypress forward')
+    resplendent:
+        -   type: ZoneConnection
+            switch: 76
+            targetZone: grelleth
+    riftseekers:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: provinggrounds
+    rivervale:
+        -   type: ZoneConnection
+            location: [-86.14, 100, 4.06]
+            targetZone: mistythicket
+    rubak:
+        -   type: ZoneConnection
+            targetZone: sarithcity
+            location: [34.02, -62.08, 527.94]
+            switch: OBJ_RUB_DOOR
+    ruja:
+        -   type: ZoneConnection
+            location: [-119.61, 800.72, -95.09]
+            switch: 1
+            targetZone: southro
+    rujb:
+        -   type: ZoneConnection
+            location: [-768.03, 357.39, -10.64]
+            switch: 1
+            targetZone: southro
+    rujc:
+        -   type: ZoneConnection
+            location: [-497.08, -1325.05, -11.24]
+            switch: 1
+            targetZone: southro
+    rujd:
+        -   type: ZoneConnection
+            location: [1280.18, -357.10, -95.24]
+            switch: 1
+            targetZone: southro
+    ruje:
+        -   type: ZoneConnection
+            location: [-1847.56, 517.25, -220.49]
+            switch: 1
+            targetZone: southro
+    rujf:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: southro
+    rujg:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: southro
+    rujh:
+        -   type: ZoneConnection
+            location: [-1250, 656, -13.74]
+            switch: 1
+            targetZone: southro
+    ruji:
+        -   type: ZoneConnection
+            location: [-1794.12, 892.13, -219.86]
+            switch: 1
+            targetZone: southro
+    rujj:
+        -   type: ZoneConnection
+            location: [-118.11, 766.05, 27.75]
+            switch: 1
+            targetZone: southro
+    runnyeye:
+        -   type: ZoneConnection
+            location: [-116.92, 5, 4.06]
+            targetZone: beholder
+        -   type: ZoneConnection
+            location: [281.88, 133.17, 5.06]
+            targetZone: mistythicket
+    sarithcity:
+        -   type: ZoneConnection
+            targetZone: rubak
+            location: [-1155.83, -1202.23, 26.07]
+            switch: OBJ_RUBAK_DOOR
+    scarlet:
+        -   type: ZoneConnection
+            location: [-1092.84, -1947.70, -102.18]
+            targetZone: twilight
+    scorchedwoods:
+        -   type: ZoneConnection
+            location: [-3129, -1235, -292]
+            targetZone: lceanium
+    shadeweaver:
+        -   type: ZoneConnection
+            location: [2541, -529.16, -385.09]
+            targetZone: paludal
+    shadeweavertwo:
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: poknowledge
+    shardslanding:
+        -   type: ZoneConnection
+            targetZone: poshadow
+            switch: 109
+    sharvahl:
+        -   type: ZoneConnection
+            location: [1680, -470, -212.24]
+            targetZone: hollowshade
+    silyssar:
+        -   type: ZoneConnection
+            location: [1653, -273, -112]
+            switch: 1
+            targetZone: zhisza
+    skyshrinetwo:
+        -   type: ZoneConnection
+            location: [105.09, 267.85, 3.12]
+            switch: 28
+            targetZone: cobaltscartwo
+    southkarana:
+        -   type: ZoneConnection
+            location: [-8580, 1156, 5.46]
+            targetZone: lakerathe
+        -   type: ZoneConnection
+            location: [2907.10, 899.79, -32.34]
+            targetZone: northkarana
+    southro:
+        -   type: Translocator
+            name: Magus Jerira
+            keyword: Nedaria's Landing
+            targetZone: nedaria
+            expansion: Lost Dungeons of Norrath
+        -   type: Translocator
+            name: Magus Jerira
+            destinations:
+                -   keyword: Butcherblock
+                    targetZone: butcher
+                -   keyword: Commonlands
+                    targetZone: commonlands
+                -   keyword: Everfrost
+                    targetZone: everfrost
+                -   keyword: North Ro
+                    targetZone: northro
+            expansion: Lost Dungeons of Norrath
+            requiredAchievement: 500980300
+        -   type: Translocator
+            name: '#Translocator Tradil'
+            keyword: Travel to Timorous Deep
+            targetZone: timorous
+    sseru:
+        -   type: ZoneConnection
+            location: [1150.54, 425.00, 80]
+            targetZone: Marus Seru
+    steamfontmts:
+        -   type: ZoneConnection
+            location: [-1084.41, -1084.49, -16.74]
+            targetZone: argath
+            expansion: Veil of Alaris
+    steppes:
+        -   type: ZoneConnection
+            location: [2221.63, -389.13, 401.68]
+            targetZone: icefall
+        -   type: ZoneConnection
+            location: [-2400, -885, 2.40]
+            targetZone: mesa
+    stonesnake:
+        -   type: ZoneConnection
+            switch: 2
+            targetZone: arthicrex
+        -   type: ZoneConnection
+            switch: 3
+            targetZone: convorteum
+    sunderock:
+        -   type: ZoneConnection
+            location: [-907, -1632, 215]
+            switch: 1
+            targetZone: vergalid
+    swampofnohope:
+        -   type: ZoneConnection
+            location: [-4500, -2162.5, -3]
+            targetZone: firiona
+            identifier: 1
+        -   type: ZoneConnection
+            location: [-4463, -2656.67, -0.45]
+            targetZone: firiona
+            identifier: 2
+        -   type: ZoneConnection
+            location: [-4500, 2566.01, 3.16]
+            targetZone: firiona
+            identifier: 4
+        -   type: ZoneConnection
+            location: [-4500, 2731.01, 2.14]
+            targetZone: firiona
+            identifier: 5
+        -   type: ZoneConnection
+            location: [5597, 1200, 9]
+            targetZone: fieldofbone
+            identifier: 1
+        -   type: ZoneConnection
+            location: [1760, -4526, 90]
+            targetZone: trakanon
+            identifier: 1
+        -   type: ZoneConnection
+            location: [2189, -4552, 22]
+            targetZone: trakanon
+            identifier: 2
+    taka:
+        -   type: ZoneConnection
+            location: [507.18, -92.66, 12.05]
+            switch: 1
+            targetZone: northro
+    takb:
+        -   type: ZoneConnection
+            location: [-544.11, 370.33, 14.28]
+            switch: 1
+            targetZone: northro
+    takc:
+        -   type: ZoneConnection
+            location: [58.85, 281.78, 12.26]
+            switch: 1
+            targetZone: northro
+    takd:
+        -   type: ZoneConnection
+            location: [134.38, -293.56, 13.36]
+            switch: 3
+            targetZone: northro
+    take:
+        -   type: ZoneConnection
+            location: [-407.65, 438.79, 26.54]
+            switch: 1
+            targetZone: northro
+    takf:
+        -   type: ZoneConnection
+            location: [-28.16, 109.99, 8.48]
+            switch: 1
+            targetZone: northro
+    takg:
+        -   type: ZoneConnection
+            location: [260.06, -207.58, 31.25]
+            switch: 83
+            targetZone: northro
+    takh:
+        -   type: ZoneConnection
+            switch: 83
+            targetZone: northro
+    taki:
+        -   type: ZoneConnection
+            location: [116.52, 633.40, 5.38]
+            switch: 51
+            targetZone: northro
+    takishruins:
+        -   type: ZoneConnection
+            switch: OBJ_STAGE_TELEPORT
+            targetZone: elddar
+        -   type: ZoneConnection
+            location: [257, -980, 61]
+            switch: OBJ_ROPE_SWITCH
+            targetZone: southro
+    takj:
+        -   type: ZoneConnection
+            location: [634.44, -145.66, -13.25]
+            switch: 59
+            targetZone: northro
+    tempesttemple:
+        -   type: ZoneConnection
+            switch: 3
+            targetZone: endlesscaverns
+    thalassius:
+        -   type: ZoneConnection
+            switch: 7
+            targetZone: kattacastrum
+    thegrey:
+        -   type: ZoneConnection
+            location: [74.49, -14.25, -47.87]
+            targetZone: ssratemple
+        -   type: ZoneConnection
+            location: [570.62, -2259.63, 3.70]
+            targetZone: scarlet
+    thevoida:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoidb:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoidc:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoidd:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoide:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoidf:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoidg:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thevoidh:
+        -   type: ZoneConnection
+            location: [-181.03, -91.57, 27.76]
+            targetZone: potimea
+        -   type: ZoneConnection
+            location: [-206.48, 132.75, -67.98]
+            targetZone: discord
+        -   type: ZoneConnection
+            location: [-150.81, 285.51, -65.33]
+            targetZone: toskirakk
+        -   type: ZoneConnection
+            location: [346.48, 91.83, 35.06]
+            targetZone: oceangreenhills
+        -   type: ZoneConnection
+            location: [-46.76, -104.34, 1.40]
+            targetZone: oldkithicor
+        -   type: ZoneConnection
+            location: [74.51, 320.33, -24.40]
+            targetZone: oldbloodfield
+        -   type: ZoneConnection
+            location: [181.14, -297.62, -12.65]
+            targetZone: oldfieldofbone
+    thulehouse1:
+        -   type: ZoneConnection
+            location: [582.27, 320.10, 15.88]
+            switch: 29
+            targetZone: thulelibrary
+        -   type: ZoneConnection
+            identifier: 1
+            location: [375.36, 76.79, 64.53]
+            switch: 19
+            targetZone: thulehouse2
+        -   type: ZoneConnection
+            identifier: 2
+            location: [373.21, -81.09, 64.70]
+            switch: 20
+            targetZone: thulehouse2
+    timorous:
+        -   type: Translocator
+            name: '#Translocator Deela'
+            destinations:
+                -   keyword: Firiona Vie
+                    targetZone: firiona
+                -   keyword: travel to Butcherblock
+                    targetZone: butcher
+        -   type: Translocator
+            name: '#Translocator Jorbin'
+            destinations:
+                -   keyword: South Ro
+                    targetZone: southro
+                -   keyword: travel to Overthere
+                    targetZone: overthere
+    torgiran:
+        -   type: ZoneConnection
+            location: [-364.21, -625, -0.50]
+            targetZone: dulak
+    toxxulia:
+        -   type: Translocator
+            name: Nexus Scion
+            keyword: journey to Luclin
+            targetZone: nexus
+            expansion: Luclin
+    trakanon:
+        -   type: ZoneConnection
+            location: [1500, 4448, -275]
+            targetZone: swampofnohope
+            identifier: 1
+        -   type: ZoneConnection
+            location: [1540, 4500, -270]
+            targetZone: swampofnohope
+            identifier: 2
+        -   type: ZoneConnection
+            location: [-1592.17, -4768.20, -472.15]
+            switch: 12
+            targetZone: sebilis
+    tutorialb:
+        -   type: ZoneConnection
+            location: [145.06, -187.19, 22.83]
+            script: |
+                mq.delay(3000)
+                if mq.TLO.Window('LargeDialogWindow').Open() then
+                    mq.TLO.Window('LargeDialogWindow/LDW_YesButton').LeftMouseUp()
+                end
+            targetZone: crescent
+    twilight:
+        -   type: ZoneConnection
+            location: [-37, -2000, 92]
+            targetZone: katta
+    umbral:
+        -   type: ZoneConnection
+            location: [-1901.99, -742.78, 152.93]
+            switch: 0
+            targetZone: vexthal
+    vergalid:
+        -   type: ZoneConnection
+            location: [0.33, 22.77, 2.40]
+            switch: 1
+            targetZone: sunderock
+    wallofslaughter:
+        -   type: ZoneConnection
+            location: [1979.28, -1702.54, 111.67]
+            targetZone: provinggrounds
+    warslikswood:
+        -   type: ZoneConnection
+            location: [-3660, 1150, 55]
+            targetZone: lakeofillomen
+        -   type: ZoneConnection
+            location: [1640, -3970, 20]
+            targetZone: fieldofbone
+            identifier: 2
+    weddingchapel:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: poknowledge
+    weddingchapeldark:
+        -   type: ZoneConnection
+            switch: 1
+            targetZone: poknowledge
+    westkorlach:
+        -   type: ZoneConnection
+            location: [-1578, -794, 362]
+            targetZone: drachnidhive
+            identifier: 1
+

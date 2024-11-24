@@ -1,5 +1,673 @@
-Aug 15, 2022 (live):
-- Updated for patch 
+Nov 17, 2024:
+- lua: Fix issues with mq.getFilteredSpawns returning nil or taking multiple frames.
+  This reverts back to the previous behavior before optimizations were implemented, but retains some of those optimizations.
+
+Nov 10, 2024:
+- lua: New Zep text editor and console widgets are now integrated. (See the updated console and texteditor
+  lua example in the lua/examples folder)
+
+Nov 8, 2024:
+- live: Update for live patch
+
+Oct 24, 2024:
+- Fix new spawns getting mq captions applied when mqcaptions are disabled
+- Fix crash that could occur when using /lua stop in some circumstances (#906)
+- Fix crash when joining too many chat channels
+- Add parameter to mq/eval script to pass an expression to evaluate
+
+Oct 19, 2024:
+- Fixed some missing console/editor keybinds. Some new functionality includes ctrl+[ +, -, 0 ] to zoom the font.
+- lua: Starting a script will now also search require dirs if script is not found in main lua dir.
+
+Oct 16, 2024:
+- live: Update for live patch
+
+Oct 15, 2024:
+- test: Update for test patch
+
+Sep 30, 2024:
+- test: Update for test patch
+
+Sep 18, 2024:
+- live: Update for live patch
+
+Sep 12, 2024:
+- test: Update for test patch
+
+Sep 7, 2024:
+- emu: Fix bug that kept OnBeginZone events to fire. This fix will
+  resolve severael bugs, including nav not stopping when zoning.
+- emu: Added new Emu Extensions section in settings, with new option
+  to automatically set cpu affinity. This is on by default.
+
+Sep 5, 2024:
+- lua: events can now preserve links:
+    - mq.event('linkDetector', '#*#', linkDetector, { keepLinks = true })
+- lua: New set of APIs for manipulating links.
+    - See the [definitions](https://github.com/macroquest/mq-definitions/blob/master/mq/_itemlinks.lua) for a full listing.
+    - lua: New examples/linkdetector.lua script in the lua folder provides some examples.
+- lua: Add support for Macro token expansion in event patterns:
+    - mq.event('meDetector', '#*#|${Me.Name}|#*#', meDetector)
+
+Aug 21, 2024:
+- Update for live patch
+- Add SpellHold to Pet TLO (#893)
+
+Aug 19, 20924:
+- Update for test patch
+
+July 28, 2024:
+- Update for test patch
+
+July 22, 2024:
+- Update for live hotfix patch
+
+July 18, 2024:
+- Update for live hotfix patch
+
+July 17, 2024:
+- Update for live patch
+
+July 14, 2024:
+- test: Update for test patch
+
+July 7, 2024:
+- Add new HotButton window type: ${Window[HotButtonWnd2/HB_Button6].HotButton}
+- See docs at: https://docs.macroquest.org/reference/data-types/datatype-hotbuttonwindow/
+- Me.CombatState no longer depends on the player window being visible (#123).
+
+July 5, 2024:
+- emu: Fix RaidMember accessors (#685), (#861)
+
+July 4, 2024:
+- emu: Fix Spell.Inspect (#831).
+
+July 3, 2024:
+- Fix EverQuest.Ping, add EverQuest.ConnectionStrength - these are the value from the net meter.
+- Fix UI not working after persona swap (#797).
+
+July 1, 2024:
+- emu: Fix CTAFrameDraw, fixes several issues with window inspector (#871)
+- emu: Fix CBazaarSearchWnd, fixes several issues with /bzsrch (#872)
+
+June 24, 2024:
+- Update for live hotfix patch
+
+June 20, 2024:
+- Fix a bug in EverQuest so the window doesn't constantly resize/restore
+  itself whenever common system events happen.
+
+June 19, 2024:
+- Update for live patch
+
+June 16, 2024:
+- Update for test patch
+- Fix MacroQuest.exe now shutting down properly
+- FIx /removeaura not parsing macro arguments (#869).
+
+May 26, 2024:
+- Update for test patch
+
+May 23, 2024:
+- Update for live hotfix patch
+- Please refrain from using MQ on truebox servers.
+
+May 15, 2024:
+- Update for live patch
+
+May 10, 2024:
+- Update for test patch
+
+April 25, 2024:
+- Adjust timestamps in chat and logging to be in local time (#853, #852).
+- Add logging auto cleanup feature to launcher (#419).
+
+March 27, 2024:
+- Updated emu client to catch it up with the latest features
+
+March 13, 2024:
+- Update for live patch
+
+March 7, 2024:
+- Update for test patch
+
+Feb 29, 2024:
+- autologin: Fix bug causing the wrong account to be assigned to characters at character select.
+- autologin: Fix bug causing blank password to be assigned to accounts at character select.
+- autologin: Add error message when launching game if everquest path is invalid.
+
+Feb 28, 2024:
+- test: Updated for latest patch
+
+Feb 26, 2024:
+- autologin: Fix loader losing track of logged in sessions when it is restarted
+- autologin: Fix several issues related to tracking the logged in state of characters
+- autologin: Fix in-game commands to now use state machine to properly handle character changes.
+- autologin: Menus will now indicate when a character is logged in, but on a different profile.
+  Selecting that profile will apply the profile to the currently logged in character.
+- autologin: Menus will now indicate when an account is already logged in, but on a different
+  character.
+- autologin: The "Show hidden characters" option is now persisted
+- autologin: Profile groups panel is now a resizable side bar instead of a drop down menu
+- autologin: Added ability to double click to expand in tree view panel
+- autologin: It is now possible to switch to any character on any account on any server, from anywhere.
+- autologin: Fix infinite loop that could occur during login.
+
+Feb 23, 2024:
+- autologin: Fix ini import creating blank passwords when stationnames entries exist.
+- autologin: Add right click option to Characters UI to add a character to a profile group.
+- autologin: Fix process tracking for loaded profiles.
+- loader: Add process list to show processes currently being tracked.
+
+Feb 22, 2024:
+- live: updated for live patch
+- autologin: Profile context menus can now toggle their state with ctrl+click
+- autologin: Profile context menus now use a star instead of check mark. Functionality is the same.
+- autologin: Profiles can now be freely re-ordered independent of star state.
+- autologin: Increase default delay when launching multiple instances.
+- autologin: Various improvements to context menus (still have issues with loaded state...)
+- autologin: Add logged in indicators to UI
+
+- autologin: Fix crash that could occur when the MQ launcher starts up
+- autologin: Fix remove profile showing group
+- autologin: Fix tray icon disappearing if explorer crashes or restarts
+- autologin: Fix an issue that might cause an extra instance of EQ to start unintentionally.
+- autologin: Add "Launch All" item to profile menu
+- autologin: Add first pass at online indicator to context menus. More to come in the future.
+- autologin: Changed check marks in autologin ui to check boxes. Single click on the check box will toggle, and tooltip will describe its behavior.
+- autologin: Add text to indicate that profile rows can be reordered via drag & drop.
+
+Feb 21, 2024:
+- live: Updated for latest patch
+- Add EQ cursor emulation for ImGui windows. This can be toggled in overlay settings (on by default).
+  When this feature is enabled, the EQ cursor and its attachments will appear over imgui windows.
+
+Feb 18, 2024:
+- test: Updated for latest patch
+
+Feb 16, 2024:
+- Changes to AutoLogin:
+- added sorting for characters that persists to context menu
+- added filter to hide characters from context menu
+- added ordering to profiles for login order and display
+- added sorting and searching to accounts
+- added some tooltips 
+
+Feb 14, 2024:
+- test: Fix Me.Platinum etc always returning 0.
+
+Feb 13, 2024:
+- test: Updated for latest patch
+- Completely revamped the autologin interface and storage
+- MQ's context menu is now driven by imgui
+- Added an extendable window gui to MQ
+- login profiles and character management is now driven through the main gui
+- removed sessions and replaced station names with single-entry profiles
+- passing the profile name to /login will load the first character in the profile
+- removed the autologin ini, replaced with sqlite db that can be copied across computers
+- a master pass has been added to provide encryption for account passwords _only_
+- the user will be prompted for a master password at first startup on a computer
+- the master password will be stored locally outside of the db (in the registry)
+- if the autologin plugin is running, logging in a new account will store the account name and associated characters in the database
+- manually editing the server list mapping is no longer needed (it is auto detected the first time you see that server in your list)
+
+Feb 3, 2024:
+- emu: Fix /timestamp showing seconds to the decimal
+
+Feb 2, 2024:
+- Add Social TLO (#825)
+
+Feb 1, 2024
+- live: Updated for latest patch
+
+Jan 30, 2024:
+- Disable jit when delaying so that delays are not optimized away (#822)
+- /doability will now accept quoted or unquoted ability names
+- /doability will now work for innate skills like slam (#371)
+- mq.TLO.Me.Ability is now a boolean. It returns true or false based on whether you have the ability.
+- mq.TLO.Me.AbilityReady will no longer say an ability is ready if you don't have that ability.
+- Added mq.TLO.Me.AbilityTimerTotal which will return the total amount of time an ability takes to refresh. This is only available while the ability is in cooldown, otherwise it returns 0. Useful for converting mq.TLO.Me.AbilityTimer into a percentage. (#823)
+- mq.TLO.Me.AltCurrency now works with the singular or plural name of the currency
+- plugins: GetZoneExpansionName(0) would previously return "Original EQ" but now returns "EverQuest"
+
+Jan 27, 2024:
+- test: Updated for latest patch
+
+Jan 20, 2024:
+- Fix Mercenary.State reporting unknown when mercenary is active (#811)
+- Fix Heading.Name/Heading.ShortName potentially going out of bounds (#813)
+- Change Me.BoundLocation.Heading to return heading type instead of a 512 unit float
+
+Jan 19, 2024:
+- Fix mq.pickle not properly escaping backslashes and not properly serializing numbers. (#815, #771).
+
+Jan 18, 2024:
+- Fix issue where textures would not draw if they had not already been preloaded.
+- Fix FPS plot in benchmark window to use its own axis.
+
+Jan 17, 2024:
+- live: Updated for latest patch
+- live: DirectX 11 is now on the live client, some visual features may be
+  missing or not working correctly.
+
+Jan 15, 2024:
+- Update CrashDetected popup with reminder that text can be copied and also add PID (#765).
+- Update faction names by using dbstr_us.txt (#806)
+- Fix Me.Origin (#807)
+- Fix several window properties that had been swapped (Click Through, Show Border, Escapable)
+
+Jan 14, 2024:
+- test: Updated for latest patch
+
+Jan 11, 2024:
+- Prospective fix for map crash (#798)
+- PackageMan now accepts the debug parameter (see docs)
+- luarocks cache has been moved to the modules folder
+
+Jan 8, 2024:
+- Fix clipping of ImGuiConsole, add opacity. (#805)
+- Fix Window.SetText correctly sending change event.
+
+Dec 18, 2023:
+- Update ImGui to 1.90
+- Update ImPlot to 0.17
+- lua: ImGui and ImPlot lua bindings fully refreshed with 100% coverage of definitions.
+- lua: mq-definitions VSCode extension available at https://marketplace.visualstudio.com/items?itemName=ZenithCodeForge.mq-defs
+- datatypes: add TradeskillDepot.DepositItem
+- datatypes: add Type.InheritedType
+- datatypes: add Me.LaurionInnVoucher, Me.ShalowainsPrivateReserve
+
+Dec 13, 2023:
+- test: Updated for latest patch
+
+Dec 12, 2023:
+- live: Updated for latest patch
+- live: Updated for latest patch (again)
+
+Dec 9, 2023:
+- Fix formatting of links in console when line contains multiple links
+
+Dec 8, 2023:
+- live: Fix spawn manager crash
+- test: Fix spawn manager crash
+
+Dec 5, 2023:
+- live: Updated for latest expansion
+
+Dec 4, 2023:
+- test: Fix ZoneGuide
+- Add Me.PersonaLevel - takes class shortname as param, returns level of that class persona.
+  e.g. ${Me.PersonaLevel[DRU]} returns level of druid class persona.
+
+Dec 2, 2023:
+- test: Updated for latest patch
+
+Nov 28, 2023:
+- Actors are now live for use in plugins, see https://docs.macroquest.org/plugins/developing/actors/
+- Actors are also now live for use in lua scripts, see examples/buffbeg.lua for example usage.
+
+Nov 22, 2023:
+- Update vcpkg dependencies
+
+Nov 19, 2023:
+- Add ability to create textures from image files. See examples/texture.lua for example usage.
+
+Nov 15, 2023:
+- live: Fix spell display window (#782).
+- autologin: Enable /camp fast when switching characters
+- live: Updated for latest patch
+
+Nov 11, 2023:
+- test: Fixed some crashes involving the buff window
+
+Nov 9, 2023:
+- Lua modules will no longer be loaded relative to the lua folder.
+- Developers should use PackageMan or (for their own internal use) the modules folder.
+
+Nov 8, 2023:
+- Fixed some issues with autologin
+- Fixed some crashes related to target window
+- test: Updated for latest patch
+
+Nov 7, 2023:
+- Added support for datatypes implemented in lua scripts. This includes support
+  for lua tables in lua datatypes. See examples and definitions for details.
+  Detailed documentation coming soon. (#716)
+- Added preliminary support for actors in c++ plugins. (#674)
+- Exposed ConsoleWidget to c++ and lua (see definitions for details)
+- lua: Added Set helper class (#770)
+
+Oct 21, 2023:
+- tlo: Add Inventory TLO (currently only has the Bank datatype)
+- Inventory.Bank has members: BagSlots, FreeSlots, TotalSlots, and each currency
+- See https://docs.macroquest.org/reference/top-level-objects/tlo-inventory/
+
+Oct 18, 2023:
+- live: Updated for latest patch
+- live: Additional servers that are no longer flagged as truebox are now supported
+
+Oct 15, 2023:
+- Fix double input on imgui windows
+
+Oct 14, 2023:
+- test: updated for latest patch
+- Added DX11 support and re-enabled the ImGui overlay. Nav rendering is still disabled.
+
+Sep 25, 2023:
+- live: Update eqlib, should fix reading some game options. (#755, #756)
+
+Sep 21, 2023:
+- Fix crash in CDragonHoardWnd and CBarterSearchWnd.
+- test: Fix crash in GetMembershipLevel
+
+Sep 20, 2023:
+- live: updated for latest patch
+- Fixed calculation of HasSPA, which should fix some properties such as Me.Silenced (#739)
+- Expand the coverage of game feature and claim data (developer tools)
+- Lifetime All-access should now appear as GOLD in ${Me.Subscription} instead of UNKNOWN
+
+Aug 26, 2023:
+- test: updated for latest patch
+
+Aug 24, 2023:
+- live: updated for latest patch
+
+Aug 16, 2023:
+- live: updated for latest patch
+
+Aug 12, 2023:
+- test: updated for latest patch
+
+Aug 10, 2023:
+- autologin: Add AutoLogin TLO to provide access to profile data (#737)
+- lua: add mq.getAllGroundItems (#740)
+- lua: Fix some issues caused by errors while requiring a file
+- window datatype: Add Window.SetText, which can be used to change the
+  contents of edit controls
+
+Jul 19, 2023:
+- live: Updated for patch
+- Add FreeGrab to AdvLootType (#733)
+- Hotkey will now restore minimized window (#735)
+
+Jul 10, 2023:
+- test: updated for test patch
+
+Jul 8, 2023:
+- Fix PackageMan issue with loading submodules in a single line
+
+Jul 6, 2023:
+- Fix scoping issues in PackageMan causing lua errors (#731)
+
+Jun 29, 2023:
+- test: updated for test patch
+
+Jun 26, 2023:
+- Fix CTextureAnimation (#729). This should fix ImGui drawing of game icons
+- Fix MQMouseInfo, should fix crashes with /mouseto (#698).
+- Fix overlay blocking input while it is hidden (#699).
+- lua: Disallow the use of mq.delay while a module is being imported (#730)
+- Add spell.MinCasterLevel to report the minimum class level of a spell (#722).
+
+June 21, 2023:
+- live: Updated for live patch
+
+June 19, 2023:
+- test: Updated for test patch
+
+May 24, 2023:
+- live: Updated for live patch
+
+May 19, 2023:
+- live: Updated for live patch
+
+May 17, 2023:
+- test: Updated for test patch
+- live: Updated for live patch. This patch introduces the new UI system,
+  there may be issues involving UI components.
+
+May 14, 2023:
+- test: Updated for test patch
+- test: Fixed Me.Combat again
+
+May 13, 2023:
+- Fix issue where OnRemoveSpawn would be called twice in some instances
+
+May 4, 2023:
+- Disable previous launcher change pending further refinement. For now, the log
+  spam should be disabled. (#717)
+
+April 26, 2023:
+- test: Updated for patch
+
+April 24, 2023:
+- Fix an issue where the loader would spam the log file with an error if more than
+  64 eqgame.exe processes were running. Instead, it will swap to the WMI process
+  monitor to retain functionality.
+- Add experimental feature that resizes the game's render viewport to fit the central
+  docking area when imgui windows are docked to edges of the screen. This can be enabled
+  in Settings under Overlay (/mqsettings overlay).
+
+April 19, 2023:
+- live: Updated for patch
+
+April 12, 2023:
+- test: Updated for patch
+- test: Fixes for autologin
+- test: Fix Me.Combat, add EverQuest.UiScale
+
+April 2, 2023:
+- test: Fix WindowOverride implementation. Fixes crashes in MQ2Map, MQ2ItemDisplay, etc.
+
+April 1, 2023:
+- Happy april fools
+- test: Updated for patch
+
+March 15, 2023:
+- live: Updated for patch
+- live: fixed zone guide structure
+
+March 8, 2023:
+- test: Updated for patch
+
+February 24, 2023:
+- Fix CryptAcquireContext error when importing Autologin profiles
+
+February 23, 2023:
+- test: Updated for patch
+
+February 21, 2023:
+- GetSpellDuration now returns correct duration. Deprecated EQGetSpellDuration.
+
+February 20, 2023:
+- emu: MQ Console will now allow GM commands (#zone)
+
+February 15, 2023:
+- live: Update for patch
+
+February 10, 2023:
+- Made some improvements to the performance of the mq console window.
+- Added an option to the mq console window to adjust the number of lines
+  of history that are stored.
+- Fix bug where a file dialog could be docked in another window, resulting in
+  the window flickering and becoming unusable.
+- lua: Calling mq.delay in an ImGui callback will now trigger an error instead
+  of silently failing.
+
+January 30, 2023:
+- lua: calling mq.delay from an imgui thread will now throw an error (#692).
+- added missing RecommendedLevel to item (#691).
+
+January 28, 2023:
+- Frame limiter is now called Frame Limiter in the settings panel (previously FPS Limiter)
+- MQ Console: Fixed last \ax so that it uses the previous default color instead of white
+- Missing plugins will now report when the file is not found rather than the LoadLibrary error
+
+January 23, 2023:
+- Add /executelink command that will simulate a click from raw link text.
+- spell datatype: Add Link member to generate clickable link text.
+- spell datatype: Add Inspect method to open the spell display window.
+- spell datatype: Added /vardata and /varset support for spell variables. Assigning
+  a string or number will reassign the spell variable by spell name or id.
+- achievement datatype: Add Inspect method to open achievement display window.
+- emu: Fix crash when declaring a spell var (#688).
+
+January 19, 2023:
+- live: Fix for broken world container
+
+January 18, 2023:
+- live: Updated for live patch
+
+January 17, 2023:
+- item datatype: Add Item.Inspect method to open item display window on a particular item.
+
+January 10, 2023:
+- test: updated for patch
+
+January 8, 2023:
+- fix /removeaug (#669).
+- imgui: Fix nested BeginDisabled calls (#672).
+- emu: Fix TradeReady flags (#666).
+- emu: Fix /itemnotify when matching invslot is also in a hotbutton.
+
+January 6, 2023:
+- lua: Added mq/Icons.lua for Icon usage in imgui
+- tlo: Added Spell.Dispellable which returns true if a spell can be dispelled (#655)
+
+December 14, 2022:
+- test: updated for patch
+
+December 8, 2022:
+- live: updated for patch
+
+December 6, 2022:
+- live: Update for expansion patch
+- live: Fixed Switch ids and names
+- Added currency for NoS
+- Added ${TradeskillDepot}, see the docs for full description of the members:
+  https://docs.macroquest.org/reference/top-level-objects/tlo-tradeskilldepot/
+- lua: Running "/lua run scriptname" will now prefer lua/scriptname/init.lua over
+  lua/scriptname.lua. this is to make it easier to transition to the new directory layout.
+
+November 29, 2022:
+- emu: Fix PctExp and PctAAExp calculations
+- tlo: Added BazaarItem.FullName
+- lua: Fixed bug where /lua pause would not pause imgui thread
+- lua: added -on and -off arguments to /lua pause
+
+November 28, 2022:
+- Huge update to settings window for MQ2Map plugin settings - /mqsettings plugin/map (#657)
+- lua: Many more improvements to imgui bindings for lua.
+- lua: Consolidated imgui demo scripts into examples/imgui_demo
+- lua: Scripts can now be started by specifying a folder name if the folder contains init.lua.
+- lua: Scripts can now require files relative to the directory that the script runs in.
+
+November 24, 2022:
+- test: fix zone count
+- test: fix keybinds
+
+November 23, 2022:
+- test: updated for test patch
+- Message box will now appear when overlay is stopped due to an error.
+- lua: Many improvements to imgui bindings for lua. Notably, ImDrawList support has been
+  added. Some of these features are evolving, check out examples/imgui_demo.lua for example lua code.
+- lua: Added support for converting macro array types to lua tables (#641).
+- lua: event and bind add/remove will now return true/false based on if the action was successful.
+  These actions may fail if the event already exists with the specified name, for example.
+
+November 16, 2022:
+- live: Updated for latest patch
+- Updated MQ2TargetInfoPHs.txt (#661)
+- Updated Fish.mac (#605)
+- Added refcounting to item and itemspell datatypes. This should fix a crash where a lua script
+  consumes the last charge of an item causing it to disappear.
+- plugins: Deprecated old item spell enum values. See deprecation warnings for replacements.
+- lua: Added imgui bindings for TableGetColumnFlags (#658)
+
+November 9, 2022:
+- test: Updated for patch
+
+November 3, 2022:
+- test: Updated for patch
+
+October 31, 2022:
+- Added upper bounds check on ReagentID, NoExpendReagentID, and ReagentCount. The max number 
+  of reagents for a spell is 4. ReagentCount[n] explains how many ReagentID[n] you need.
+  For NoExpendReagentID is always just need 1 of the item.
+
+October 26, 2022:
+- live: Updated for live patch
+
+October 16, 2022:
+- test: Updated for patch
+
+October 15, 2022:
+- emu: Fix max pet buff count being incorrect
+
+October 14, 2022:
+- Add MaxFPS and MaxBGFPS to EverQuest TLO. Reports the settings found on the options window.
+- Improved Macro TLO functionality to be able to retrieve some values while a macro isn't running.
+- Fixed achievement categories not being found properly.
+
+October 10, 2022:
+- emu: Improved ability to capture crash reports.
+- emu: Fixed CharSelect data (#627).
+
+October 9, 2022:
+- emu: Fixed issue causing custom UIs to create instability and other problems (#639).
+
+October 6, 2022:
+- Remove Spell.SPA - this wasn't actually a SPA and was some other meaningless value.
+- Add Spell.CategoryID and Spell.SubcategoryID - the integer values of Category and Subcategory
+
+October 2, 2022 (test):
+- Updated for test patch
+
+October 2, 2022:
+- Autobank and related functionality has been moved from mq2main into its own autobank plugin. (#580)
+- autobank: Added tradeskill item filter
+- framelimiter: Fix framelimiter not bypassing built-in limiter when it is enabled.
+
+September 26, 2022:
+- Fix Me.Levitating (#632)
+- Add more robust ini handling options - see http://docs.macroquest.org/reference/data-types/datatype-inifilesectionkey
+- Add .StripLinks memember to string types which will return the plain text version of a string containing links
+
+September 21, 2022 (live):
+- Fix achievement crash (#629).
+- Updated for live patch
+
+September 18, 2022:
+- emu: Added back /timestamp for emulator builds to add timestamps to chat. Added checkbox
+  to the mq settings window under a new "Chat" section. (#618)
+- emu: Fix title bar click events on MQ2ChatWnd. (#616)
+- emu: Fix tabselect crash. (#622)
+- emu: Fix crash when checking spell stacking. (#624)
+- emu: Fix crash when interacting with merchants. (#626)
+- emu: Re-introduce GroupLeaderExp, GroupLeaderPoints, PctGroupLeaderExp, RaidLeaderExp,
+  RaidLeaderPoints, PctRaidLeaderExp. (#625)
+- emu: Re-introduce support for LAMarkNPC, LANPCHealth, LADelegateMA, LADelegateMarkNPC,
+  LAInspectBuffs, LASpellAwareness, LAOffenseEnhancement, LAManaEnhancement, LAHealthEnhancement,
+  LAHealthRegen, LAFindPathPC, LAHoTT (#625)
+
+September 16, 2022 (test):
+- Updated for latest test patch
+
+September 7, 2022:
+- /captioncolor will work when typed in EQ chat windows again (#619)
+- Autologin profiles launched from MQ will now work properly for servers with spaces in
+  their shortname
+- Fixed a crash that would occur in macros when declaring an array of invalid size
+- The "noparse" parameter in the Ini TLO is no longer case sensitive
+
+Aug 19, 2022:
+- Add ${MacroQuest.BuildName} to get the name of the build target (Live/Test/Emu)
+
+Aug 17, 2022:
+- Fix autoskills not returning proper values
+
+Aug 17, 2022 (live):
+- Updated for patch
 
 Aug 12, 2022:
 - /mapfilter will now store Radius values instead of toggle information (Fixes #600)

@@ -1,0 +1,520 @@
+<?xml version = "1.0"?>
+<XML ID = "EQInterfaceDefinitionLanguage">
+<Schema xmlns = "EverQuestData" xmlns:dt = "EverQuestDataTypes"/>
+
+<Button item="APW_EvalButton">
+    <ScreenID>EvalButton</ScreenID>
+    <Location>   <X>97</X>     <Y>2</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+</Button>
+<Label item="APW_EvalLabel">
+    <ScreenID>EvalLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Eval</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>60</CX>  <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>115</X>     <Y>1</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+</Label>
+
+<Button item="APW_LoopButton">
+    <ScreenID>LoopButton</ScreenID>
+    <Location>   <X>97</X>     <Y>17</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+</Button>
+<Label item="APW_LoopLabel">
+    <ScreenID>LoopLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Loop</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>60</CX>  <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>115</X>     <Y>16</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+</Label>
+
+<Button item="APW_SlowButton">
+    <ScreenID>SlowButton</ScreenID>
+    <Location>   <X>97</X>     <Y>62</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+</Button>
+<Label item="APW_SlowLabel">
+    <ScreenID>SlowLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Slow</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>60</CX>  <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>115</X>     <Y>61</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+</Label>
+
+  
+<Button item="APW_DoorButton">
+    <ScreenID>DoorButton</ScreenID>
+    <Location>   <X>170</X>     <Y>2</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+</Button>
+
+<Label item="APW_DoorLabel">
+    <ScreenID>DoorLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Door</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>60</CX>  <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>187</X>     <Y>1</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+
+<Button item="APW_ReverseButton">
+    <ScreenID>ReverseButton</ScreenID>
+    <Location>     <X>97</X>    <Y>47</Y>                    </Location>
+    <Size>        <CX>14</CX>  <CY>14</CY>   </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G> <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+</Button>
+
+<Label item="APW_ReverseLabel">
+    <ScreenID>ReverseLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Reverse</Text>
+    <TextColor>    <R>255</R>    <G>255</G>     <B>255</B>   </TextColor>
+    <Size>        <CX>60</CX>  <CY>20</CY>                 </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>     <X>115</X>    <Y>46</Y>                   </Location>
+    <AutoStretch>false</AutoStretch>
+</Label>
+
+  <Label item="APW_PauseLabel">
+    <ScreenID>PauseLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Pause</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>60</CX>
+      <CY>20</CY>
+    </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>
+      <X>115</X>
+      <Y>31</Y>
+    </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+  <Button item="APW_PauseButton">
+    <ScreenID>PauseButton</ScreenID>
+    <Location>	 <X>97</X>	   <Y>32</Y>    </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>   </Size>
+    <Style_VScroll>false</Style_VScroll>	<Style_HScroll>false</Style_HScroll>  <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor>   <R>255</R>   <G>255</G>    <B>255</B>  </TextColor>
+    <ButtonDrawTemplate>
+	  <Normal>A_CheckBoxNormal</Normal>
+	  <Pressed>A_CheckBoxPressed</Pressed>
+    </ButtonDrawTemplate>
+  </Button>
+
+   <Label item="APW_SmartLabel">
+    <ScreenID>SmartLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Smart</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>60</CX>
+      <CY>20</CY>
+    </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>
+      <X>187</X>
+      <Y>16</Y>
+    </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+  <Button item="APW_SmartButton">
+    <ScreenID>SmartButton</ScreenID>
+    <Location>
+      <X>170</X>
+      <Y>17</Y>
+    </Location>
+    <Size>
+      <CX>14</CX>
+      <CY>14</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+	  <Normal>A_CheckBoxNormal</Normal>
+	  <Pressed>A_CheckBoxPressed</Pressed>
+    </ButtonDrawTemplate>
+  </Button>
+
+  <Label item="APW_StuckLabel">
+    <ScreenID>StuckLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Stuck Logic</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>60</CX>  <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>287</X>     <Y>1</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+  <Button item="APW_StuckButton">
+    <ScreenID>StuckButton</ScreenID>
+    <Location>   <X>270</X>     <Y>2</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+  </Button>
+  
+  <Label item="APW_BreakFollowLabel">
+    <ScreenID>BreakFollowLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Break Follow</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>75</CX>    <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>287</X>     <Y>16</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+  <Button item="APW_BreakFollowButton">
+    <ScreenID>BreakFollowButton</ScreenID>
+    <Location>   <X>270</X>     <Y>17</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+  </Button>
+
+  <Label item="APW_BreakPathLabel">
+    <ScreenID>BreakPathLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Break Path</Text>
+    <TextColor> <R>255</R>    <G>255</G>   <B>255</B> </TextColor>
+    <Size>     <CX>60</CX>  <CY>20</CY>             </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>  <X>287</X>     <Y>31</Y>   </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+  <Button item="APW_BreakPathButton">
+    <ScreenID>BreakPathButton</ScreenID>
+    <Location>   <X>270</X>     <Y>32</Y>   </Location>
+    <Size>      <CX>14</CX>   <CY>14</CY>  </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor> <R>255</R> <G>255</G>  <B>255</B> </TextColor>
+    <ButtonDrawTemplate> <Normal>A_CheckBoxNormal</Normal> <Pressed>A_CheckBoxPressed</Pressed> </ButtonDrawTemplate>
+  </Button>
+
+
+  <Label item="APW_ZoneLabel">
+    <ScreenID>ZoneLabel</ScreenID>
+    <Font>3</Font>
+    <Text>Zone</Text>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <Size>
+      <CX>60</CX>
+      <CY>20</CY>
+    </Size>
+    <AlignCenter>false</AlignCenter>
+    <Location>
+      <X>187</X>
+      <Y>31</Y>
+    </Location>
+    <AutoStretch>false</AutoStretch>
+  </Label>
+  <Button item="APW_ZoneButton">
+    <ScreenID>ZoneButton</ScreenID>
+    <Location>
+      <X>170</X>
+      <Y>32</Y>
+    </Location>
+    <Size>
+      <CX>14</CX>
+      <CY>14</CY>
+    </Size>
+    <Style_VScroll>false</Style_VScroll>
+    <Style_HScroll>false</Style_HScroll>
+    <Style_Transparent>false</Style_Transparent>
+    <Style_Checkbox>true</Style_Checkbox>
+    <TextColor>
+      <R>255</R>
+      <G>255</G>
+      <B>255</B>
+    </TextColor>
+    <ButtonDrawTemplate>
+	  <Normal>A_CheckBoxNormal</Normal>
+	  <Pressed>A_CheckBoxPressed</Pressed>
+    </ButtonDrawTemplate>
+  </Button>
+
+  
+  
+<Button item = "APW_PlayButton">
+	<ScreenID>PlayButton</ScreenID>
+    <Location>
+      <X>97</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>70</CX>
+      <CY>20</CY>
+    </Size>
+	<Text>Play</Text>
+	<Style_VScroll>false</Style_VScroll>
+	<Style_HScroll>false</Style_HScroll>
+	<Style_Transparent>false</Style_Transparent>
+	<Style_Checkbox>false</Style_Checkbox>
+	<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+	</TextColor>
+	<ButtonDrawTemplate>
+		<Normal>A_BtnNormal</Normal>
+		<Pressed>A_BtnPressed</Pressed>
+		<Flyby>A_BtnFlyby</Flyby>
+		<Disabled>A_BtnDisabled</Disabled>
+		<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+	</ButtonDrawTemplate>
+</Button>
+
+<Button item = "APW_CancelButton">
+	<ScreenID>CancelButton</ScreenID>
+    <Location>
+      <X>97</X>
+      <Y>105</Y>
+    </Location>
+    <Size>
+      <CX>70</CX>
+      <CY>20</CY>
+    </Size>
+	<Text>Cancel</Text>
+	<Style_VScroll>false</Style_VScroll>
+	<Style_HScroll>false</Style_HScroll>
+	<Style_Transparent>false</Style_Transparent>
+	<Style_Checkbox>false</Style_Checkbox>
+	<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+	</TextColor>
+	<ButtonDrawTemplate>
+		<Normal>A_BtnNormal</Normal>
+		<Pressed>A_BtnPressed</Pressed>
+		<Flyby>A_BtnFlyby</Flyby>
+		<Disabled>A_BtnDisabled</Disabled>
+		<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+	</ButtonDrawTemplate>
+</Button>
+
+<Button item = "APW_NewButton">
+	<ScreenID>NewButton</ScreenID>
+    <Location>
+      <X>170</X>
+      <Y>80</Y>
+    </Location>
+    <Size>
+      <CX>70</CX>
+      <CY>20</CY>
+    </Size>
+	<Text>New</Text>
+	<Style_VScroll>false</Style_VScroll>
+	<Style_HScroll>false</Style_HScroll>
+	<Style_Transparent>false</Style_Transparent>
+	<Style_Checkbox>false</Style_Checkbox>
+	<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+	</TextColor>
+	<ButtonDrawTemplate>
+		<Normal>A_BtnNormal</Normal>
+		<Pressed>A_BtnPressed</Pressed>
+		<Flyby>A_BtnFlyby</Flyby>
+		<Disabled>A_BtnDisabled</Disabled>
+		<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+	</ButtonDrawTemplate>
+</Button>
+
+<Button item = "APW_RecordButton">
+	<ScreenID>RecordButton</ScreenID>
+    <Location>   <X>170</X>	<Y>105</Y>	</Location>
+    <Size>		<CX>70</CX> <CY>20</CY> </Size>
+	<Text>Overwrite</Text>
+	<Style_VScroll>false</Style_VScroll>
+	<Style_HScroll>false</Style_HScroll>
+	<Style_Transparent>false</Style_Transparent>
+	<Style_Checkbox>false</Style_Checkbox>
+	<TextColor>  <R>255</R> 	<G>255</G> 	<B>255</B> </TextColor>
+	<ButtonDrawTemplate>
+		<Normal>A_BtnNormal</Normal>
+		<Pressed>A_BtnPressed</Pressed>
+		<Flyby>A_BtnFlyby</Flyby>
+		<Disabled>A_BtnDisabled</Disabled>
+		<PressedFlyby>A_BtnPressedFlyby</PressedFlyby>
+	</ButtonDrawTemplate>
+</Button>
+
+
+<Listbox item = "APW_PathList">
+	<ScreenID>PathList</ScreenID>
+	<DrawTemplate>WDT_Inner</DrawTemplate>
+    <Location>
+      <X>1</X>
+      <Y>1</Y>
+    </Location>
+    <Size>
+      <CX>90</CX>
+      <CY>125</CY>
+    </Size>
+	<TextColor>
+			<R>255</R>
+			<G>255</G>
+			<B>255</B>
+	</TextColor>
+	<Style_Border>true</Style_Border>
+	<Style_VScroll>true</Style_VScroll>
+	<Columns>
+		<Width>100</Width>
+		<Heading>PATH NAME</Heading>
+	</Columns>
+</Listbox>
+
+
+<Editbox item="APW_EditBox">
+	<ScreenID>APW_EditBox</ScreenID>
+	<DrawTemplate>WDT_Inner</DrawTemplate>
+	<Style_Border>true</Style_Border>
+	<Location>        <X>1</X>    <Y>132</Y>  </Location>
+	<Size>          <CX>240</CX>  <CY>20</CY> </Size>
+	<TextColor>      <R>255</R> <G>255</G> <B>255</B> </TextColor>
+</Editbox>
+
+<Listbox item = "APW_INIList">
+	<ScreenID>INIList</ScreenID>
+	<DrawTemplate>WDT_Inner</DrawTemplate>
+    <Location>      <X>1</X>    <Y>160</Y>    </Location>
+    <Size>        <CX>240</CX> <CY>95</CY>  </Size>
+	<TextColor>   <R>255</R>   <G>255</G> 	<B>255</B>  </TextColor>
+	<Style_Border>true</Style_Border>
+	<Style_VScroll>true</Style_VScroll>
+	<Columns>
+		<Width>250</Width>
+		<Heading>key =  X  Y  Z  checkpoint</Heading>
+	</Columns>
+</Listbox>
+
+
+
+<Screen item = "AdvPathWnd">
+	<RelativePosition>false</RelativePosition>
+	<Location>
+		<X>100</X>
+		<Y>60</Y>
+	</Location>
+	<Size>
+		<CX>30</CX>
+		<CY>20</CY>
+	</Size>
+	<Style_VScroll>false</Style_VScroll>
+	<Style_HScroll>false</Style_HScroll>
+	<Style_Transparent>false</Style_Transparent>
+	<Text>AdvPath Window</Text>
+	<DrawTemplate>WDT_Rounded</DrawTemplate>
+	<Style_Titlebar>true</Style_Titlebar>
+	<Style_Closebox>true</Style_Closebox>
+	<Style_Minimizebox>true</Style_Minimizebox>
+	<Style_Border>true</Style_Border>
+	<Style_Sizable>true</Style_Sizable>
+    	<Pieces>APW_DoorLabel</Pieces>
+		<Pieces>APW_DoorButton</Pieces>	
+		<Pieces>APW_ReverseLabel</Pieces>
+		<Pieces>APW_ReverseButton</Pieces>		
+		<Pieces>APW_PauseLabel</Pieces>
+		<Pieces>APW_PauseButton</Pieces>		
+		<Pieces>APW_SmartLabel</Pieces>
+		<Pieces>APW_SmartButton</Pieces>		
+		<Pieces>APW_ZoneLabel</Pieces>
+		<Pieces>APW_ZoneButton</Pieces>
+		<Pieces>APW_StuckLabel</Pieces>
+		<Pieces>APW_StuckButton</Pieces>
+		<Pieces>APW_BreakFollowLabel</Pieces> 
+	    <Pieces>APW_BreakFollowButton</Pieces>
+		<Pieces>APW_BreakPathLabel</Pieces>
+	    <Pieces>APW_BreakPathButton</Pieces>
+		<Pieces>APW_PathList</Pieces>  
+		<Pieces>APW_EditBox</Pieces>  
+		<Pieces>APW_INIList</Pieces> 
+		<Pieces>APW_EvalLabel</Pieces>
+		<Pieces>APW_EvalButton</Pieces>	
+		<Pieces>APW_LoopLabel</Pieces>
+		<Pieces>APW_LoopButton</Pieces>	
+		<Pieces>APW_SlowLabel</Pieces>
+		<Pieces>APW_SlowButton</Pieces>	
+		<Pieces>APW_RecordButton</Pieces>  
+		<Pieces>APW_PlayButton</Pieces> 
+		<Pieces>APW_CancelButton</Pieces>  
+		<Pieces>APW_NewButton</Pieces>  
+		
+</Screen>
+
+
+</XML>

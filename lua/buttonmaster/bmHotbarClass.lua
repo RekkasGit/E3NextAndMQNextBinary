@@ -3,6 +3,7 @@ local Set                           = require('mq.Set')
 local btnUtils                      = require('lib.buttonUtils')
 local BMButtonHandlers              = require('bmButtonHandlers')
 local themes                        = require('extras.themes')
+local BMTab                         = require('bmTab')
 
 local WINDOW_SETTINGS_ICON_SIZE     = 22
 
@@ -34,6 +35,8 @@ BMHotbarClass.importText            = ""
 BMHotbarClass.decodedObject         = {}
 
 BMHotbarClass.newSetName            = ""
+BMHotbarClass.editingLabel          = ""
+BMHotbarClass.windowTitleEdit       = ""
 BMHotbarClass.currentSelectedSet    = 0
 
 BMHotbarClass.lastFrameTime         = 0
@@ -48,11 +51,35 @@ BMHotbarClass.newY                  = 0
 
 BMHotbarClass.searchText            = ""
 
+BMHotbarClass.currentDnDData        = nil
+BMHotbarClass.tabBar                = nil
+
+BMHotbarClass.alphaMenu             = {
+    { name = "A-D",   filter = function(i) return i >= "A" and i <= "D" end, items = {}, },
+    { name = "E-H",   filter = function(i) return i >= "E" and i <= "H" end, items = {}, },
+    { name = "I-L",   filter = function(i) return i >= "I" and i <= "L" end, items = {}, },
+    { name = "M-P",   filter = function(i) return i >= "M" and i <= "P" end, items = {}, },
+    { name = "Q-T",   filter = function(i) return i >= "Q" and i <= "T" end, items = {}, },
+    { name = "U-X",   filter = function(i) return i >= "U" and i <= "X" end, items = {}, },
+    { name = "Y-Z",   filter = function(i) return i >= "Y" and i <= "Z" end, items = {}, },
+    { name = "0-9",   filter = function(i) return i >= "0" and i <= "9" end, items = {}, },
+    { name = "Other", filter = function(i) return true end,                  items = {}, }, }
+
+
 function BMHotbarClass.new(id, createFresh)
     local newBMHotbar = setmetatable({ id = id, }, BMHotbarClass)
 
     if createFresh then
-        BMSettings:GetCharConfig().Windows[id] = { Visible = true, Sets = {}, Locked = false, HideTitleBar = false, CompactMode = false, AdvTooltips = true, ShowSearch = false, }
+        BMSettings:GetCharConfig().Windows[id] = {
+            Visible = true,
+            Sets = {},
+            Locked = false,
+            HideTitleBar = false,
+            CompactMode = false,
+            AdvTooltips = true,
+            ShowSearch = false,
+            PerCharacterPositioning = false,
+        }
 
         -- if this character doesn't have the sections in the config, create them
         newBMHotbar.updateWindowPosSize = true
@@ -65,6 +92,48 @@ function BMHotbarClass.new(id, createFresh)
     end
 
     BMSettings:GetCharConfig().Windows[id].Sets = BMSettings:GetCharConfig().Windows[id].Sets or {}
+
+    newBMHotbar.tabBar = BMTab.new(
+        tostring(id),
+        BMSettings:GetCharacterWindowSets(id),
+        function(newLabels)
+            BMSettings:GetCharConfig().Windows[id].Sets = newLabels
+            BMSettings:SaveSettings(true)
+        end,
+        function(label, idx)
+            -- Rename popup injected into each tab's context menu.
+            if newBMHotbar.editingLabel ~= label then
+                newBMHotbar.editingLabel = label
+                newBMHotbar.newSetName   = label
+            end
+            ImGui.Text("Edit Name:")
+            local tmp, changed = ImGui.InputText("##bmtab_edit_" .. id, newBMHotbar.newSetName, 0)
+            if changed then newBMHotbar.newSetName = tmp end
+            if ImGui.Button("Save##bmtab_save_" .. id) then
+                local newName = newBMHotbar.newSetName
+                if newName and newName:len() > 0 and newName ~= label then
+                    -- Rename in global Sets table.
+                    BMSettings:GetSettings().Sets[newName] = BMSettings:GetSettings().Sets[label]
+                    BMSettings:GetSettings().Sets[label]   = nil
+                    -- Update all characters that reference this set name.
+                    for curCharKey, curCharData in pairs(BMSettings:GetSettings().Characters) do
+                        for windowIdx, windowData in ipairs(curCharData.Windows or {}) do
+                            for setIdx, oldSetName in ipairs(windowData.Sets or {}) do
+                                if oldSetName == label then
+                                    BMSettings:GetSettings().Characters[curCharKey].Windows[windowIdx].Sets[setIdx] = newName
+                                end
+                            end
+                        end
+                    end
+                    newBMHotbar.tabBar:RenameTab(label, newName)
+                    BMSettings:SaveSettings(true)
+                end
+                newBMHotbar.editingLabel = ""
+                newBMHotbar.newSetName   = ""
+                ImGui.CloseCurrentPopup()
+            end
+        end
+    )
 
     return newBMHotbar
 end
@@ -83,6 +152,10 @@ end
 
 function BMHotbarClass:IsVisible()
     return BMSettings:GetCharacterWindow(self.id).Visible
+end
+
+function BMHotbarClass:PerCharacterPositioning()
+    return BMSettings:GetCharacterWindow(self.id).PerCharacterPositioning
 end
 
 ---@return integer, integer
@@ -184,8 +257,15 @@ function BMHotbarClass:RenderHotbar(flags)
     end
 
     local colorPop, stylePop = self:StartTheme()
+    local windowTitle = BMSettings:GetCharacterWindow(self.id).Title or string.format('Button Master - %d', self.id)
+    local renderName  = windowTitle
+
+    if self:PerCharacterPositioning() then
+        renderName = windowTitle .. "##" .. mq.TLO.EverQuest.Server() .. "_" .. mq.TLO.Me.Name()
+    end
+
     ImGui.PushID("##MainWindow_" .. tostring(self.id))
-    self.openGUI, self.shouldDrawGUI = ImGui.Begin(string.format('Button Master - %d', self.id), self.openGUI,
+    self.openGUI, self.shouldDrawGUI = ImGui.Begin(renderName, self.openGUI,
         bit32.bor(flags))
 
     if not ImGui.IsMouseDown(ImGuiMouseButton.Left) then
@@ -285,68 +365,24 @@ function BMHotbarClass:RenderTabs()
         self:RenderTabContextMenu()
         self:RenderCreateTab()
 
-        if ImGui.BeginTabBar("Tabs", ImGuiTabBarFlags.Reorderable) then
-            if (#BMSettings:GetCharacterWindowSets(self.id) or 0) > 0 then
-                for i, set in ipairs(BMSettings:GetCharacterWindowSets(self.id)) do
-                    if ImGui.BeginTabItem(set) then
-                        SetLabel = set
-                        self.currentSelectedSet = i
+        -- Sync tab bar labels in case sets were added/removed via context menu.
+        self.tabBar:SetLabels(BMSettings:GetCharacterWindowSets(self.id))
 
-                        -- tab edit popup
-                        if ImGui.BeginPopupContextItem(set) then
-                            ImGui.Text("Edit Name:")
-                            local tmp, selected = ImGui.InputText("##edit", set, 0)
-                            if selected then self.newSetName = tmp end
-                            if ImGui.Button("Save") then
-                                BMEditPopup:CloseEditPopup()
-                                local newSetLabel = self.newSetName
-                                if self.newSetName ~= nil then
-                                    BMSettings:GetCharacterWindowSets(self.id)[i] = self.newSetName
+        local selectedLabel, selectedIdx = self.tabBar:Render()
 
-                                    -- move the old button set to the new name
-                                    BMSettings:GetSettings().Sets[newSetLabel], BMSettings:GetSettings().Sets[SetLabel] =
-                                        BMSettings:GetSettings().Sets[SetLabel], nil
-
-                                    -- update the character button set name
-                                    for curCharKey, curCharData in pairs(BMSettings:GetSettings().Characters) do
-                                        for windowIdx, windowData in ipairs(curCharData.Windows) do
-                                            for setIdx, oldSetName in ipairs(windowData.Sets) do
-                                                if oldSetName == set then
-                                                    btnUtils.Output(string.format(
-                                                        "\awUpdating section '\ag%s\aw' renaming \am%s\aw => \at%s",
-                                                        curCharKey,
-                                                        oldSetName, self.newSetName))
-                                                    BMSettings:GetSettings().Characters[curCharKey].Windows[windowIdx].Sets[setIdx] =
-                                                        self.newSetName
-                                                end
-                                            end
-                                        end
-                                    end
-
-                                    -- update set to the new name so the button render doesn't fail
-                                    SetLabel = newSetLabel
-                                    BMSettings:SaveSettings(true)
-                                end
-                                ImGui.CloseCurrentPopup()
-                            end
-                            ImGui.EndPopup()
-                        end
-                        if BMSettings:GetCharacterWindow(self.id).ShowSearch then
-                            ImGui.Text("Search")
-                            ImGui.SameLine()
-                            self.searchText = ImGui.InputText("##SearchText", self.searchText, ImGuiInputTextFlags.None)
-                        else
-                            self.searchText = ""
-                        end
-                        self:RenderButtons(SetLabel, self.searchText)
-                        ImGui.EndTabItem()
-                    end
-                end
+        if selectedLabel and selectedIdx then
+            self.currentSelectedSet = selectedIdx
+            if BMSettings:GetCharacterWindow(self.id).ShowSearch then
+                ImGui.Text("Search")
+                ImGui.SameLine()
+                self.searchText = ImGui.InputText("##SearchText", self.searchText, ImGuiInputTextFlags.None)
+            else
+                self.searchText = ""
             end
+            self:RenderButtons(selectedLabel, self.searchText)
         else
             ImGui.Text(string.format("No Sets Added! Add one by right-clicking on %s", Icons.MD_SETTINGS))
         end
-        ImGui.EndTabBar()
     end
 end
 
@@ -420,26 +456,46 @@ function BMHotbarClass:RenderTabContextMenu()
         end
 
         if ImGui.BeginMenu("Delete Hotkey") then
-            local sortedButtons = {}
+            local sortedKeys = {}
             for k, v in pairs(BMSettings:GetSettings().Buttons) do
-                table.insert(sortedButtons,
+                table.insert(sortedKeys,
                     { Label = BMButtonHandlers.ResolveButtonLabel(v, true), id = k, })
             end
-            table.sort(sortedButtons, function(a, b) return a.Label < b.Label end)
+            table.sort(sortedKeys, function(a, b) return a.Label < b.Label end)
 
-            for _, buttonData in pairs(sortedButtons) do
-                if ImGui.MenuItem(BMButtonHandlers.ResolveButtonLabel(buttonData, true)) then
-                    -- clean up any references to this Button.
-                    for setNameKey, setButtons in pairs(BMSettings:GetSettings().Sets) do
-                        for buttonKey, buttonName in pairs(setButtons) do
-                            if buttonName == buttonData.id then
-                                BMSettings:GetSettings().Sets[setNameKey][buttonKey] = nil
+            local sortedAlphaMenu = {}
+
+            for idx, buttonData in ipairs(sortedKeys) do
+                for _, menuGroup in ipairs(self.alphaMenu) do
+                    sortedAlphaMenu[menuGroup.name] = sortedAlphaMenu[menuGroup.name] or {}
+                    if menuGroup.filter(buttonData.Label:sub(1, 1):upper()) then
+                        table.insert(sortedAlphaMenu[menuGroup.name], { idx = idx, buttonData = buttonData, })
+                        break
+                    end
+                end
+            end
+
+            for _, menuGroup in pairs(self.alphaMenu) do
+                local items = sortedAlphaMenu[menuGroup.name] or {}
+                if #items > 0 then
+                    if ImGui.BeginMenu(menuGroup.name) then
+                        for _, item in ipairs(items) do
+                            if ImGui.MenuItem(item.buttonData.Label .. "##delete_menu_" .. tostring(item.idx)) then
+                                -- clean up any references to this Button.
+                                for setNameKey, setButtons in pairs(BMSettings:GetSettings().Sets) do
+                                    for buttonKey, buttonName in pairs(setButtons) do
+                                        if buttonName == item.buttonData.id then
+                                            BMSettings:GetSettings().Sets[setNameKey][buttonKey] = nil
+                                        end
+                                    end
+                                end
+                                BMSettings:GetSettings().Buttons[item.buttonData.id] = nil
+                                BMSettings:SaveSettings(true)
+                                break
                             end
                         end
+                        ImGui.EndMenu()
                     end
-                    BMSettings:GetSettings().Buttons[buttonData.id] = nil
-                    BMSettings:SaveSettings(true)
-                    break
                 end
             end
             ImGui.EndMenu()
@@ -567,6 +623,11 @@ function BMHotbarClass:RenderTabContextMenu()
                     .CompactMode
                 BMSettings:SaveSettings(true)
             end
+            if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).PerCharacterPositioning and "Global Window Positioning" or "Per Char Window Positioning")) then
+                BMSettings:GetCharacterWindow(self.id).PerCharacterPositioning = not BMSettings:GetCharacterWindow(self.id)
+                    .PerCharacterPositioning
+                BMSettings:SaveSettings(true)
+            end
             if ImGui.MenuItem((BMSettings:GetCharacterWindow(self.id).AdvTooltips and "Disable" or "Enable") .. " Advanced Tooltips") then
                 BMSettings:GetCharacterWindow(self.id).AdvTooltips = not BMSettings:GetCharacterWindow(self.id)
                     .AdvTooltips
@@ -601,6 +662,17 @@ function BMHotbarClass:RenderTabContextMenu()
                 },
             }
 
+            ImGui.Separator()
+            ImGui.Text("Window Name:")
+            local titleTmp, titleChanged = ImGui.InputText("##winTitle_" .. self.id, self.windowTitleEdit, 0)
+            if titleChanged then self.windowTitleEdit = titleTmp end
+            if ImGui.Button("Rename##winRename_" .. self.id) then
+                local newTitle = self.windowTitleEdit:len() > 0 and self.windowTitleEdit or nil
+                BMSettings:GetCharacterWindow(self.id).Title = newTitle
+                BMSettings:SaveSettings(true)
+                self.windowTitleEdit = ""
+            end
+
             if ImGui.BeginMenu("Update FPS") then
                 for _, v in ipairs(fps_scale) do
                     local checked = BMSettings:GetCharacterWindow(self.id).FPS == v.fps
@@ -632,7 +704,8 @@ function BMHotbarClass:RenderTabContextMenu()
 
         if ImGui.BeginMenu("Show/Hide Hotbar") then
             for hbIdx, hotbarClass in ipairs(BMHotbars) do
-                if ImGui.MenuItem(string.format("Button Master - %d", hbIdx), nil, hotbarClass:IsVisible()) then
+                local hbTitle = BMSettings:GetCharacterWindow(hbIdx).Title or string.format("Button Master - %d", hbIdx)
+                if ImGui.MenuItem(hbTitle, nil, hotbarClass:IsVisible()) then
                     hotbarClass:ToggleVisible()
                 end
             end
@@ -745,16 +818,39 @@ function BMHotbarClass:RenderContextMenu(Set, Index, buttonID)
                     return labelA < labelB
                 end)
 
-                for _, key in ipairs(sortedKeys) do
+                local sortedAlphaMenu = {}
+
+                for idx, key in ipairs(sortedKeys) do
                     local value = unassigned[key]
                     if value ~= nil then
-                        if ImGui.MenuItem(BMButtonHandlers.ResolveButtonLabel(value, true)) then
-                            BMSettings:GetSettings().Sets[Set][Index] = key
-                            BMSettings:SaveSettings(true)
-                            break
+                        for _, menuGroup in ipairs(self.alphaMenu) do
+                            sortedAlphaMenu[menuGroup.name] = sortedAlphaMenu[menuGroup.name] or {}
+                            local label = BMButtonHandlers.ResolveButtonLabel(value, true)
+                            if menuGroup.filter(label:sub(1, 1):upper()) then
+                                table.insert(sortedAlphaMenu[menuGroup.name], { idx = idx, key = key, value = value, label = label, })
+                                break
+                            end
                         end
                     end
                 end
+
+
+                for _, menuGroup in pairs(self.alphaMenu) do
+                    local items = sortedAlphaMenu[menuGroup.name] or {}
+                    if #items > 0 then
+                        if ImGui.BeginMenu(menuGroup.name) then
+                            for _, item in ipairs(items) do
+                                if ImGui.MenuItem(item.label .. "##assign_menu_" .. tostring(item.idx)) then
+                                    BMSettings:GetSettings().Sets[Set][Index] = item.key
+                                    BMSettings:SaveSettings(true)
+                                    break
+                                end
+                            end
+                            ImGui.EndMenu()
+                        end
+                    end
+                end
+
                 ImGui.EndMenu()
             end
         end
@@ -772,6 +868,19 @@ function BMHotbarClass:RenderContextMenu(Set, Index, buttonID)
                 BMSettings:GetSettings().Sets[Set][Index] = nil
                 BMSettings:SaveSettings(true)
             end
+            if ImGui.MenuItem("Delete") then
+                local buttonID = BMSettings:GetSettings().Sets[Set][Index]
+                for setNameKey, setButtons in pairs(BMSettings:GetSettings().Sets) do
+                    for buttonKey, buttonName in pairs(setButtons) do
+                        if buttonName == buttonID then
+                            BMSettings:GetSettings().Sets[setNameKey][buttonKey] = nil
+                        end
+                    end
+                end
+                BMSettings:GetSettings().Buttons[buttonID] = nil
+                BMSettings:SaveSettings(true)
+            end
+
             if ImGui.MenuItem(Icons.MD_SHARE) then
                 BMButtonHandlers.ExportButtonToClipBoard(button)
             end
@@ -828,20 +937,31 @@ function BMHotbarClass:RenderButtons(Set, searchText)
             else
                 -- setup drag and drop
                 if ImGui.BeginDragDropSource() then
-                    ImGui.SetDragDropPayload("BTN", ButtonIndex)
+                    self.currentDnDData = { Set = Set, Index = ButtonIndex, }
+                    ImGui.SetDragDropPayload("BTN", self.id)
                     ImGui.Button(button.Label, btnSize, btnSize)
                     ImGui.EndDragDropSource()
                 end
                 if ImGui.BeginDragDropTarget() then
                     local payload = ImGui.AcceptDragDropPayload("BTN")
+
                     if payload ~= nil then
                         ---@diagnostic disable-next-line: undefined-field
-                        local num = payload.Data;
-                        -- swap the keys in the button set
-                        BMSettings:GetSettings().Sets[Set][num], BMSettings:GetSettings().Sets[Set][ButtonIndex] =
-                            BMSettings:GetSettings().Sets[Set][ButtonIndex],
-                            BMSettings:GetSettings().Sets[Set][num]
-                        BMSettings:SaveSettings(true)
+                        local dndData = BMHotbars[payload.Data].currentDnDData
+                        local success = dndData ~= nil
+                        if success then
+                            local to_set = dndData.Set
+                            local to_num = dndData.Index
+                            btnUtils.Output("Dropping button from set '" ..
+                                tostring(to_set) .. "' index " .. tostring(to_num) .. " to set '" .. tostring(Set) .. "' index " .. tostring(ButtonIndex))
+
+                            -- swap the keys in the button set
+                            BMSettings:GetSettings().Sets[to_set][to_num], BMSettings:GetSettings().Sets[Set][ButtonIndex] =
+                                BMSettings:GetSettings().Sets[Set][ButtonIndex], BMSettings:GetSettings().Sets[to_set][to_num]
+                            BMSettings:SaveSettings(true)
+                        else
+                            btnUtils.Output("\arError: Failed to decode dropped button payload :: %s!\ax", payload.Data or "nil")
+                        end
                     end
                     ImGui.EndDragDropTarget()
                 end

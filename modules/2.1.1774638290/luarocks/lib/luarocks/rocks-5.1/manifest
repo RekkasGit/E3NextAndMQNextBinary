@@ -1,7 +1,7 @@
 commands = {}
 dependencies = {
    lsqlite3 = {
-      ["0.9.5-1"] = {
+      ["0.9.6-1"] = {
          {
             constraints = {
                {
@@ -22,7 +22,7 @@ dependencies = {
       }
    },
    luafilesystem = {
-      ["1.8.0-1"] = {
+      ["1.9.0-1"] = {
          {
             constraints = {
                {
@@ -39,15 +39,15 @@ dependencies = {
 }
 modules = {
    lfs = {
-      "luafilesystem/1.8.0-1"
+      "luafilesystem/1.9.0-1"
    },
    lsqlite3 = {
-      "lsqlite3/0.9.5-1"
+      "lsqlite3/0.9.6-1"
    }
 }
 repository = {
    lsqlite3 = {
-      ["0.9.5-1"] = {
+      ["0.9.6-1"] = {
          {
             arch = "installed",
             commands = {},
@@ -59,7 +59,7 @@ repository = {
       }
    },
    luafilesystem = {
-      ["1.8.0-1"] = {
+      ["1.9.0-1"] = {
          {
             arch = "installed",
             commands = {},
